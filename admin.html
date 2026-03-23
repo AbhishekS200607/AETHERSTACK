@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Admin Panel – Aetherstack</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-950 text-gray-100 min-h-screen p-8">
+  <div class="max-w-5xl mx-auto">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+      <h1 class="text-3xl font-bold text-orange-400">Aetherstack Admin</h1>
+      <div class="flex gap-2">
+        <input id="secret" type="password" placeholder="Admin secret" class="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-orange-400"/>
+        <button onclick="authenticate()" class="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded text-sm font-bold transition">Login</button>
+      </div>
+    </div>
+
+    <div id="status" class="text-gray-400 text-sm mb-4"></div>
+
+    <!-- Tabs -->
+    <div id="panel" class="hidden">
+      <div class="flex gap-1 mb-6 bg-gray-900 p-1 rounded-xl w-fit">
+        <button onclick="switchTab('submissions')" id="tab-submissions" class="tab-btn px-5 py-2 rounded-lg text-sm font-bold transition bg-orange-500 text-white">Submissions</button>
+        <button onclick="switchTab('projects')" id="tab-projects" class="tab-btn px-5 py-2 rounded-lg text-sm font-bold transition text-gray-400 hover:text-white">Projects</button>
+      </div>
+
+      <!-- Submissions Tab -->
+      <div id="pane-submissions">
+        <div id="submissions-count" class="text-gray-400 text-sm mb-4"></div>
+        <div id="submissions-list" class="space-y-4"></div>
+      </div>
+
+      <!-- Projects Tab -->
+      <div id="pane-projects" class="hidden">
+
+        <!-- Add / Edit Form -->
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
+          <h2 id="form-title" class="text-lg font-bold text-orange-400 mb-4">Add New Project</h2>
+          <input type="hidden" id="edit-id"/>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="text-xs uppercase text-gray-500 font-bold tracking-widest block mb-1">Title *</label>
+              <input id="p-title" type="text" placeholder="Project name" class="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-orange-400"/>
+            </div>
+            <div>
+              <label class="text-xs uppercase text-gray-500 font-bold tracking-widest block mb-1">Tags (comma separated)</label>
+              <input id="p-tags" type="text" placeholder="React, Node.js, Tailwind" class="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-orange-400"/>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="text-xs uppercase text-gray-500 font-bold tracking-widest block mb-1">Image URL</label>
+              <input id="p-image" type="url" placeholder="https://image.com/photo.jpg" class="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-orange-400"/>
+            </div>
+            <div>
+              <label class="text-xs uppercase text-gray-500 font-bold tracking-widest block mb-1">Project Link</label>
+              <input id="p-link" type="url" placeholder="https://yourproject.com" class="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-orange-400"/>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="text-xs uppercase text-gray-500 font-bold tracking-widest block mb-1">Description *</label>
+            <textarea id="p-desc" rows="3" placeholder="What problem did this project solve?" class="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-orange-400 resize-none"></textarea>
+          </div>
+          <div class="flex gap-3">
+            <button onclick="saveProject()" class="bg-orange-500 hover:bg-orange-600 px-5 py-2 rounded text-sm font-bold transition">Save Project</button>
+            <button onclick="cancelEdit()" id="cancel-btn" class="hidden bg-gray-700 hover:bg-gray-600 px-5 py-2 rounded text-sm font-bold transition">Cancel</button>
+          </div>
+          <p id="form-status" class="text-sm mt-3"></p>
+        </div>
+
+        <!-- Projects List -->
+        <div id="projects-list" class="space-y-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let SECRET = '';
+
+    function authenticate() {
+      SECRET = document.getElementById('secret').value;
+      if (!SECRET) { document.getElementById('status').textContent = 'Enter admin secret.'; return; }
+      loadSubmissions();
+      loadProjects();
+      document.getElementById('panel').classList.remove('hidden');
+      document.getElementById('status').textContent = '';
+    }
+
+    document.getElementById('secret').addEventListener('keydown', e => e.key === 'Enter' && authenticate());
+
+    function switchTab(tab) {
+      ['submissions', 'projects'].forEach(t => {
+        document.getElementById(`pane-${t}`).classList.toggle('hidden', t !== tab);
+        const btn = document.getElementById(`tab-${t}`);
+        btn.className = t === tab
+          ? 'tab-btn px-5 py-2 rounded-lg text-sm font-bold transition bg-orange-500 text-white'
+          : 'tab-btn px-5 py-2 rounded-lg text-sm font-bold transition text-gray-400 hover:text-white';
+      });
+    }
+
+    // ── Submissions ──────────────────────────────────────────
+    async function loadSubmissions() {
+      try {
+        const res = await fetch(`/api/submissions?secret=${encodeURIComponent(SECRET)}`);
+        if (!res.ok) { document.getElementById('status').textContent = 'Unauthorized.'; document.getElementById('panel').classList.add('hidden'); return; }
+        const data = await res.json();
+        document.getElementById('submissions-count').textContent = `${data.length} submission(s)`;
+        document.getElementById('submissions-list').innerHTML = data.length
+          ? data.map(s => `
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 space-y-2">
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="text-lg font-bold text-white">${s.name}</p>
+                  <a href="mailto:${s.email}" class="text-orange-400 text-sm">${s.email}</a>
+                </div>
+                <span class="text-xs text-gray-500">${new Date(s.date).toLocaleString()}</span>
+              </div>
+              <div class="flex gap-4 text-sm text-gray-400">
+                <span>📁 ${s.projectType || '—'}</span>
+                <span>💰 ${s.budget || '—'}</span>
+              </div>
+              <p class="text-gray-300 text-sm border-t border-gray-800 pt-3">${s.message}</p>
+            </div>`).join('')
+          : '<p class="text-gray-500">No submissions yet.</p>';
+      } catch { document.getElementById('status').textContent = 'Could not connect to server.'; }
+    }
+
+    // ── Projects ─────────────────────────────────────────────
+    let projects = [];
+
+    async function loadProjects() {
+      const res = await fetch('/api/projects');
+      projects = await res.json();
+      renderProjects();
+    }
+
+    function renderProjects() {
+      const el = document.getElementById('projects-list');
+      if (!projects.length) { el.innerHTML = '<p class="text-gray-500">No projects yet. Add one above.</p>'; return; }
+      el.innerHTML = projects.map(p => `
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 flex gap-4 items-start">
+          ${p.imageUrl
+            ? `<img src="${p.imageUrl}" class="w-24 h-16 object-cover rounded-lg flex-shrink-0"/>`
+            : p.link
+            ? `<img src="https://api.microlink.io/?url=${encodeURIComponent(p.link)}&screenshot=true&meta=false&embed=screenshot.url" class="w-24 h-16 object-cover rounded-lg flex-shrink-0"/>`
+            : '<div class="w-24 h-16 bg-gray-800 rounded-lg flex-shrink-0 flex items-center justify-center text-gray-600 text-xs">No image</div>'}
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-start gap-2">
+              <div>
+                <p class="font-bold text-white text-lg">${p.title}</p>
+                ${p.link ? `<a href="${p.link}" target="_blank" class="text-orange-400 text-xs hover:underline">${p.link}</a>` : '<span class="text-gray-600 text-xs">No link</span>'}
+              </div>
+              <div class="flex gap-2 flex-shrink-0">
+                <button onclick="editProject(${p.id})" class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded text-xs font-bold transition">Edit</button>
+                <button onclick="deleteProject(${p.id})" class="bg-red-900 hover:bg-red-800 px-3 py-1 rounded text-xs font-bold transition">Delete</button>
+              </div>
+            </div>
+            <p class="text-gray-400 text-sm mt-1">${p.description}</p>
+            <div class="flex gap-2 mt-2 flex-wrap">
+              ${(p.tags || []).map(t => `<span class="bg-gray-800 text-orange-400 text-xs px-2 py-0.5 rounded">${t}</span>`).join('')}
+            </div>
+          </div>
+        </div>`).join('');
+    }
+
+    async function saveProject() {
+      const id = document.getElementById('edit-id').value;
+      const body = {
+        secret: SECRET,
+        title: document.getElementById('p-title').value.trim(),
+        description: document.getElementById('p-desc').value.trim(),
+        tags: document.getElementById('p-tags').value.split(',').map(t => t.trim()).filter(Boolean),
+        imageUrl: document.getElementById('p-image').value.trim(),
+        link: document.getElementById('p-link').value.trim()
+      };
+      const st = document.getElementById('form-status');
+      if (!body.title || !body.description) { st.textContent = 'Title and description are required.'; st.className = 'text-sm mt-3 text-red-400'; return; }
+
+      const url = id ? `/api/projects/${id}` : '/api/projects';
+      const method = id ? 'PUT' : 'POST';
+      const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      if (res.ok) {
+        st.textContent = id ? '✅ Project updated!' : '✅ Project added!';
+        st.style.color = '#4ade80';
+        cancelEdit();
+        loadProjects();
+        updateFrontend();
+        setTimeout(() => st.textContent = '', 3000);
+      } else {
+        st.textContent = '❌ Error saving project.';
+        st.style.color = '#f87171';
+      }
+    }
+
+    function editProject(id) {
+      const p = projects.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('edit-id').value = p.id;
+      document.getElementById('p-title').value = p.title;
+      document.getElementById('p-desc').value = p.description;
+      document.getElementById('p-tags').value = (p.tags || []).join(', ');
+      document.getElementById('p-image').value = p.imageUrl || '';
+      document.getElementById('p-link').value = p.link || '';
+      document.getElementById('form-title').textContent = 'Edit Project';
+      document.getElementById('cancel-btn').classList.remove('hidden');
+      document.getElementById('form-status').className = 'text-sm mt-3 hidden';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function cancelEdit() {
+      document.getElementById('edit-id').value = '';
+      document.getElementById('p-title').value = '';
+      document.getElementById('p-desc').value = '';
+      document.getElementById('p-tags').value = '';
+      document.getElementById('p-image').value = '';
+      document.getElementById('p-link').value = '';
+      document.getElementById('form-title').textContent = 'Add New Project';
+      document.getElementById('cancel-btn').classList.add('hidden');
+      document.getElementById('form-status').textContent = '';
+    }
+
+    async function deleteProject(id) {
+      const p = projects.find(x => x.id === id);
+      if (!confirm(`Delete "${p?.title}"? This will remove it from the frontend.`)) return;
+      const res = await fetch(`/api/projects/${id}?secret=${encodeURIComponent(SECRET)}`, { method: 'DELETE' });
+      if (res.ok) {
+        loadProjects();
+        updateFrontend();
+      } else {
+        alert('Failed to delete. Check your secret.');
+      }
+    }
+
+    // Notify index.html to reload projects via localStorage event
+    function updateFrontend() {
+      localStorage.setItem('projects_updated', Date.now());
+    }
+  </script>
+</body>
+</html>
