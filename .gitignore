@@ -1,0 +1,4 @@
+.env
+node_modules/
+submissions.json
+projects.json

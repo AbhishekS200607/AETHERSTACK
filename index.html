@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aetherstack | Premium Web Solutions</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed-dim": "#56d9d8",
+              "secondary": "#c6c6c7",
+              "surface-container-high": "#2a2a2a",
+              "tertiary-container": "#00acab",
+              "inverse-on-surface": "#313030",
+              "surface-container-lowest": "#0e0e0e",
+              "primary-fixed-dim": "#ffb4a3",
+              "on-error": "#690005",
+              "secondary-container": "#454747",
+              "inverse-primary": "#ae3115",
+              "on-tertiary": "#003736",
+              "on-primary-fixed-variant": "#8c1900",
+              "secondary-fixed-dim": "#c6c6c7",
+              "surface-container": "#201f1f",
+              "on-secondary-container": "#b4b5b5",
+              "tertiary": "#56d9d8",
+              "on-secondary-fixed": "#1a1c1c",
+              "on-primary": "#630f00",
+              "secondary-fixed": "#e2e2e2",
+              "on-tertiary-container": "#003939",
+              "error": "#ffb4ab",
+              "primary": "#ffb4a3",
+              "surface-tint": "#ffb4a3",
+              "surface-bright": "#393939",
+              "error-container": "#93000a",
+              "on-error-container": "#ffdad6",
+              "background": "#131313",
+              "on-primary-container": "#661000",
+              "primary-fixed": "#ffdad2",
+              "on-tertiary-fixed": "#002020",
+              "on-background": "#e5e2e1",
+              "surface-container-highest": "#353534",
+              "outline-variant": "#59413c",
+              "primary-container": "#ff6b4a",
+              "surface-container-low": "#1c1b1b",
+              "on-surface": "#e5e2e1",
+              "on-tertiary-fixed-variant": "#00504f",
+              "surface": "#131313",
+              "surface-variant": "#353534",
+              "on-secondary": "#2f3131",
+              "surface-dim": "#131313",
+              "inverse-surface": "#e5e2e1",
+              "on-surface-variant": "#e1bfb8",
+              "on-secondary-fixed-variant": "#454747",
+              "tertiary-fixed": "#76f6f4",
+              "outline": "#a88a83",
+              "on-primary-fixed": "#3d0600"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+            animation: {
+              'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+              'float': 'float 4s ease-in-out infinite',
+              'fox-entrance': 'foxEntrance 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+            },
+            keyframes: {
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' },
+              },
+              foxEntrance: {
+                '0%': { opacity: '0', transform: 'perspective(1000px) rotateX(-90deg) rotateY(45deg) scale(0.5)' },
+                '100%': { opacity: '1', transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)' },
+              }
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-nav {
+        background: rgba(32, 31, 31, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .gradient-primary {
+        background: linear-gradient(45deg, #ffb4a3, #ff6b4a);
+      }
+      .reveal {
+        opacity: 0;
+      }
+      .reveal.active {
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+
+      /* 3D Effects */
+      .perspective-container {
+        perspective: 1000px;
+      }
+      .tilt-3d {
+        transition: transform 0.4s cubic-bezier(0.2, 0.64, 0.39, 0.97);
+        transform-style: preserve-3d;
+      }
+      .tilt-3d:hover {
+        transform: rotateX(4deg) rotateY(-4deg) scale(1.02);
+      }
+      
+      .hero-3d-box {
+        transition: transform 0.6s cubic-bezier(0.2, 0.64, 0.39, 0.97);
+        transform-style: preserve-3d;
+      }
+      .hero-3d-box:hover {
+        transform: rotateY(-10deg) rotateX(5deg);
+      }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-fixed">
+<!-- TopNavBar -->
+<nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl z-50 glass-nav rounded-2xl shadow-2xl transition-all duration-500">
+<div class="flex justify-between items-center w-full px-6 py-4">
+  <div class="flex items-center gap-3 group">
+    <div class="animate-fox-entrance overflow-hidden rounded-lg w-10 h-10 flex items-center justify-center bg-surface-container-high/50">
+      <img alt="Aetherstack Fox" class="w-8 h-8 object-contain" src="https://lh3.googleusercontent.com/aida/ADBb0ujzfWRTqXFNyf16_fFECFSpeatIMfyJR7I2eUikpj9keu6Na1TsIjNqHpVf5UiKRefNfEyh9z3ReWSrmlN3gPBNfM2zWqCytnlR7SNFJTpyJ7Q8ZOfrKbxWZaYytnnz73RnTw9r86XPpCUe7vJgF5x2WF7PKLK8yRfg-287ovKGK-Mcuwzz-to-1-bZPZzZ7dQFIX9LcKQwvFEDQPA4g5KFPF5SzL4xV7Bkpm1z-zkvEXjAFdKEJXi6SzmkQ-M3VwU7xddH8ri4"/>
+    </div>
+    <span class="text-xl font-black tracking-tighter text-[#e5e2e1] font-headline">Aetherstack</span>
+  </div>
+  <div class="hidden md:flex items-center gap-8 font-headline font-bold tracking-tight text-sm">
+    <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="#about">About</a>
+    <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="#projects">Projects</a>
+    <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="#contact">Contact</a>
+  </div>
+  <div class="flex items-center gap-3">
+    <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" class="hidden md:block gradient-primary text-on-primary-fixed px-5 py-2 rounded-xl font-bold tracking-tight hover:opacity-90 transition-all duration-300 active:scale-95 shadow-lg shadow-primary-container/20 text-sm">Get Started</button>
+    <button id="hamburger" onclick="toggleMenu()" class="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-[5px] rounded-lg hover:bg-surface-container-high transition-colors">
+      <span class="ham-line block w-6 h-0.5 bg-[#e5e2e1] transition-all duration-300"></span>
+      <span class="ham-line block w-6 h-0.5 bg-[#e5e2e1] transition-all duration-300"></span>
+      <span class="ham-line block w-6 h-0.5 bg-[#e5e2e1] transition-all duration-300"></span>
+    </button>
+  </div>
+</div>
+<!-- Mobile Menu -->
+<div id="mobile-menu" class="hidden md:hidden px-6 pb-5 flex-col gap-4 font-headline font-bold tracking-tight text-sm border-t border-outline-variant/10 mt-1 pt-4">
+  <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="#about">About</a>
+  <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="#projects">Projects</a>
+  <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="#contact">Contact</a>
+  <button onclick="toggleMenu(); document.getElementById('contact').scrollIntoView({behavior:'smooth'})" class="gradient-primary text-on-primary-fixed px-5 py-2 rounded-xl font-bold hover:opacity-90 transition-all text-sm w-full mt-1">Get Started</button>
+</div>
+</nav>
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden animate-fade-in-up">
+<div class="absolute inset-0 z-0 opacity-20 pointer-events-none">
+<div class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-primary-container/20 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-tertiary-container/10 rounded-full blur-[100px]"></div>
+</div>
+<div class="max-w-7xl mx-auto px-8 w-full z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-surface-container-high rounded-full mb-8">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant font-label">Available for New Projects</span>
+</div>
+<h1 class="font-headline font-black text-6xl md:text-8xl lg:text-9xl leading-[0.9] tracking-tighter mb-8">
+                    Premium Web <br/>
+<span class="text-primary-container">Solutions.</span>
+</h1>
+<p class="text-xl md:text-2xl text-on-surface-variant max-w-2xl mb-12 font-light leading-relaxed">
+                    Building the future of your business, one pixel at a time. High-performance architecture meets boutique design precision.
+                </p>
+<div class="flex flex-wrap gap-6">
+<button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" class="gradient-primary text-on-primary-fixed px-10 py-5 rounded-xl font-black text-lg font-headline tracking-tight hover:shadow-[0_0_30px_rgba(255,107,74,0.4)] transition-all">Start Your Build</button>
+<div class="flex items-center gap-4 group cursor-pointer">
+<div class="w-14 h-14 rounded-full border border-outline-variant flex items-center justify-center group-hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-primary">play_arrow</span>
+</div>
+<span class="font-bold tracking-tight text-on-surface">View Showreel</span>
+</div>
+</div>
+</div>
+<div class="lg:col-span-4 relative hidden lg:block perspective-container">
+<div class="relative w-full aspect-square flex items-center justify-center hero-3d-box">
+<div class="absolute inset-0 bg-surface-container-low rounded-2xl transform rotate-6 scale-90"></div>
+<div class="relative z-10 w-full aspect-square bg-surface-container-high rounded-2xl flex flex-col items-center justify-center p-12 border border-outline-variant/10 shadow-2xl overflow-hidden">
+<img alt="Aetherstack Fox Logo" class="w-48 h-48 object-contain animate-float drop-shadow-[0_0_20px_rgba(255,107,74,0.3)]" src="https://lh3.googleusercontent.com/aida/ADBb0ujzfWRTqXFNyf16_fFECFSpeatIMfyJR7I2eUikpj9keu6Na1TsIjNqHpVf5UiKRefNfEyh9z3ReWSrmlN3gPBNfM2zWqCytnlR7SNFJTpyJ7Q8ZOfrKbxWZaYytnnz73RnTw9r86XPpCUe7vJgF5x2WF7PKLK8yRfg-287ovKGK-Mcuwzz-to-1-bZPZzZ7dQFIX9LcKQwvFEDQPA4g5KFPF5SzL4xV7Bkpm1z-zkvEXjAFdKEJXi6SzmkQ-M3VwU7xddH8ri4"/>
+<div class="mt-8 text-center">
+<p class="font-headline font-black text-2xl tracking-tighter text-on-surface">code smarter.</p>
+<p class="font-headline font-black text-2xl tracking-tighter text-primary-container mt-[-4px]">ship faster.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- About Us Section -->
+<section class="py-32 bg-surface-container-low relative overflow-hidden reveal" id="about">
+<div class="absolute right-0 top-0 opacity-[0.03] translate-x-1/4 translate-y-[-10%] pointer-events-none">
+<span class="material-symbols-outlined text-[800px]">forest</span>
+</div>
+<div class="max-w-7xl mx-auto px-8 relative z-10">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+<div>
+<span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">Our Identity</span>
+<h2 class="font-headline font-extrabold text-5xl md:text-6xl tracking-tighter mb-8">
+                        B.Tech Minds. <br/>Full-Stack Vision.
+                    </h2>
+<div class="space-y-6 text-on-surface-variant text-lg leading-relaxed">
+<p>
+                            Founded by a collective of high-performing B.Tech engineers, Aetherstack bridges the gap between complex enterprise technology and beautiful, user-centric interfaces.
+                        </p>
+<p>
+                            We specialize in the modern stack: <span class="text-on-surface font-bold">Java, Spring Boot, and React</span>. Our mission is simple: to provide early-stage founders and small businesses with the kind of tech infrastructure usually reserved for giants, at a fraction of the cost.
+                        </p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface p-8 rounded-xl border border-outline-variant/5 hover:border-primary/20 transition-colors">
+<span class="material-symbols-outlined text-tertiary mb-4 text-4xl">terminal</span>
+<h3 class="font-headline font-bold text-xl mb-2">Technical Rigor</h3>
+<p class="text-sm text-on-surface-variant">Clean code architecture that scales from day one.</p>
+</div>
+<div class="bg-surface p-8 rounded-xl border border-outline-variant/5 mt-8 hover:border-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary mb-4 text-4xl">payments</span>
+<h3 class="font-headline font-bold text-xl mb-2">Fair Pricing</h3>
+<p class="text-sm text-on-surface-variant">Accessible solutions tailored for high-growth potential.</p>
+</div>
+<div class="bg-surface p-8 rounded-xl border border-outline-variant/5 hover:border-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary mb-4 text-4xl">speed</span>
+<h3 class="font-headline font-bold text-xl mb-2">Rapid Deployment</h3>
+<p class="text-sm text-on-surface-variant">Iterative cycles that prioritize market feedback.</p>
+</div>
+<div class="bg-surface p-8 rounded-xl border border-outline-variant/5 mt-8 hover:border-primary/20 transition-colors">
+<span class="material-symbols-outlined text-tertiary mb-4 text-4xl">draw</span>
+<h3 class="font-headline font-bold text-xl mb-2">Boutique UI</h3>
+<p class="text-sm text-on-surface-variant">Every pixel hand-crafted for maximum engagement.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Projects Grid -->
+<section class="py-32 bg-surface reveal" id="projects">
+<div class="max-w-7xl mx-auto px-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
+<div class="max-w-2xl">
+<span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">Case Studies</span>
+<h2 class="font-headline font-extrabold text-5xl md:text-6xl tracking-tighter">Featured Artifacts</h2>
+</div>
+<div class="flex gap-4">
+<button class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">west</span>
+</button>
+<button class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">east</span>
+</button>
+</div>
+</div>
+<div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-12 perspective-container">
+<p class="text-on-surface-variant col-span-2">Loading projects...</p>
+</div>
+</div>
+</section>
+<!-- Contact Section -->
+<section class="py-32 bg-surface-container-low relative reveal" id="contact">
+<div class="max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-20">
+<div class="lg:col-span-5">
+<span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">Get In Touch</span>
+<h2 class="font-headline font-extrabold text-5xl md:text-6xl tracking-tighter mb-8">Let's build <br/>the next big thing.</h2>
+<p class="text-on-surface-variant text-lg mb-12">
+                    Ready to start your project? Fill out the form or reach out directly to discuss your vision.
+                </p>
+<div class="space-y-8">
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 bg-surface flex items-center justify-center rounded-xl">
+<span class="material-symbols-outlined text-primary">mail</span>
+</div>
+<div>
+<p class="text-xs uppercase font-bold tracking-widest text-on-surface-variant font-label">Email Us</p>
+<p class="text-xl font-headline font-bold">stackaether@gmail.com</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 bg-surface flex items-center justify-center rounded-xl">
+<span class="material-symbols-outlined text-tertiary">location_on</span>
+</div>
+<div>
+<p class="text-xs uppercase font-bold tracking-widest text-on-surface-variant font-label">Based in</p>
+<p class="text-xl font-headline font-bold">Remote / Global</p>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-7">
+<form id="contactForm" class="bg-surface p-10 md:p-12 rounded-2xl shadow-2xl space-y-8 border border-outline-variant/5">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="text-xs uppercase font-bold tracking-widest text-on-surface-variant font-label">Name</label>
+<input id="cf-name" class="w-full bg-surface-container-low border-none focus:ring-0 focus:bg-surface-container-high transition-all text-on-surface py-4 px-0 border-b-2 border-outline-variant/30 focus:border-primary" placeholder="John Doe" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs uppercase font-bold tracking-widest text-on-surface-variant font-label">Email</label>
+<input id="cf-email" class="w-full bg-surface-container-low border-none focus:ring-0 focus:bg-surface-container-high transition-all text-on-surface py-4 px-0 border-b-2 border-outline-variant/30 focus:border-primary" placeholder="john@example.com" type="email"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="text-xs uppercase font-bold tracking-widest text-on-surface-variant font-label">Project Type</label>
+<select id="cf-type" class="w-full bg-surface-container-low border-none focus:ring-0 focus:bg-surface-container-high transition-all text-on-surface py-4 px-0 border-b-2 border-outline-variant/30 focus:border-primary appearance-none">
+<option>Web Application</option>
+<option>E-commerce</option>
+<option>SaaS Platform</option>
+<option>Landing Page</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="text-xs uppercase font-bold tracking-widest text-on-surface-variant font-label">Budget Range</label>
+<input id="cf-budget" type="text" class="w-full bg-surface-container-low border-none focus:ring-0 focus:bg-surface-container-high transition-all text-on-surface py-4 px-0 border-b-2 border-outline-variant/30 focus:border-primary" placeholder="e.g. 2,000 or Negotiable"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs uppercase font-bold tracking-widest text-on-surface-variant font-label">Project Details</label>
+<textarea id="cf-message" class="w-full bg-surface-container-low border-none focus:ring-0 focus:bg-surface-container-high transition-all text-on-surface py-4 px-0 border-b-2 border-outline-variant/30 focus:border-primary resize-none" placeholder="Tell us about your vision..." rows="4"></textarea>
+</div>
+<div id="cf-status" class="text-sm font-bold text-center hidden"></div>
+<button id="cf-btn" class="w-full gradient-primary py-5 rounded-xl font-headline font-black text-xl text-on-primary-fixed hover:shadow-lg hover:opacity-90 transition-all active:scale-[0.98]" type="submit">
+                        Submit Proposal
+                    </button>
+</form>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-8 bg-[#1c1b1b] border-t border-outline-variant/5">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-7xl mx-auto">
+<div class="flex items-center gap-3">
+<img alt="Aetherstack" class="w-6 h-6 object-contain" src="https://lh3.googleusercontent.com/aida/ADBb0ujzfWRTqXFNyf16_fFECFSpeatIMfyJR7I2eUikpj9keu6Na1TsIjNqHpVf5UiKRefNfEyh9z3ReWSrmlN3gPBNfM2zWqCytnlR7SNFJTpyJ7Q8ZOfrKbxWZaYytnnz73RnTw9r86XPpCUe7vJgF5x2WF7PKLK8yRfg-287ovKGK-Mcuwzz-to-1-bZPZzZ7dQFIX9LcKQwvFEDQPA4g5KFPF5SzL4xV7Bkpm1z-zkvEXjAFdKEJXi6SzmkQ-M3VwU7xddH8ri4"/>
+<span class="font-['Space_Grotesk'] font-bold text-[#ff6b4a]">Aetherstack</span>
+</div>
+<p class="font-['Manrope'] text-sm text-[#e5e2e1]">© 2026 Aetherstack. Built with Geometric Precision.</p>
+<div class="flex gap-8">
+<a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors hover:translate-x-1 transition-transform" href="#">Privacy Policy</a>
+<a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors hover:translate-x-1 transition-transform" href="#">Terms of Service</a>
+<a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors hover:translate-x-1 transition-transform" href="#">Github</a>
+<a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors hover:translate-x-1 transition-transform" href="#">LinkedIn</a>
+</div>
+</div>
+</footer>
+<script>
+    // Load projects dynamically
+    async function loadProjects() {
+      const grid = document.getElementById('projects-grid');
+      try {
+        const res = await fetch('/api/projects');
+        const projects = await res.json();
+        if (!projects.length) {
+          grid.innerHTML = '<p class="text-on-surface-variant col-span-2">No projects yet.</p>';
+          return;
+        }
+        grid.innerHTML = projects.map(p => `
+          <div onclick="${p.link ? `window.open('${p.link}','_blank')` : ''}" class="group cursor-pointer tilt-3d">
+            <div class="relative overflow-hidden rounded-2xl bg-surface-container-low mb-8 aspect-[16/10] shadow-xl">
+              ${(() => {
+                const isLiveLink = p.link && !p.link.includes('github.com');
+                if (isLiveLink) {
+                  return `<img alt="${p.title}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 opacity-60 group-hover:opacity-100" src="https://api.microlink.io/?url=${encodeURIComponent(p.link)}&screenshot=true&meta=false&embed=screenshot.url"/>`;
+                } else if (p.imageUrl) {
+                  return `<img alt="${p.title}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 opacity-60 group-hover:opacity-100" src="${p.imageUrl}"/>`;
+                } else {
+                  return `<div class="w-full h-full bg-surface-container-high flex items-center justify-center text-on-surface-variant text-sm">No Preview</div>`;
+                }
+              })()}
+              <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-60"></div>
+              <div class="absolute top-6 left-6 flex gap-2">
+                ${(p.tags || []).map(t => `<span class="bg-background/80 backdrop-blur px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-on-surface rounded">${t}</span>`).join('')}
+              </div>
+            </div>
+            <div class="flex justify-between items-start gap-4">
+              <div>
+                <h3 class="font-headline font-bold text-3xl mb-3 group-hover:text-primary transition-colors">${p.title}</h3>
+                <p class="text-on-surface-variant leading-relaxed max-w-md">${p.description}</p>
+              </div>
+              <div class="w-12 h-12 rounded-xl border border-outline-variant flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all duration-300">
+                <span class="material-symbols-outlined text-on-surface group-hover:text-on-primary">north_east</span>
+              </div>
+            </div>
+          </div>`).join('');
+      } catch {
+        grid.innerHTML = '<p class="text-on-surface-variant col-span-2">Could not load projects.</p>';
+      }
+    }
+
+    loadProjects();
+
+    // Reload if admin panel triggers an update
+    window.addEventListener('storage', e => { if (e.key === 'projects_updated') loadProjects(); });
+
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('cf-btn');
+      const status = document.getElementById('cf-status');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+      status.className = 'text-sm font-bold text-center hidden';
+
+      try {
+        const res = await fetch('http://localhost:3000/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: document.getElementById('cf-name').value,
+            email: document.getElementById('cf-email').value,
+            projectType: document.getElementById('cf-type').value,
+            budget: document.getElementById('cf-budget').value,
+            message: document.getElementById('cf-message').value
+          })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          status.textContent = '✅ Proposal received! We\'ll be in touch soon.';
+          status.className = 'text-sm font-bold text-center text-tertiary';
+          this.reset();
+        } else {
+          status.textContent = '⚠️ ' + (data.error || 'Something went wrong.');
+          status.className = 'text-sm font-bold text-center text-error';
+        }
+      } catch {
+        status.textContent = '⚠️ Could not connect to server. Please try again.';
+        status.className = 'text-sm font-bold text-center text-error';
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Submit Proposal';
+    });
+
+    function toggleMenu() {
+      const menu = document.getElementById('mobile-menu');
+      const lines = document.querySelectorAll('.ham-line');
+      const isOpen = !menu.classList.contains('hidden');
+      menu.classList.toggle('hidden');
+      menu.classList.toggle('flex');
+      // Animate hamburger to X
+      if (!isOpen) {
+        lines[0].style.transform = 'translateY(7px) rotate(45deg)';
+        lines[1].style.opacity = '0';
+        lines[2].style.transform = 'translateY(-7px) rotate(-45deg)';
+      } else {
+        lines[0].style.transform = '';
+        lines[1].style.opacity = '';
+        lines[2].style.transform = '';
+      }
+    }
+
+    function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+            var windowHeight = window.innerHeight;
+            var elementTop = reveals[i].getBoundingClientRect().top;
+            var elementVisible = 150;
+            if (elementTop < windowHeight - elementVisible) {
+                reveals[i].classList.add("active");
+            }
+        }
+    }
+    window.addEventListener("scroll", reveal);
+    // Initial check
+    reveal();
+</script>
+</body></html>
