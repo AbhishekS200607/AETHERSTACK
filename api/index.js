@@ -59,15 +59,15 @@ app.post('/api/contact', async (req, res) => {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
-      subject: \New Proposal from \\,
-      html: \
+      subject: `New Proposal from ${name}`,
+      html: `
         <h2>New Contact Submission</h2>
-        <p><b>Name:</b> \</p>
-        <p><b>Email:</b> \</p>
-        <p><b>Project Type:</b> \</p>
-        <p><b>Budget:</b> \</p>
-        <p><b>Message:</b><br>\</p>
-      \
+        <p><b>Name:</b> ${name}</p>
+        <p><b>Email:</b> ${email}</p>
+        <p><b>Project Type:</b> ${projectType}</p>
+        <p><b>Budget:</b> ${budget}</p>
+        <p><b>Message:</b><br>${message}</p>
+      `
     });
   } catch (e) {
     console.error('Email error:', e.message);
