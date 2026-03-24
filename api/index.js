@@ -26,12 +26,12 @@ async function readSubmissions() {
 }
 
 async function saveSubmission(data) {
+  // Only sending confirmed columns (name, email, budget, message)
   const { error } = await supabase.from('submissions').insert([
     { 
       id: Date.now(), 
       name: data.name, 
       email: data.email, 
-      project_type: data.projectType, 
       budget: data.budget, 
       message: data.message 
     }
