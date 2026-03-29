@@ -2,7 +2,8 @@
 <html class="dark" lang="en">
 <head>
     <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>`n<link rel="icon" href="/Logo%20maker%20project.png" type="image/png" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="icon" href="/Logo%20maker%20project.png" type="image/png" />
     <title>Services | Aetherstack</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
@@ -99,6 +100,19 @@
           .reveal.active {
             animation: fadeInUp 0.8s ease-out forwards;
           }
+          .comparison-table th, .comparison-table td {
+            border-bottom: 1px solid rgba(168, 138, 131, 0.1);
+            padding: 1.25rem 1rem;
+            text-align: left;
+          }
+          .comparison-table th {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: #ffb4a3;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.75rem;
+          }
         </style>
 </head>
 <body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-fixed">
@@ -116,6 +130,9 @@
                 <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="index.html#projects">Projects</a>
                 <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="team.html">Team</a>
                 <a class="text-[#ff6b4a] transition-colors" href="services.html">Services</a>
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="pricing.html">Pricing</a>
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="blog.html">Blog</a>
+                <a class="text-[#ff6b4a] font-black transition-colors" href="calculator.html">Get Quote</a>
             </div>
             <div class="flex items-center gap-3">
                 <button onclick="window.location.href='index.html#contact'" class="hidden md:block gradient-primary text-on-primary-fixed px-5 py-2 rounded-xl font-bold tracking-tight hover:opacity-90 transition-all duration-300 active:scale-95 shadow-lg shadow-primary-container/20 text-sm">Get Started</button>
@@ -132,81 +149,378 @@
             <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="index.html#projects">Projects</a>
             <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="team.html">Team</a>
             <a onclick="toggleMenu()" class="text-[#ff6b4a] transition-colors block py-1" href="services.html">Services</a>
+            <a onclick="toggleMenu()" class="text-[#ff6b4a] font-black transition-colors block py-1" href="calculator.html">Get Quote</a>
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="pricing.html">Pricing</a>
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="blog.html">Blog</a>
         </div>
     </nav>
 
     <main class="pt-32 pb-24">
-        <!-- Services Header -->
-        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-20 animate-fade-in-up">
+        <!-- Hero Section -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-32 animate-fade-in-up">
             <span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">Our Expertise</span>
-            <h1 class="font-headline font-black text-5xl md:text-7xl lg:text-8xl tracking-tighter mb-8">
-                Precision <span class="text-primary-container">Engineering.</span>
+            <h1 class="font-headline font-black text-6xl md:text-8xl tracking-tighter mb-8 leading-[0.9]">
+                What We <span class="text-primary-container">Build.</span>
             </h1>
             <p class="text-xl md:text-2xl text-on-surface-variant max-w-3xl font-light leading-relaxed">
-                We build high-performance applications using <strong>HTML, CSS, JavaScript</strong> and robust <strong>Java Backend (Spring Boot)</strong> solutions.
+                Professional agency quality at student-friendly prices. We help small businesses, startups, and local shops get online without spending a fortune.
             </p>
         </section>
 
-        <!-- Pricing Cards -->
-        <section class="max-w-7xl mx-auto px-6 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 mb-32">
+        <!-- Service Cards Grid -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 grid grid-cols-1 lg:grid-cols-3 gap-8 mb-40 reveal">
             <!-- Frontend Card -->
-            <div class="reveal bg-surface-container-low p-10 rounded-2xl border border-outline-variant/10 hover:border-primary/30 transition-all group">
-                <div class="w-16 h-16 bg-surface-container-high rounded-xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined text-primary text-4xl">web_asset</span>
+            <div class="bg-surface-container-low p-8 rounded-3xl border border-outline-variant/10 hover:border-primary/30 transition-all flex flex-col">
+                <div class="mb-8">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-tertiary block mb-2">Web Essentials</span>
+                    <h3 class="font-headline font-black text-3xl mb-4">Frontend Development</h3>
+                    <p class="text-xs font-bold text-on-surface-variant mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">code</span>
+                        HTML5, CSS3, Vanilla JS
+                    </p>
                 </div>
-                <h3 class="font-headline font-bold text-4xl mb-4">Frontend Development</h3>
-                <p class="text-on-surface-variant text-lg mb-8 leading-relaxed">
-                    Custom-built, responsive interfaces using <strong>HTML, CSS, and JavaScript</strong>. Pixel-perfect layouts designed for maximum user engagement.
-                </p>
-                <div class="text-5xl font-headline font-black mb-2">
-                    <span class="text-sm font-bold text-on-surface-variant uppercase tracking-widest align-middle mr-2">Starting at</span>
-                    <span class="text-primary-container">₹1,000</span>
+                <div class="mb-8">
+                    <p class="text-4xl font-headline font-black text-primary-container mb-1">₹1,000</p>
+                    <p class="text-xs uppercase font-bold tracking-widest text-on-surface-variant">Starting Price</p>
                 </div>
-                <p class="text-xs text-on-surface-variant uppercase font-bold tracking-tighter mb-8 opacity-60">* Hosting and domain purchase not included</p>
-                <ul class="space-y-4 mb-10 text-on-surface-variant">
-                    <li class="flex items-center gap-3"><span class="material-symbols-outlined text-tertiary text-sm">check_circle</span> HTML5 & CSS3</li>
-                    <li class="flex items-center gap-3"><span class="material-symbols-outlined text-tertiary text-sm">check_circle</span> Vanilla JavaScript</li>
-                    <li class="flex items-center gap-3"><span class="material-symbols-outlined text-tertiary text-sm">check_circle</span> Responsive & Mobile-First</li>
+                <ul class="space-y-4 text-sm text-on-surface-variant mb-12 flex-grow">
+                    <li class="flex items-start gap-3"><span class="material-symbols-outlined text-tertiary text-sm mt-0.5">check_circle</span> Fully mobile responsive</li>
+                    <li class="flex items-start gap-3"><span class="material-symbols-outlined text-tertiary text-sm mt-0.5">check_circle</span> Cross browser compatible</li>
+                    <li class="flex items-start gap-3"><span class="material-symbols-outlined text-tertiary text-sm mt-0.5">check_circle</span> Smooth animations & transitions</li>
+                    <li class="flex items-start gap-3"><span class="material-symbols-outlined text-tertiary text-sm mt-0.5">check_circle</span> WhatsApp chat integration</li>
+                    <li class="flex items-start gap-3"><span class="material-symbols-outlined text-tertiary text-sm mt-0.5">check_circle</span> Clean source code handover</li>
                 </ul>
-                <button onclick="window.location.href='index.html#contact'" class="w-full py-4 rounded-xl border border-outline-variant hover:bg-surface-container-high transition-all font-bold">Select Plan</button>
+                <div class="pt-6 border-t border-outline-variant/10">
+                    <p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-4">Delivery: 3–15 days</p>
+                    <button onclick="window.location.href='index.html#contact'" class="w-full py-4 rounded-xl border border-outline-variant hover:bg-surface-container-high transition-all font-bold">Choose Plan</button>
+                </div>
             </div>
 
-            <!-- Full Stack Card -->
-            <div class="reveal bg-surface-container-high p-10 rounded-2xl border-2 border-primary/20 hover:border-primary transition-all group relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-primary-container text-on-primary-fixed px-6 py-2 rounded-bl-xl font-bold text-xs uppercase tracking-widest">Popular</div>
-                <div class="w-16 h-16 bg-surface-container-lowest rounded-xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                    <span class="material-symbols-outlined text-tertiary text-4xl">layers</span>
+            <!-- Node.js Card -->
+            <div class="bg-surface-container-high p-8 rounded-3xl border-2 border-primary/20 hover:border-primary transition-all flex flex-col relative scale-105 z-10 shadow-2xl">
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-on-primary-fixed px-4 py-1 rounded-full font-bold text-[10px] uppercase tracking-widest">Most Popular</div>
+                <div class="mb-8">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-tertiary block mb-2">Modern Backend</span>
+                    <h3 class="font-headline font-black text-3xl mb-4">Full Stack — Node.js</h3>
+                    <p class="text-xs font-bold text-on-surface-variant mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">storage</span>
+                        Node.js, Express, MongoDB/MySQL
+                    </p>
                 </div>
-                <h3 class="font-headline font-bold text-4xl mb-4">Full Stack Solution</h3>
-                <p class="text-on-surface-variant text-lg mb-8 leading-relaxed">
-                    Complete end-to-end applications featuring a powerful <strong>Java (Spring Boot) Backend</strong> integrated with modern HTML/CSS/JS frontends.
-                </p>
-                <div class="text-5xl font-headline font-black mb-2">
-                    <span class="text-sm font-bold text-on-surface-variant uppercase tracking-widest align-middle mr-2">Starting at</span>
-                    <span class="text-primary-container">₹3,000</span>
+                <div class="mb-8">
+                    <p class="text-4xl font-headline font-black text-primary-container mb-1">₹3,000</p>
+                    <p class="text-xs uppercase font-bold tracking-widest text-on-surface-variant">Starting Price</p>
                 </div>
-                <p class="text-xs text-on-surface-variant uppercase font-bold tracking-tighter mb-8 opacity-60">* Price adjusts according to website complexity</p>
-                <ul class="space-y-4 mb-10 text-on-surface-variant">
-                    <li class="flex items-center gap-3"><span class="material-symbols-outlined text-tertiary text-sm">check_circle</span> Java Backend (Spring Boot)</li>
-                    <li class="flex items-center gap-3"><span class="material-symbols-outlined text-tertiary text-sm">check_circle</span> SQL / NoSQL Databases</li>
-                    <li class="flex items-center gap-3"><span class="material-symbols-outlined text-tertiary text-sm">check_circle</span> Secure REST API Development</li>
+                <ul class="space-y-4 text-sm text-on-surface-variant mb-12 flex-grow">
+                    <li class="flex items-start gap-3 font-bold text-on-surface"><span class="material-symbols-outlined text-primary text-sm mt-0.5">add_circle</span> Everything in Frontend</li>
+                    <li class="flex items-start gap-3"><span class="material-symbols-outlined text-tertiary text-sm mt-0.5">check_circle</span> User login & signup system</li>
+                    <li class="flex items-start gap-3"><span class="material-symbols-outlined text-tertiary text-sm mt-0.5">check_circle</span> Admin dashboard option</li>
+                    <li class="flex items-start gap-3"><span class="material-symbols-outlined text-tertiary text-sm mt-0.5">check_circle</span> Razorpay payment gateway</li>
+                    <li class="flex items-start gap-3"><span class="material-symbols-outlined text-tertiary text-sm mt-0.5">check_circle</span> Deployed on Railway/Render</li>
                 </ul>
-                <button onclick="window.location.href='index.html#contact'" class="w-full py-4 rounded-xl gradient-primary text-on-primary-fixed font-bold hover:shadow-lg transition-all">Get a Quote</button>
+                <div class="pt-6 border-t border-outline-variant/10">
+                    <p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-4">Delivery: 7–30 days</p>
+                    <button onclick="window.location.href='index.html#contact'" class="w-full py-4 rounded-xl gradient-primary text-on-primary-fixed font-bold hover:shadow-lg transition-all">Choose Plan</button>
+                </div>
             </div>
-                <button onclick="window.location.href='index.html#contact'" class="w-full py-4 rounded-xl gradient-primary text-on-primary-fixed font-bold hover:shadow-lg transition-all">Get a Quote</button>
+
+            <!-- Spring Boot Card -->
+            <div class="bg-surface-container-low p-8 rounded-3xl border border-outline-variant/10 hover:border-primary/30 transition-all flex flex-col">
+                <div class="mb-8">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-tertiary block mb-2">Enterprise Ready</span>
+                    <h3 class="font-headline font-black text-3xl mb-4">Full Stack — Java</h3>
+                    <p class="text-xs font-bold text-on-surface-variant mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">settings_suggest</span>
+                        Java, Spring Boot, MySQL
+                    </p>
+                </div>
+                <div class="mb-8">
+                    <p class="text-4xl font-headline font-black text-primary-container mb-1">₹4,000</p>
+                    <p class="text-xs uppercase font-bold tracking-widest text-on-surface-variant">Starting Price</p>
+                </div>
+                <ul class="space-y-4 text-sm text-on-surface-variant mb-12 flex-grow">
+                    <li class="flex items-start gap-3 font-bold text-on-surface"><span class="material-symbols-outlined text-primary text-sm mt-0.5">add_circle</span> Everything in Frontend</li>
+                    <li class="flex items-start gap-3"><span class="material-symbols-outlined text-tertiary text-sm mt-0.5">check_circle</span> Spring Security Auth</li>
+                    <li class="flex items-start gap-3"><span class="material-symbols-outlined text-tertiary text-sm mt-0.5">check_circle</span> Role based access control</li>
+                    <li class="flex items-start gap-3"><span class="material-symbols-outlined text-tertiary text-sm mt-0.5">check_circle</span> Complex database architecture</li>
+                    <li class="flex items-start gap-3"><span class="material-symbols-outlined text-tertiary text-sm mt-0.5">check_circle</span> Enterprise-grade stability</li>
+                </ul>
+                <div class="pt-6 border-t border-outline-variant/10">
+                    <p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-4">Delivery: 10–40 days</p>
+                    <button onclick="window.location.href='index.html#contact'" class="w-full py-4 rounded-xl border border-outline-variant hover:bg-surface-container-high transition-all font-bold">Choose Plan</button>
+                </div>
             </div>
         </section>
 
-        <!-- Random Quote Section -->
-        <section class="max-w-4xl mx-auto px-6 text-center reveal">
-            <div class="bg-surface-container-lowest p-12 rounded-3xl border border-outline-variant/10 relative">
-                <span class="material-symbols-outlined text-primary/20 text-9xl absolute -top-10 -left-10 select-none">format_quote</span>
-                <p id="quote-text" class="font-headline font-bold text-2xl md:text-3xl italic mb-6 text-on-surface leading-relaxed">
-                    "Loading wisdom..."
+        <!-- Comparison Table -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-40 reveal text-center">
+            <span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">The Aetherstack Edge</span>
+            <h2 class="font-headline font-black text-4xl md:text-5xl mb-12">Why Not Just Hire a Big Agency?</h2>
+            
+            <div class="overflow-x-auto rounded-3xl border border-outline-variant/10 bg-surface-container-low">
+                <table class="w-full comparison-table border-collapse text-sm md:text-base">
+                    <thead>
+                        <tr class="bg-surface-container-high">
+                            <th>Criteria</th>
+                            <th>Large Agency</th>
+                            <th>Freelancer</th>
+                            <th class="text-primary-container font-black">AetherStack</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-on-surface-variant">
+                        <tr>
+                            <td class="font-bold text-on-surface">Price</td>
+                            <td>₹30,000+</td>
+                            <td>₹5,000–₹20,000</td>
+                            <td class="text-primary font-black">₹1,000–₹14,000</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-on-surface">Team Support</td>
+                            <td>Yes</td>
+                            <td>No</td>
+                            <td class="text-tertiary">Yes</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-on-surface">Communication</td>
+                            <td>Indirect</td>
+                            <td>Sometimes Direct</td>
+                            <td class="text-tertiary">Always Direct</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-on-surface">Accountability</td>
+                            <td>High</td>
+                            <td>Low</td>
+                            <td class="text-tertiary font-bold">High</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-on-surface">Best for</td>
+                            <td>Enterprises</td>
+                            <td>One-off tasks</td>
+                            <td class="text-on-surface font-black">Small Businesses</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="mt-8 text-on-surface-variant italic font-light">"Professional agencies charge ₹30,000+ for the same work. We start at ₹1,000."</p>
+        </section>
+
+        <!-- Add-On Services Grid -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-40 reveal">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
+                <div class="max-w-xl">
+                    <span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">Power Ups</span>
+                    <h2 class="font-headline font-black text-4xl md:text-5xl">Add-On Services</h2>
+                </div>
+                <p class="text-on-surface-variant md:max-w-xs text-sm">Customize any plan with these optional extras to make your site even more powerful.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-surface-container p-6 rounded-2xl border border-outline-variant/5 hover:border-primary/20 transition-all flex justify-between items-center group">
+                    <div>
+                        <p class="font-bold text-on-surface group-hover:text-primary transition-colors">Logo Design</p>
+                        <p class="text-xs text-on-surface-variant">Custom brand identity</p>
+                    </div>
+                    <span class="font-headline font-black text-xl">₹400</span>
+                </div>
+                <div class="bg-surface-container p-6 rounded-2xl border border-outline-variant/5 hover:border-primary/20 transition-all flex justify-between items-center group">
+                    <div>
+                        <p class="font-bold text-on-surface group-hover:text-primary transition-colors">Domain Purchase</p>
+                        <p class="text-xs text-on-surface-variant">Assistance & setup</p>
+                    </div>
+                    <span class="font-headline font-black text-xl">₹200</span>
+                </div>
+                <div class="bg-surface-container p-6 rounded-2xl border border-outline-variant/5 hover:border-primary/20 transition-all flex justify-between items-center group">
+                    <div>
+                        <p class="font-bold text-on-surface group-hover:text-primary transition-colors">Hosting Setup</p>
+                        <p class="text-xs text-on-surface-variant">Vercel / Railway</p>
+                    </div>
+                    <span class="font-headline font-black text-xl">₹300</span>
+                </div>
+                <div class="bg-surface-container p-6 rounded-2xl border border-outline-variant/5 hover:border-primary/20 transition-all flex justify-between items-center group">
+                    <div>
+                        <p class="font-bold text-on-surface group-hover:text-primary transition-colors">SEO Setup</p>
+                        <p class="text-xs text-on-surface-variant">Meta tags, Sitemap, Indexing</p>
+                    </div>
+                    <span class="font-headline font-black text-xl">₹500</span>
+                </div>
+                <div class="bg-surface-container p-6 rounded-2xl border border-outline-variant/5 hover:border-primary/20 transition-all flex justify-between items-center group">
+                    <div>
+                        <p class="font-bold text-on-surface group-hover:text-primary transition-colors">Google Analytics</p>
+                        <p class="text-xs text-on-surface-variant">Traffic tracking setup</p>
+                    </div>
+                    <span class="font-headline font-black text-xl">₹200</span>
+                </div>
+                <div class="bg-surface-container p-6 rounded-2xl border border-outline-variant/5 hover:border-primary/20 transition-all flex justify-between items-center group">
+                    <div>
+                        <p class="font-bold text-on-surface group-hover:text-primary transition-colors">Maintenance</p>
+                        <p class="text-xs text-on-surface-variant">Monthly updates & fixes</p>
+                    </div>
+                    <span class="font-headline font-black text-xl">₹500<small class="text-[10px] opacity-60">/mo</small></span>
+                </div>
+                <div class="bg-surface-container p-6 rounded-2xl border border-outline-variant/5 hover:border-primary/20 transition-all flex justify-between items-center group">
+                    <div>
+                        <p class="font-bold text-on-surface group-hover:text-primary transition-colors">Extra Page</p>
+                        <p class="text-xs text-on-surface-variant">Beyond plan limits</p>
+                    </div>
+                    <span class="font-headline font-black text-xl">₹300<small class="text-[10px] opacity-60">/pg</small></span>
+                </div>
+                <div class="bg-surface-container p-6 rounded-2xl border border-outline-variant/5 hover:border-primary/20 transition-all flex justify-between items-center group">
+                    <div>
+                        <p class="font-bold text-on-surface group-hover:text-primary transition-colors">Email Notifications</p>
+                        <p class="text-xs text-on-surface-variant">Automated setup</p>
+                    </div>
+                    <span class="font-headline font-black text-xl">₹600</span>
+                </div>
+                <div class="bg-surface-container p-6 rounded-2xl border border-outline-variant/5 hover:border-primary/20 transition-all flex justify-between items-center group">
+                    <div>
+                        <p class="font-bold text-on-surface group-hover:text-primary transition-colors">Razorpay Payment</p>
+                        <p class="text-xs text-on-surface-variant">Full integration</p>
+                    </div>
+                    <span class="font-headline font-black text-xl">₹2,000</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- How We Work -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-40 reveal">
+            <div class="text-center mb-16">
+                <span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">Our Process</span>
+                <h2 class="font-headline font-black text-4xl md:text-5xl mb-4">How We Work</h2>
+                <p class="text-on-surface-variant max-w-2xl mx-auto">A transparent, step-by-step approach from our first talk to the final hand-off.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+                <!-- Connect -->
+                <div class="relative">
+                    <div class="text-8xl font-headline font-black text-surface-container-high absolute -top-12 -left-4 select-none">01</div>
+                    <div class="relative z-10 pt-4">
+                        <h4 class="font-headline font-bold text-xl mb-3 text-primary">Requirement Analysis</h4>
+                        <p class="text-on-surface-variant text-sm leading-relaxed">Fill our form or WhatsApp us. We discuss your requirements and vision in detail.</p>
+                    </div>
+                </div>
+                <!-- Build -->
+                <div class="relative">
+                    <div class="text-8xl font-headline font-black text-surface-container-high absolute -top-12 -left-4 select-none">02</div>
+                    <div class="relative z-10 pt-4">
+                        <h4 class="font-headline font-bold text-xl mb-3 text-primary">Strategic Building</h4>
+                        <p class="text-on-surface-variant text-sm leading-relaxed">50% advance to begin. We build, share progress updates, and iterate based on your feedback.</p>
+                    </div>
+                </div>
+                <!-- Deliver -->
+                <div class="relative">
+                    <div class="text-8xl font-headline font-black text-surface-container-high absolute -top-12 -left-4 select-none">03</div>
+                    <div class="relative z-10 pt-4">
+                        <h4 class="font-headline font-bold text-xl mb-3 text-primary">Final Deployment</h4>
+                        <p class="text-on-surface-variant text-sm leading-relaxed">Final review + remaining payment. We hand over the source code and offer 15 days of free bug fixes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payment Terms -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-40 reveal grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="bg-surface-container-high p-10 rounded-3xl border border-outline-variant/10">
+                <h3 class="font-headline font-black text-2xl mb-8 flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary">payments</span>
+                    Payment Structure
+                </h3>
+                <ul class="space-y-6 text-on-surface-variant">
+                    <li class="flex items-start gap-4 p-4 rounded-xl bg-surface-container-low border border-outline-variant/5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></span>
+                        <div>
+                            <p class="font-bold text-on-surface">Small/Medium Projects <span class="text-xs font-normal opacity-60 ml-2">(Under ₹8,000)</span></p>
+                            <p class="text-sm">50% advance, 50% on delivery.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4 p-4 rounded-xl bg-surface-container-low border border-outline-variant/5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></span>
+                        <div>
+                            <p class="font-bold text-on-surface">Large Projects <span class="text-xs font-normal opacity-60 ml-2">(Above ₹8,000)</span></p>
+                            <p class="text-sm">40% advance, 30% midway, 30% on delivery.</p>
+                        </div>
+                    </li>
+                    <li class="text-sm italic p-4 bg-background/50 rounded-xl border border-tertiary/20">
+                        Accepted via UPI, GPay, PhonePe, or Bank Transfer. Source code is handed over only after full payment.
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="flex flex-col justify-center">
+                <h3 class="font-headline font-black text-4xl mb-6">Student-Founded. <br/><span class="text-tertiary">India-Focused.</span></h3>
+                <p class="text-on-surface-variant leading-relaxed text-lg mb-8">
+                    We keep our overhead low so we can keep your costs even lower. Based in Kerala, working for small businesses across India.
                 </p>
-                <p id="quote-author" class="text-primary uppercase font-bold tracking-[0.2em] text-sm">
-                    — Aetherstack
+                <div class="flex gap-4">
+                    <div class="bg-surface-container-high px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest text-primary border border-primary/20">No Corporate Jargon</div>
+                    <div class="bg-surface-container-high px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest text-tertiary border border-tertiary/20">Direct Access</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="max-w-4xl mx-auto px-6 md:px-8 mb-40 reveal">
+            <h2 class="font-headline font-black text-4xl mb-12 text-center">Mini FAQ</h2>
+            <div class="space-y-4">
+                <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer" open>
+                    <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors">
+                        Do you provide hosting and domain?
+                        <span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                        No, but we can set it up for you as an add-on service. Hosting typically costs ₹0–₹500/month depending on the platform (many small sites can run on free tiers).
+                    </p>
+                </details>
+                <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                    <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors">
+                        How do we communicate during the project?
+                        <span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                        Directly via WhatsApp or email. You'll always talk to the developer working on your project, not a middleman or account manager.
+                    </p>
+                </details>
+                <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                    <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors">
+                        Can I request changes after delivery?
+                        <span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                        Yes, 2 free revision rounds are included in all plans. Additional changes or new features after the 15-day bug-fix period are billed at ₹300 per change.
+                    </p>
+                </details>
+                <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                    <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors">
+                        What if I don't know what I want exactly?
+                        <span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                        No problem. Fill the contact form and we'll guide you through everything in a free 30-minute discussion call to map out your needs.
+                    </p>
+                </details>
+                <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                    <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors">
+                        Do you work with clients outside Kerala?
+                        <span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+                    </summary>
+                    <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                        Yes, we work fully remote across India. All communication is online through WhatsApp, Email, and Google Meet.
+                    </p>
+                </details>
+            </div>
+        </section>
+
+        <!-- Bottom CTA -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 reveal">
+            <div class="bg-surface-container-highest p-12 md:p-20 rounded-[3rem] text-center border border-outline-variant/10 relative overflow-hidden">
+                <div class="absolute inset-0 bg-primary/5 pointer-events-none"></div>
+                <h2 class="font-headline font-black text-4xl md:text-6xl mb-6 relative z-10">Not sure what you need?</h2>
+                <p class="text-xl text-on-surface-variant mb-12 max-w-2xl mx-auto relative z-10">
+                    Use our free cost calculator to get an instant estimate based on your project requirements.
                 </p>
+                <div class="flex flex-wrap justify-center gap-6 relative z-10">
+                    <button onclick="window.location.href='calculator.html'" class="gradient-primary text-on-primary-fixed px-10 py-5 rounded-2xl font-black text-lg font-headline tracking-tight hover:shadow-[0_0_30px_rgba(255,107,74,0.4)] transition-all">Calculate My Cost</button>
+                    <button onclick="window.location.href='index.html#contact'" class="bg-surface-container-high text-on-surface px-10 py-5 rounded-2xl font-black text-lg font-headline tracking-tight hover:bg-surface-container-highest border border-outline-variant transition-all">Talk to Us</button>
+                </div>
             </div>
         </section>
     </main>
@@ -219,36 +533,19 @@
                 <span class="font-['Space_Grotesk'] font-bold text-[#ff6b4a]">Aetherstack</span>
             </div>
             <p class="font-['Manrope'] text-sm text-[#e5e2e1]">© 2026 Aetherstack. Built with Geometric Precision.</p>
-            <div class="flex gap-8">
+            <div class="flex flex-wrap gap-x-8 gap-y-4">
                 <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="index.html">Home</a>
-                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="team.html">Team</a>
-                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="privacy.html">Privacy Policy</a>
-                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="terms.html">Terms</a>
-                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="#">Github</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="services.html">Services</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="faq.html">FAQ</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="process.html">Process</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="blog.html">Blog</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="careers.html">Careers</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="privacy.html">Privacy</a>
             </div>
         </div>
     </footer>
 
     <script>
-        const quotes = [
-            { text: "Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work.", author: "Steve Jobs" },
-            { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
-            { text: "The way to get started is to quit talking and begin doing.", author: "Walt Disney" },
-            { text: "Success is not final; failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
-            { text: "Don't be afraid to give up the good to go for the great.", author: "John D. Rockefeller" },
-            { text: "Opportunities don't happen. You create them.", author: "Chris Grosser" },
-            { text: "Chase the vision, not the money; the money will end up following you.", author: "Tony Hsieh" },
-            { text: "Quality is not an act, it is a habit.", author: "Aristotle" },
-            { text: "The secret of change is to focus all of your energy, not on fighting the old, but on building the new.", author: "Socrates" }
-        ];
-
-        function setRandomQuote() {
-            const randomIndex = Math.floor(Math.random() * quotes.length);
-            const quote = quotes[randomIndex];
-            document.getElementById('quote-text').textContent = `"${quote.text}"`;
-            document.getElementById('quote-author').textContent = `— ${quote.author}`;
-        }
-
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
             const lines = document.querySelectorAll('.ham-line');
@@ -279,12 +576,7 @@
         }
 
         window.addEventListener("scroll", reveal);
-        window.addEventListener("load", () => {
-            setRandomQuote();
-            reveal();
-        });
+        window.addEventListener("load", reveal);
     </script>
 </body>
 </html>
-
-

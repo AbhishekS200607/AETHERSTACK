@@ -1,1 +1,12 @@
-{"version": 2, "rewrites": [{"source": "/api/(.*)", "destination": "/api/index.js"}, {"source": "/admin", "destination": "/admin.html"}]}
+{
+  "version": 2,
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.js" },
+    { "source": "/(.*)", "destination": "/public/$1" }
+  ]
+}

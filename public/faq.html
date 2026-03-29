@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="icon" href="/Logo%20maker%20project.png" type="image/png" />
+    <title>FAQ | Aetherstack</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+          tailwind.config = {
+            darkMode: "class",
+            theme: {
+              extend: {
+                colors: {
+                  "tertiary-fixed-dim": "#56d9d8",
+                  "secondary": "#c6c6c7",
+                  "surface-container-high": "#2a2a2a",
+                  "tertiary-container": "#00acab",
+                  "inverse-on-surface": "#313030",
+                  "surface-container-lowest": "#0e0e0e",
+                  "primary-fixed-dim": "#ffb4a3",
+                  "on-error": "#690005",
+                  "secondary-container": "#454747",
+                  "inverse-primary": "#ae3115",
+                  "on-tertiary": "#003736",
+                  "on-primary-fixed-variant": "#8c1900",
+                  "secondary-fixed-dim": "#c6c6c7",
+                  "surface-container": "#201f1f",
+                  "on-secondary-container": "#b4b5b5",
+                  "tertiary": "#56d9d8",
+                  "on-secondary-fixed": "#1a1c1c",
+                  "on-primary": "#630f00",
+                  "secondary-fixed": "#e2e2e2",
+                  "on-tertiary-container": "#003939",
+                  "error": "#ffb4ab",
+                  "primary": "#ffb4a3",
+                  "surface-tint": "#ffb4a3",
+                  "surface-bright": "#393939",
+                  "error-container": "#93000a",
+                  "on-error-container": "#ffdad6",
+                  "background": "#131313",
+                  "on-primary-container": "#661000",
+                  "primary-fixed": "#ffdad2",
+                  "on-tertiary-fixed": "#002020",
+                  "on-background": "#e5e2e1",
+                  "surface-container-highest": "#353534",
+                  "outline-variant": "#59413c",
+                  "primary-container": "#ff6b4a",
+                  "surface-container-low": "#1c1b1b",
+                  "on-surface": "#e5e2e1",
+                  "on-tertiary-fixed-variant": "#00504f",
+                  "surface": "#131313",
+                  "surface-variant": "#353534",
+                  "on-secondary": "#2f3131",
+                  "surface-dim": "#131313",
+                  "inverse-surface": "#e5e2e1",
+                  "on-surface-variant": "#e1bfb8",
+                  "on-secondary-fixed-variant": "#454747",
+                  "tertiary-fixed": "#76f6f4",
+                  "outline": "#a88a83",
+                  "on-primary-fixed": "#3d0600"
+                },
+                fontFamily: {
+                  "headline": ["Space Grotesk"],
+                  "body": ["Manrope"],
+                  "label": ["Manrope"]
+                },
+                borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                animation: {
+                  'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                },
+                keyframes: {
+                  fadeInUp: {
+                    '0%': { opacity: '0', transform: 'translateY(20px)' },
+                    '100%': { opacity: '1', transform: 'translateY(0)' },
+                  }
+                }
+              },
+            },
+          }
+        </script>
+    <style>
+          .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+          }
+          .glass-nav {
+            background: rgba(32, 31, 31, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+          }
+          .gradient-primary {
+            background: linear-gradient(45deg, #ffb4a3, #ff6b4a);
+          }
+          .reveal {
+            opacity: 0;
+          }
+          .reveal.active {
+            animation: fadeInUp 0.8s ease-out forwards;
+          }
+          details[open] summary span {
+            transform: rotate(180deg);
+          }
+        </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-fixed">
+    <!-- TopNavBar -->
+    <nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl z-50 glass-nav rounded-2xl shadow-2xl transition-all duration-500">
+        <div class="flex justify-between items-center w-full px-6 py-4">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="overflow-hidden rounded-lg w-10 h-10 flex items-center justify-center bg-surface-container-high/50">
+                    <img alt="Aetherstack Fox" class="w-8 h-8 object-contain" src="/Logo%20maker%20project.png"/>
+                </div>
+                <span class="text-xl font-black tracking-tighter text-[#e5e2e1] font-headline">Aetherstack</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8 font-headline font-bold tracking-tight text-sm">
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="index.html#about">About</a>
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="services.html">Services</a>
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="pricing.html">Pricing</a>
+                <a class="text-[#ff6b4a] font-black transition-colors" href="calculator.html">Get Quote</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="window.location.href='index.html#contact'" class="hidden md:block gradient-primary text-on-primary-fixed px-5 py-2 rounded-xl font-bold tracking-tight hover:opacity-90 transition-all duration-300 active:scale-95 shadow-lg shadow-primary-container/20 text-sm">Get Started</button>
+                <button id="hamburger" onclick="toggleMenu()" class="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-[5px] rounded-lg hover:bg-surface-container-high transition-colors">
+                    <span class="ham-line block w-6 h-0.5 bg-[#e5e2e1] transition-all duration-300"></span>
+                    <span class="ham-line block w-6 h-0.5 bg-[#e5e2e1] transition-all duration-300"></span>
+                    <span class="ham-line block w-6 h-0.5 bg-[#e5e2e1] transition-all duration-300"></span>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-5 flex-col gap-4 font-headline font-bold tracking-tight text-sm border-t border-outline-variant/10 mt-1 pt-4">
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="index.html#about">About</a>
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="services.html">Services</a>
+            <a onclick="toggleMenu()" class="text-[#ff6b4a] font-black transition-colors block py-1" href="calculator.html">Get Quote</a>
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="pricing.html">Pricing</a>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-24">
+        <!-- FAQ Header -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-20 animate-fade-in-up">
+            <span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">Knowledge Base</span>
+            <h1 class="font-headline font-black text-6xl md:text-8xl tracking-tighter mb-8 leading-[0.9]">
+                Common <span class="text-primary-container">Questions.</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-on-surface-variant max-w-3xl font-light leading-relaxed">
+                Everything you need to know about AetherStack, our process, and how we help your business grow online.
+            </p>
+        </section>
+
+        <!-- FAQ Content -->
+        <section class="max-w-4xl mx-auto px-6 md:px-8 space-y-16 reveal">
+            
+            <!-- About the Team -->
+            <div>
+                <h2 class="font-headline font-black text-3xl mb-8 flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary">groups</span>
+                    About the Team
+                </h2>
+                <div class="space-y-4">
+                    <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                        <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors list-none">
+                            Who is AetherStack?
+                            <span class="material-symbols-outlined transition-transform">expand_more</span>
+                        </summary>
+                        <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            A team of B.Tech Computer Science students from Kerala who build websites for small businesses and startups at affordable prices. We combine fresh academic knowledge with practical engineering to deliver high-quality web solutions.
+                        </p>
+                    </details>
+                    <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                        <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors list-none">
+                            Are you a registered company?
+                            <span class="material-symbols-outlined transition-transform">expand_more</span>
+                        </summary>
+                        <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            We are a student-founded agency. While not formally registered as a private limited company yet, we operate professionally with proper payment terms, legal contracts, and documented delivery processes.
+                        </p>
+                    </details>
+                    <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                        <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors list-none">
+                            How do I know you won't disappear with my money?
+                            <span class="material-symbols-outlined transition-transform">expand_more</span>
+                        </summary>
+                        <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            Transparency is our core value. We take only a 50% advance to start work. The remaining payment is made only after you have reviewed and approved the final delivery. We have a real domain, real professional emails, and a verified team of students with reputations to maintain.
+                        </p>
+                    </details>
+                </div>
+            </div>
+
+            <!-- About Projects -->
+            <div>
+                <h2 class="font-headline font-black text-3xl mb-8 flex items-center gap-3">
+                    <span class="material-symbols-outlined text-tertiary">assignment</span>
+                    About Projects
+                </h2>
+                <div class="space-y-4">
+                    <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                        <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors list-none">
+                            What kind of websites do you build?
+                            <span class="material-symbols-outlined transition-transform">expand_more</span>
+                        </summary>
+                        <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            We specialize in Frontend websites, full stack web apps (Node.js or Java Spring Boot), landing pages, portfolios, e-commerce stores, and custom SaaS platforms tailored to your specific business needs.
+                        </p>
+                    </details>
+                    <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                        <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors list-none">
+                            Do you build mobile apps?
+                            <span class="material-symbols-outlined transition-transform">expand_more</span>
+                        </summary>
+                        <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            Currently, we focus exclusively on web development to ensure the highest quality in that domain. We do not build native Android or iOS apps at this time.
+                        </p>
+                    </details>
+                    <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                        <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors list-none">
+                            Can you redesign my existing website?
+                            <span class="material-symbols-outlined transition-transform">expand_more</span>
+                        </summary>
+                        <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            Absolutely. We can take your existing website and completely redesign it with a modern aesthetic and rebuild the backend for better performance and security.
+                        </p>
+                    </details>
+                    <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                        <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors list-none">
+                            How long does a project take?
+                            <span class="material-symbols-outlined transition-transform">expand_more</span>
+                        </summary>
+                        <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            Timeline varies by complexity:<br/>
+                            • <strong>Frontend:</strong> 3–15 days<br/>
+                            • <strong>Node.js Full Stack:</strong> 7–30 days<br/>
+                            • <strong>Spring Boot Full Stack:</strong> 10–40 days
+                        </p>
+                    </details>
+                </div>
+            </div>
+
+            <!-- About Pricing -->
+            <div>
+                <h2 class="font-headline font-black text-3xl mb-8 flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary-container">payments</span>
+                    About Pricing
+                </h2>
+                <div class="space-y-4">
+                    <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                        <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors list-none">
+                            How much does a website cost?
+                            <span class="material-symbols-outlined transition-transform">expand_more</span>
+                        </summary>
+                        <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            Starting from ₹1,000 for basic frontend sites. Full stack solutions start at ₹3,000. For a more accurate estimate, we recommend using our <a href="calculator.html" class="text-primary font-bold hover:underline">Cost Calculator</a>.
+                        </p>
+                    </details>
+                    <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                        <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors list-none">
+                            Is hosting and domain included?
+                            <span class="material-symbols-outlined transition-transform">expand_more</span>
+                        </summary>
+                        <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            No. Hosting and domain are separate ongoing costs paid to third-party providers. However, we can handle the entire setup for you as an add-on service.
+                        </p>
+                    </details>
+                    <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                        <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors list-none">
+                            What payment methods do you accept?
+                            <span class="material-symbols-outlined transition-transform">expand_more</span>
+                        </summary>
+                        <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            We accept all major UPI apps (GPay, PhonePe, Paytm), as well as direct Bank Transfers.
+                        </p>
+                    </details>
+                </div>
+            </div>
+
+            <!-- About Process -->
+            <div>
+                <h2 class="font-headline font-black text-3xl mb-8 flex items-center gap-3">
+                    <span class="material-symbols-outlined text-tertiary">settings_suggest</span>
+                    About Process
+                </h2>
+                <div class="space-y-4">
+                    <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                        <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors list-none">
+                            What information do I need to provide?
+                            <span class="material-symbols-outlined transition-transform">expand_more</span>
+                        </summary>
+                        <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            We'll need your business name, a clear idea of what the website should achieve, any specific design preferences, and any content/images you already have.
+                        </p>
+                    </details>
+                    <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                        <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors list-none">
+                            What if I don't have content or images?
+                            <span class="material-symbols-outlined transition-transform">expand_more</span>
+                        </summary>
+                        <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            No problem. We can guide you on how to write effective content and we can source high-quality royalty-free stock images with your final approval.
+                        </p>
+                    </details>
+                    <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                        <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors list-none">
+                            How many revisions do I get?
+                            <span class="material-symbols-outlined transition-transform">expand_more</span>
+                        </summary>
+                        <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            We include 2 free revision rounds in all our plans to ensure the final product perfectly matches your vision.
+                        </p>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Technical -->
+            <div>
+                <h2 class="font-headline font-black text-3xl mb-8 flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary">terminal</span>
+                    Technical
+                </h2>
+                <div class="space-y-4">
+                    <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                        <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors list-none">
+                            Will my website work on mobile?
+                            <span class="material-symbols-outlined transition-transform">expand_more</span>
+                        </summary>
+                        <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            Yes, absolutely. All our websites are built to be "mobile-first" and fully responsive across all screen sizes by default.
+                        </p>
+                    </details>
+                    <details class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/10 group cursor-pointer">
+                        <summary class="font-bold text-lg flex justify-between items-center group-hover:text-primary transition-colors list-none">
+                            Do you work with clients outside Kerala?
+                            <span class="material-symbols-outlined transition-transform">expand_more</span>
+                        </summary>
+                        <p class="mt-4 text-on-surface-variant text-sm leading-relaxed">
+                            Yes, we work fully remote and serve clients all across India. All our communication happens seamlessly online.
+                        </p>
+                    </details>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Bottom CTA -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mt-32 reveal">
+            <div class="bg-surface-container-highest p-12 md:p-20 rounded-[3rem] text-center border border-outline-variant/10 relative overflow-hidden">
+                <div class="absolute inset-0 bg-primary/5 pointer-events-none"></div>
+                <h2 class="font-headline font-black text-4xl md:text-5xl mb-6 relative z-10">Still have questions?</h2>
+                <p class="text-xl text-on-surface-variant mb-12 max-w-2xl mx-auto relative z-10">
+                    We're just a message away. Let's talk about your project directly.
+                </p>
+                <div class="flex flex-wrap justify-center gap-6 relative z-10">
+                    <button onclick="window.location.href='index.html#contact'" class="gradient-primary text-on-primary-fixed px-10 py-5 rounded-2xl font-black text-lg font-headline tracking-tight hover:shadow-[0_0_30px_rgba(255,107,74,0.4)] transition-all">Contact Us</button>
+                    <button onclick="window.location.href='calculator.html'" class="bg-surface-container-high text-on-surface px-10 py-5 rounded-2xl font-black text-lg font-headline tracking-tight hover:bg-surface-container-highest border border-outline-variant transition-all">Get a Quote</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-12 px-6 md:px-8 bg-[#1c1b1b] border-t border-outline-variant/5">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-7xl mx-auto">
+            <div class="flex items-center gap-3">
+                <img alt="Aetherstack" class="w-6 h-6 object-contain" src="/Logo%20maker%20project.png"/>
+                <span class="font-['Space_Grotesk'] font-bold text-[#ff6b4a]">Aetherstack</span>
+            </div>
+            <p class="font-['Manrope'] text-sm text-[#e5e2e1]">© 2026 Aetherstack. Built with Geometric Precision.</p>
+            <div class="flex flex-wrap gap-x-8 gap-y-4">
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="index.html">Home</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="services.html">Services</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="faq.html">FAQ</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="process.html">Process</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="blog.html">Blog</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="careers.html">Careers</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="privacy.html">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const lines = document.querySelectorAll('.ham-line');
+            const isOpen = !menu.classList.contains('hidden');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('flex');
+            if (!isOpen) {
+                lines[0].style.transform = 'translateY(7px) rotate(45deg)';
+                lines[1].style.opacity = '0';
+                lines[2].style.transform = 'translateY(-7px) rotate(-45deg)';
+            } else {
+                lines[0].style.transform = '';
+                lines[1].style.opacity = '';
+                lines[2].style.transform = '';
+            }
+        }
+
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+
+        window.addEventListener("scroll", reveal);
+        window.addEventListener("load", reveal);
+    </script>
+</body>
+</html>

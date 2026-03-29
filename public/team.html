@@ -2,7 +2,8 @@
 <html class="dark" lang="en">
 <head>
     <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>`n<link rel="icon" href="/Logo%20maker%20project.png" type="image/png" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="icon" href="/Logo%20maker%20project.png" type="image/png" />
     <title>Our Team | Aetherstack</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
@@ -69,16 +70,11 @@
                 borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
                 animation: {
                   'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
-                  'float': 'float 4s ease-in-out infinite',
                 },
                 keyframes: {
                   fadeInUp: {
                     '0%': { opacity: '0', transform: 'translateY(20px)' },
                     '100%': { opacity: '1', transform: 'translateY(0)' },
-                  },
-                  float: {
-                    '0%, 100%': { transform: 'translateY(0)' },
-                    '50%': { transform: 'translateY(-10px)' },
                   }
                 }
               },
@@ -104,6 +100,51 @@
           .reveal.active {
             animation: fadeInUp 0.8s ease-out forwards;
           }
+          .avatar-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 900;
+            font-size: 2.5rem;
+            letter-spacing: -0.05em;
+            position: relative;
+            background: #1c1b1b;
+            border: 2px solid currentColor;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          .avatar-circle::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 1px solid currentColor;
+            opacity: 0.2;
+            transition: all 0.5s ease;
+          }
+          .group:hover .avatar-circle {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px currentColor;
+          }
+          .group:hover .avatar-circle::after {
+            inset: -12px;
+            opacity: 0.4;
+          }
+          .skill-chip {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #e5e2e1;
+            white-space: nowrap;
+          }
         </style>
 </head>
 <body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-fixed">
@@ -118,10 +159,11 @@
             </a>
             <div class="hidden md:flex items-center gap-8 font-headline font-bold tracking-tight text-sm">
                 <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="index.html#about">About</a>
-                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="index.html#projects">Projects</a>
-                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="index.html#contact">Contact</a>
-                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="team.html">Team</a>
                 <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="services.html">Services</a>
+                <a class="text-[#ff6b4a] transition-colors" href="team.html">Team</a>
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="pricing.html">Pricing</a>
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="blog.html">Blog</a>
+                <a class="text-[#ff6b4a] font-black transition-colors" href="calculator.html">Get Quote</a>
             </div>
             <div class="flex items-center gap-3">
                 <button onclick="window.location.href='index.html#contact'" class="hidden md:block gradient-primary text-on-primary-fixed px-5 py-2 rounded-xl font-bold tracking-tight hover:opacity-90 transition-all duration-300 active:scale-95 shadow-lg shadow-primary-container/20 text-sm">Get Started</button>
@@ -135,70 +177,156 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden px-6 pb-5 flex-col gap-4 font-headline font-bold tracking-tight text-sm border-t border-outline-variant/10 mt-1 pt-4">
             <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="index.html#about">About</a>
-            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="index.html#projects">Projects</a>
-            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="index.html#contact">Contact</a>
-            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="team.html">Team</a>
             <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="services.html">Services</a>
+            <a onclick="toggleMenu()" class="text-[#ff6b4a] block py-1" href="team.html">Team</a>
+            <a onclick="toggleMenu()" class="text-[#ff6b4a] font-black transition-colors block py-1" href="calculator.html">Get Quote</a>
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="pricing.html">Pricing</a>
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="blog.html">Blog</a>
         </div>
     </nav>
 
     <main class="pt-32 pb-24">
-        <!-- Team Header -->
-        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-20 animate-fade-in-up">
+        <!-- Hero Section -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-32 animate-fade-in-up text-center">
             <span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">The Builders</span>
-            <h1 class="font-headline font-black text-5xl md:text-7xl lg:text-8xl tracking-tighter mb-8">
-                Meet the <span class="text-primary-container">Architects.</span>
+            <h1 class="font-headline font-black text-6xl md:text-8xl tracking-tighter mb-8 leading-[0.9]">
+                The People Behind <br class="hidden md:block"/>the <span class="text-primary-container">Stack.</span>
             </h1>
-            <p class="text-xl md:text-2xl text-on-surface-variant max-w-3xl font-light leading-relaxed">
-                A specialized team of engineers dedicated to transforming complex problems into elegant digital experiences.
+            <p class="text-xl md:text-2xl text-on-surface-variant max-w-3xl mx-auto font-light leading-relaxed">
+                A team of passionate B.Tech CS students from Kerala — building real products for real businesses.
             </p>
         </section>
 
-        <!-- Team Grid -->
-        <section class="max-w-7xl mx-auto px-6 md:px-8 grid grid-cols-1 md:grid-cols-3 gap-12">
-            <!-- Member 1: Abhishek S -->
-            <div class="reveal group">
-                <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-surface-container mb-6 border border-outline-variant/10">
-                    <div class="absolute inset-0 flex items-center justify-center text-on-surface-variant">
-                        <span class="material-symbols-outlined text-8xl opacity-10">person</span>
-                    </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60"></div>
-                </div>
-                <h3 class="font-headline font-bold text-3xl mb-1 group-hover:text-primary transition-colors">Abhishek S</h3>
-                <p class="text-primary-container font-bold text-sm uppercase tracking-widest mb-4">Frontend & Backend</p>
-                <p class="text-on-surface-variant leading-relaxed">
-                    Full-stack engineer specializing in scalable system architecture and interactive user interfaces.
-                </p>
+        <!-- Department 1: Technical -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-40 reveal">
+            <div class="mb-16">
+                <h2 class="font-headline font-black text-4xl mb-4 flex items-center gap-4">
+                    <svg class="text-primary w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg> Technical
+                </h2>
+                <p class="text-on-surface-variant max-w-2xl">The builders. They write the code, design the architecture, and bring ideas to life.</p>
             </div>
-
-            <!-- Member 2: Sebin -->
-            <div class="reveal group">
-                <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-surface-container mb-6 border border-outline-variant/10">
-                    <div class="absolute inset-0 flex items-center justify-center text-on-surface-variant">
-                        <span class="material-symbols-outlined text-8xl opacity-10">person</span>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Abhishek S -->
+                <div class="group bg-surface-container-low p-8 rounded-3xl border border-outline-variant/10 hover:border-primary/30 transition-all flex flex-col items-center text-center">
+                    <div class="avatar-circle text-primary mb-8">AS</div>
+                    <h3 class="font-headline font-bold text-2xl mb-1 group-hover:text-primary transition-colors">Abhishek S</h3>
+                    <p class="text-primary font-bold text-[10px] uppercase tracking-[0.2em] mb-6">Full Stack — Team Lead</p>
+                    <p class="text-on-surface-variant text-sm leading-relaxed mb-8 flex-grow italic">
+                        "Leads the technical direction of every project. Passionate about clean architecture and scalable systems."
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <span class="skill-chip">HTML</span><span class="skill-chip">CSS</span><span class="skill-chip">JS</span>
+                        <span class="skill-chip">Java</span><span class="skill-chip">Spring Boot</span><span class="skill-chip">MySQL</span>
                     </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60"></div>
                 </div>
-                <h3 class="font-headline font-bold text-3xl mb-1 group-hover:text-primary transition-colors">Sebin</h3>
-                <p class="text-primary-container font-bold text-sm uppercase tracking-widest mb-4">Frontend & Backend</p>
-                <p class="text-on-surface-variant leading-relaxed">
-                    Passionate about bridging the gap between logic and design, ensuring seamless end-to-end functionality.
-                </p>
+
+                <!-- Sebin Joseph -->
+                <div class="group bg-surface-container-low p-8 rounded-3xl border border-outline-variant/10 hover:border-primary/30 transition-all flex flex-col items-center text-center">
+                    <div class="avatar-circle text-primary mb-8">SJ</div>
+                    <h3 class="font-headline font-bold text-2xl mb-1 group-hover:text-primary transition-colors">Sebin Joseph</h3>
+                    <p class="text-primary font-bold text-[10px] uppercase tracking-[0.2em] mb-6">Full Stack Developer</p>
+                    <p class="text-on-surface-variant text-sm leading-relaxed mb-8 flex-grow italic">
+                        "Bridges the gap between frontend and backend. Loves building seamless end-to-end user experiences."
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <span class="skill-chip">Node.js</span><span class="skill-chip">Express</span><span class="skill-chip">MongoDB</span>
+                        <span class="skill-chip">JS</span><span class="skill-chip">HTML</span><span class="skill-chip">CSS</span>
+                    </div>
+                </div>
+
+                <!-- Dhanesh KS -->
+                <div class="group bg-surface-container-low p-8 rounded-3xl border border-outline-variant/10 hover:border-primary/30 transition-all flex flex-col items-center text-center">
+                    <div class="avatar-circle text-primary mb-8">DK</div>
+                    <h3 class="font-headline font-bold text-2xl mb-1 group-hover:text-primary transition-colors">Dhanesh KS</h3>
+                    <p class="text-primary font-bold text-[10px] uppercase tracking-[0.2em] mb-6">Frontend Developer</p>
+                    <p class="text-on-surface-variant text-sm leading-relaxed mb-8 flex-grow italic">
+                        "Pixel-perfect layouts and smooth animations are his signature. Every interface he builds just feels right."
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <span class="skill-chip">HTML5</span><span class="skill-chip">CSS3</span><span class="skill-chip">Responsive</span>
+                        <span class="skill-chip">Animations</span><span class="skill-chip">UI/UX</span>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            <!-- Member 3: Dhanesh -->
-            <div class="reveal group">
-                <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-surface-container mb-6 border border-outline-variant/10">
-                    <div class="absolute inset-0 flex items-center justify-center text-on-surface-variant">
-                        <span class="material-symbols-outlined text-8xl opacity-10">person</span>
+        <!-- Department 2: Management & Marketing -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-40 reveal">
+            <div class="mb-16">
+                <h2 class="font-headline font-black text-4xl mb-4 flex items-center gap-4">
+                    <svg class="text-tertiary w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg> Management & Marketing
+                </h2>
+                <p class="text-on-surface-variant max-w-2xl">The connectors. They talk to clients, handle communication, and bring in new business.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
+                <!-- Aadhil -->
+                <div class="group bg-surface-container-low p-8 rounded-3xl border border-outline-variant/10 hover:border-tertiary/30 transition-all flex flex-col items-center text-center">
+                    <div class="avatar-circle text-tertiary mb-8">AA</div>
+                    <h3 class="font-headline font-bold text-2xl mb-1 group-hover:text-tertiary transition-colors">Aadhil</h3>
+                    <p class="text-tertiary font-bold text-[10px] uppercase tracking-[0.2em] mb-6">Client Relations & Marketing</p>
+                    <p class="text-on-surface-variant text-sm leading-relaxed mb-8 flex-grow italic">
+                        "First point of contact for every client. Makes sure expectations are clear and relationships are strong."
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <span class="skill-chip">Communication</span><span class="skill-chip">Biz Dev</span><span class="skill-chip">Leads</span>
                     </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60"></div>
                 </div>
-                <h3 class="font-headline font-bold text-3xl mb-1 group-hover:text-primary transition-colors">Dhanesh</h3>
-                <p class="text-tertiary font-bold text-sm uppercase tracking-widest mb-4">Frontend Specialist</p>
-                <p class="text-on-surface-variant leading-relaxed">
-                    Expert in crafting high-performance, pixel-perfect layouts with a focus on user engagement and accessibility.
+
+                <!-- Deepak -->
+                <div class="group bg-surface-container-low p-8 rounded-3xl border border-outline-variant/10 hover:border-tertiary/30 transition-all flex flex-col items-center text-center">
+                    <div class="avatar-circle text-tertiary mb-8">DP</div>
+                    <h3 class="font-headline font-bold text-2xl mb-1 group-hover:text-tertiary transition-colors">Deepak</h3>
+                    <p class="text-tertiary font-bold text-[10px] uppercase tracking-[0.2em] mb-6">Marketing & Operations</p>
+                    <p class="text-on-surface-variant text-sm leading-relaxed mb-8 flex-grow italic">
+                        "Handles how AetherStack presents itself to the world. Always thinking about reach and growth."
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <span class="skill-chip">Strategy</span><span class="skill-chip">Content</span><span class="skill-chip">Social Media</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Department 3: Design -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-40 reveal">
+            <div class="mb-16">
+                <h2 class="font-headline font-black text-4xl mb-4 flex items-center gap-4">
+                    <svg class="text-primary-container w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Design
+                </h2>
+                <p class="text-on-surface-variant max-w-2xl">The creative eye. Every visual decision on every project passes through here.</p>
+            </div>
+            
+            <div class="flex justify-center">
+                <!-- Prageeth P -->
+                <div class="group bg-surface-container-low p-8 rounded-3xl border border-outline-variant/10 hover:border-primary-container/30 transition-all flex flex-col items-center text-center max-w-md w-full">
+                    <div class="avatar-circle text-primary-container mb-8">PP</div>
+                    <h3 class="font-headline font-bold text-2xl mb-1 group-hover:text-primary-container transition-colors">Prageeth P</h3>
+                    <p class="text-primary-container font-bold text-[10px] uppercase tracking-[0.2em] mb-6">Creative Designer</p>
+                    <p class="text-on-surface-variant text-sm leading-relaxed mb-8 flex-grow italic">
+                        "Crafts the visual identity of every project — from the first logo sketch to the final pixel on screen. Believes a brand's look is its first handshake with the world."
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <span class="skill-chip">Logo Design</span><span class="skill-chip">Brand Identity</span><span class="skill-chip">UI Design</span>
+                        <span class="skill-chip">UX Design</span><span class="skill-chip">Figma</span><span class="skill-chip">Typography</span>
+                        <span class="skill-chip">Color Theory</span><span class="skill-chip">Business Cards</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bottom Section: Join the Team -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 reveal">
+            <div class="bg-surface-container-highest p-12 md:p-20 rounded-[3rem] text-center border border-outline-variant/10 relative overflow-hidden">
+                <div class="absolute inset-0 bg-primary/5 pointer-events-none"></div>
+                <h2 class="font-headline font-black text-4xl md:text-6xl mb-6 relative z-10">Want to build with us?</h2>
+                <p class="text-xl text-on-surface-variant mb-12 max-w-2xl mx-auto relative z-10">
+                    We're always open to passionate B.Tech students from Kerala who love web development, design, or marketing.
                 </p>
+                <div class="flex justify-center relative z-10">
+                    <button onclick="window.location.href='careers.html'" class="gradient-primary text-on-primary-fixed px-10 py-5 rounded-2xl font-black text-lg font-headline tracking-tight hover:shadow-[0_0_30px_rgba(255,107,74,0.4)] transition-all">See Open Roles</button>
+                </div>
             </div>
         </section>
     </main>
@@ -211,11 +339,14 @@
                 <span class="font-['Space_Grotesk'] font-bold text-[#ff6b4a]">Aetherstack</span>
             </div>
             <p class="font-['Manrope'] text-sm text-[#e5e2e1]">© 2026 Aetherstack. Built with Geometric Precision.</p>
-            <div class="flex gap-8">
+            <div class="flex flex-wrap gap-x-8 gap-y-4">
                 <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="index.html">Home</a>
-                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="privacy.html">Privacy Policy</a>
-                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="terms.html">Terms</a>
-                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="#">Github</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="services.html">Services</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="faq.html">FAQ</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="process.html">Process</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="blog.html">Blog</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="careers.html">Careers</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="privacy.html">Privacy</a>
             </div>
         </div>
     </footer>
@@ -249,10 +380,9 @@
                 }
             }
         }
+
         window.addEventListener("scroll", reveal);
-        reveal();
+        window.addEventListener("load", reveal);
     </script>
 </body>
 </html>
-
-

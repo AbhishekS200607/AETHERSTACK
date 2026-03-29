@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="icon" href="/Logo%20maker%20project.png" type="image/png" />
+    <title>404 - Page Not Found | Aetherstack</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+          tailwind.config = {
+            darkMode: "class",
+            theme: {
+              extend: {
+                colors: {
+                  "primary": "#ffb4a3",
+                  "primary-container": "#ff6b4a",
+                  "background": "#131313",
+                  "on-background": "#e5e2e1",
+                  "surface-container-high": "#2a2a2a",
+                  "outline-variant": "#59413c",
+                },
+                fontFamily: {
+                  "headline": ["Space Grotesk"],
+                  "body": ["Manrope"],
+                },
+              },
+            },
+          }
+        </script>
+    <style>
+          .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+          }
+          .gradient-primary {
+            background: linear-gradient(45deg, #ffb4a3, #ff6b4a);
+          }
+          .glitch-text {
+            position: relative;
+            display: inline-block;
+          }
+          @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+          }
+          .glitch-text:hover {
+            animation: glitch 0.3s cubic-bezier(.25,.46,.45,.94) both infinite;
+            color: #ff6b4a;
+          }
+        </style>
+</head>
+<body class="bg-background text-on-background font-body h-screen flex flex-col justify-center items-center px-6 overflow-hidden">
+    
+    <div class="text-center max-w-2xl animate-fade-in-up w-full">
+        <span class="font-headline font-black text-[8rem] sm:text-[12rem] md:text-[18rem] leading-none text-surface-container-high select-none block glitch-text">404</span>
+        
+        <h1 class="font-headline font-black text-2xl sm:text-3xl md:text-5xl tracking-tighter mb-4 -mt-4 sm:-mt-8 md:-mt-12 relative z-10">
+            Looks like this page got <br class="sm:hidden"/><span class="text-primary-container">lost in the stack.</span>
+        </h1>
+        
+        <p class="text-on-surface-variant text-base md:text-xl mb-8 md:mb-12 font-light max-w-lg mx-auto leading-relaxed px-4">
+            The page you're looking for doesn't exist or was moved. Let's get you back on track.
+        </p>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-md md:max-w-none mx-auto">
+            <a href="index.html" class="bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/10 px-3 py-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex flex-col items-center gap-2 group">
+                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">home</span>
+                Home
+            </a>
+            <a href="services.html" class="bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/10 px-3 py-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex flex-col items-center gap-2 group">
+                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">construction</span>
+                Services
+            </a>
+            <a href="index.html#projects" class="bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/10 px-3 py-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex flex-col items-center gap-2 group">
+                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">grid_view</span>
+                Projects
+            </a>
+            <a href="index.html#contact" class="bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/10 px-3 py-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex flex-col items-center gap-2 group">
+                <span class="material-symbols-outlined group-hover:scale-110 transition-transform">mail</span>
+                Contact
+            </a>
+        </div>
+
+        <div class="mt-20 border-t border-outline-variant/10 pt-8">
+            <p class="text-[10px] uppercase tracking-widest text-on-surface-variant opacity-60">
+                If you think this is a mistake, contact us at <a href="mailto:stackaether@gmail.com" class="text-primary hover:underline">stackaether@gmail.com</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Decorative Elements -->
+    <div class="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden -z-10 opacity-20">
+        <div class="absolute top-[10%] left-[5%] w-64 h-64 bg-primary/20 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-[10%] right-[5%] w-96 h-96 bg-primary-container/20 blur-[150px] rounded-full"></div>
+    </div>
+
+</body>
+</html>

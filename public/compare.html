@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="icon" href="/Logo%20maker%20project.png" type="image/png" />
+    <title>Compare | Aetherstack</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+          tailwind.config = {
+            darkMode: "class",
+            theme: {
+              extend: {
+                colors: {
+                  "tertiary-fixed-dim": "#56d9d8",
+                  "secondary": "#c6c6c7",
+                  "surface-container-high": "#2a2a2a",
+                  "tertiary-container": "#00acab",
+                  "inverse-on-surface": "#313030",
+                  "surface-container-lowest": "#0e0e0e",
+                  "primary-fixed-dim": "#ffb4a3",
+                  "on-error": "#690005",
+                  "secondary-container": "#454747",
+                  "inverse-primary": "#ae3115",
+                  "on-tertiary": "#003736",
+                  "on-primary-fixed-variant": "#8c1900",
+                  "secondary-fixed-dim": "#c6c6c7",
+                  "surface-container": "#201f1f",
+                  "on-secondary-container": "#b4b5b5",
+                  "tertiary": "#56d9d8",
+                  "on-secondary-fixed": "#1a1c1c",
+                  "on-primary": "#630f00",
+                  "secondary-fixed": "#e2e2e2",
+                  "on-tertiary-container": "#003939",
+                  "error": "#ffb4ab",
+                  "primary": "#ffb4a3",
+                  "surface-tint": "#ffb4a3",
+                  "surface-bright": "#393939",
+                  "error-container": "#93000a",
+                  "on-error-container": "#ffdad6",
+                  "background": "#131313",
+                  "on-primary-container": "#661000",
+                  "primary-fixed": "#ffdad2",
+                  "on-tertiary-fixed": "#002020",
+                  "on-background": "#e5e2e1",
+                  "surface-container-highest": "#353534",
+                  "outline-variant": "#59413c",
+                  "primary-container": "#ff6b4a",
+                  "surface-container-low": "#1c1b1b",
+                  "on-surface": "#e5e2e1",
+                  "on-tertiary-fixed-variant": "#00504f",
+                  "surface": "#131313",
+                  "surface-variant": "#353534",
+                  "on-secondary": "#2f3131",
+                  "surface-dim": "#131313",
+                  "inverse-surface": "#e5e2e1",
+                  "on-surface-variant": "#e1bfb8",
+                  "on-secondary-fixed-variant": "#454747",
+                  "tertiary-fixed": "#76f6f4",
+                  "outline": "#a88a83",
+                  "on-primary-fixed": "#3d0600"
+                },
+                fontFamily: {
+                  "headline": ["Space Grotesk"],
+                  "body": ["Manrope"],
+                  "label": ["Manrope"]
+                },
+                borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                animation: {
+                  'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                },
+                keyframes: {
+                  fadeInUp: {
+                    '0%': { opacity: '0', transform: 'translateY(20px)' },
+                    '100%': { opacity: '1', transform: 'translateY(0)' },
+                  }
+                }
+              },
+            },
+          }
+        </script>
+    <style>
+          .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+          }
+          .glass-nav {
+            background: rgba(32, 31, 31, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+          }
+          .gradient-primary {
+            background: linear-gradient(45deg, #ffb4a3, #ff6b4a);
+          }
+          .reveal {
+            opacity: 0;
+          }
+          .reveal.active {
+            animation: fadeInUp 0.8s ease-out forwards;
+          }
+          .compare-table th, .compare-table td {
+            border-bottom: 1px solid rgba(168, 138, 131, 0.1);
+            padding: 1.5rem 1rem;
+            text-align: left;
+          }
+          .compare-table th {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: #ffb4a3;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.75rem;
+          }
+        </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-fixed">
+    <!-- TopNavBar -->
+    <nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl z-50 glass-nav rounded-2xl shadow-2xl transition-all duration-500">
+        <div class="flex justify-between items-center w-full px-6 py-4">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="overflow-hidden rounded-lg w-10 h-10 flex items-center justify-center bg-surface-container-high/50">
+                    <img alt="Aetherstack Fox" class="w-8 h-8 object-contain" src="/Logo%20maker%20project.png"/>
+                </div>
+                <span class="text-xl font-black tracking-tighter text-[#e5e2e1] font-headline">Aetherstack</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8 font-headline font-bold tracking-tight text-sm">
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="index.html#about">About</a>
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="services.html">Services</a>
+                <a class="text-[#ff6b4a] transition-colors" href="compare.html">Why Us</a>
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="pricing.html">Pricing</a>
+                <a class="text-[#ff6b4a] font-black transition-colors" href="calculator.html">Get Quote</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="window.location.href='index.html#contact'" class="hidden md:block gradient-primary text-on-primary-fixed px-5 py-2 rounded-xl font-bold tracking-tight hover:opacity-90 transition-all duration-300 active:scale-95 shadow-lg shadow-primary-container/20 text-sm">Get Started</button>
+                <button id="hamburger" onclick="toggleMenu()" class="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-[5px] rounded-lg hover:bg-surface-container-high transition-colors">
+                    <span class="ham-line block w-6 h-0.5 bg-[#e5e2e1] transition-all duration-300"></span>
+                    <span class="ham-line block w-6 h-0.5 bg-[#e5e2e1] transition-all duration-300"></span>
+                    <span class="ham-line block w-6 h-0.5 bg-[#e5e2e1] transition-all duration-300"></span>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-5 flex-col gap-4 font-headline font-bold tracking-tight text-sm border-t border-outline-variant/10 mt-1 pt-4">
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="index.html#about">About</a>
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="services.html">Services</a>
+            <a onclick="toggleMenu()" class="text-[#ff6b4a] font-black transition-colors block py-1" href="calculator.html">Get Quote</a>
+            <a onclick="toggleMenu()" class="text-[#ff6b4a] block py-1" href="compare.html">Why Us</a>
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="pricing.html">Pricing</a>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-24">
+        <!-- Hero Section -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-20 animate-fade-in-up">
+            <span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">The Direct Advantage</span>
+            <h1 class="font-headline font-black text-6xl md:text-8xl tracking-tighter mb-8 leading-[0.9]">
+                Why <span class="text-primary-container">Aetherstack?</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-on-surface-variant max-w-3xl font-light leading-relaxed">
+                See how we compare to expensive agencies and unreliable freelancers. We bridge the gap between quality and affordability.
+            </p>
+        </section>
+
+        <!-- Main Comparison Table -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-40 reveal">
+            <div class="overflow-x-auto rounded-[2rem] border border-outline-variant/10 bg-surface-container-low shadow-2xl">
+                <table class="w-full compare-table border-collapse text-sm md:text-base">
+                    <thead>
+                        <tr class="bg-surface-container-high">
+                            <th>Features</th>
+                            <th>Large Agency</th>
+                            <th>Freelancer</th>
+                            <th class="text-primary-container font-black">AetherStack</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-on-surface-variant">
+                        <tr>
+                            <td class="font-bold text-on-surface">Starting Price</td>
+                            <td>₹30,000+</td>
+                            <td>₹5,000+</td>
+                            <td class="text-primary font-black">₹1,000</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-on-surface">Team or Solo</td>
+                            <td>Team</td>
+                            <td>Solo</td>
+                            <td class="text-tertiary">Team</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-on-surface">Communication</td>
+                            <td>Indirect (PMs)</td>
+                            <td>Sometimes Direct</td>
+                            <td class="text-tertiary">Always Direct</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-on-surface">Advance Payment</td>
+                            <td>50–100%</td>
+                            <td>100%</td>
+                            <td class="text-tertiary font-bold">50% Only</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-on-surface">Source Code Handover</td>
+                            <td>Sometimes</td>
+                            <td>Rarely</td>
+                            <td class="text-tertiary">Always</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-on-surface">Free Revisions</td>
+                            <td>Rarely</td>
+                            <td>Rarely</td>
+                            <td class="text-tertiary">2 Rounds Inc.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-on-surface">Post Delivery Support</td>
+                            <td>Paid Only</td>
+                            <td>Rarely</td>
+                            <td class="text-tertiary">15 Days Free</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-on-surface">Response Time</td>
+                            <td>Days</td>
+                            <td>Unpredictable</td>
+                            <td class="text-on-surface font-black">Within 24h</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-on-surface">Transparency</td>
+                            <td>Low</td>
+                            <td>Low</td>
+                            <td class="text-tertiary font-bold">High</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Scenario Cards -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-40 reveal">
+            <h2 class="font-headline font-black text-4xl mb-12 text-center">Real-World Scenarios</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Scenario 1 -->
+                <div class="bg-surface-container-high p-10 rounded-3xl border border-outline-variant/10 flex flex-col">
+                    <span class="material-symbols-outlined text-4xl text-primary mb-6">landing_page</span>
+                    <h3 class="font-headline font-bold text-xl mb-4">"I just need a simple landing page"</h3>
+                    <p class="text-on-surface-variant text-sm leading-relaxed mb-8 flex-grow">
+                        Agencies charge ₹15,000–₹30,000 and take 4–6 weeks. A freelancer might charge ₹5,000 but delivery is unpredictable. 
+                        <strong>AetherStack charges ₹1,000 and delivers in 3–5 days.</strong>
+                    </p>
+                </div>
+                <!-- Scenario 2 -->
+                <div class="bg-surface-container-high p-10 rounded-3xl border border-outline-variant/10 flex flex-col">
+                    <span class="material-symbols-outlined text-4xl text-tertiary mb-6">database</span>
+                    <h3 class="font-headline font-bold text-xl mb-4">"I need a full website with login"</h3>
+                    <p class="text-on-surface-variant text-sm leading-relaxed mb-8 flex-grow">
+                        Agencies quote ₹80,000–₹2,00,000. Freelancers often disappear after advance. 
+                        <strong>AetherStack charges ₹6,000–₹10,000 with milestone payments and direct WhatsApp updates.</strong>
+                    </p>
+                </div>
+                <!-- Scenario 3 -->
+                <div class="bg-surface-container-high p-10 rounded-3xl border border-outline-variant/10 flex flex-col">
+                    <span class="material-symbols-outlined text-4xl text-primary-container mb-6">savings</span>
+                    <h3 class="font-headline font-bold text-xl mb-4">"I have a tight budget under ₹5,000"</h3>
+                    <p class="text-on-surface-variant text-sm leading-relaxed mb-8 flex-grow">
+                        Most agencies and top freelancers will ignore you. 
+                        <strong>AetherStack was built exactly for this — professional work at a price that makes sense for new businesses.</strong>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bottom Tagline -->
+        <section class="max-w-4xl mx-auto px-6 md:px-8 mb-40 text-center reveal">
+            <p class="text-2xl md:text-3xl font-headline font-black leading-tight">
+                "Professional agencies charge ₹30,000+ for the same work. We start at ₹1,000. Same quality. No middlemen. Direct communication."
+            </p>
+        </section>
+
+        <!-- Bottom CTA -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 reveal">
+            <div class="bg-surface-container-highest p-12 md:p-20 rounded-[3rem] text-center border border-outline-variant/10 relative overflow-hidden">
+                <div class="absolute inset-0 bg-primary/5 pointer-events-none"></div>
+                <h2 class="font-headline font-black text-4xl md:text-6xl mb-6 relative z-10">Choose the better path.</h2>
+                <p class="text-xl text-on-surface-variant mb-12 max-w-2xl mx-auto relative z-10">
+                    Get the same engineering quality without the corporate overhead.
+                </p>
+                <div class="flex flex-wrap justify-center gap-6 relative z-10">
+                    <button onclick="window.location.href='calculator.html'" class="gradient-primary text-on-primary-fixed px-10 py-5 rounded-2xl font-black text-lg font-headline tracking-tight hover:shadow-[0_0_30px_rgba(255,107,74,0.4)] transition-all">Calculate My Cost</button>
+                    <button onclick="window.location.href='index.html#contact'" class="bg-surface-container-high text-on-surface px-10 py-5 rounded-2xl font-black text-lg font-headline tracking-tight hover:bg-surface-container-highest border border-outline-variant transition-all">Talk to Us</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-12 px-6 md:px-8 bg-[#1c1b1b] border-t border-outline-variant/5">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-7xl mx-auto">
+            <div class="flex items-center gap-3">
+                <img alt="Aetherstack" class="w-6 h-6 object-contain" src="/Logo%20maker%20project.png"/>
+                <span class="font-['Space_Grotesk'] font-bold text-[#ff6b4a]">Aetherstack</span>
+            </div>
+            <p class="font-['Manrope'] text-sm text-[#e5e2e1]">© 2026 Aetherstack. Built with Geometric Precision.</p>
+            <div class="flex flex-wrap gap-x-8 gap-y-4">
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="index.html">Home</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="services.html">Services</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="faq.html">FAQ</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="process.html">Process</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="blog.html">Blog</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="careers.html">Careers</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="privacy.html">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const lines = document.querySelectorAll('.ham-line');
+            const isOpen = !menu.classList.contains('hidden');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('flex');
+            if (!isOpen) {
+                lines[0].style.transform = 'translateY(7px) rotate(45deg)';
+                lines[1].style.opacity = '0';
+                lines[2].style.transform = 'translateY(-7px) rotate(-45deg)';
+            } else {
+                lines[0].style.transform = '';
+                lines[1].style.opacity = '';
+                lines[2].style.transform = '';
+            }
+        }
+
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+
+        window.addEventListener("scroll", reveal);
+        window.addEventListener("load", reveal);
+    </script>
+</body>
+</html>

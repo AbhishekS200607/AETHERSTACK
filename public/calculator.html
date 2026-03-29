@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="icon" href="/Logo%20maker%20project.png" type="image/png" />
+    <title>Cost Calculator | Aetherstack</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+          tailwind.config = {
+            darkMode: "class",
+            theme: {
+              extend: {
+                colors: {
+                  "tertiary-fixed-dim": "#56d9d8",
+                  "secondary": "#c6c6c7",
+                  "surface-container-high": "#2a2a2a",
+                  "tertiary-container": "#00acab",
+                  "inverse-on-surface": "#313030",
+                  "surface-container-lowest": "#0e0e0e",
+                  "primary-fixed-dim": "#ffb4a3",
+                  "on-error": "#690005",
+                  "secondary-container": "#454747",
+                  "inverse-primary": "#ae3115",
+                  "on-tertiary": "#003736",
+                  "on-primary-fixed-variant": "#8c1900",
+                  "secondary-fixed-dim": "#c6c6c7",
+                  "surface-container": "#201f1f",
+                  "on-secondary-container": "#b4b5b5",
+                  "tertiary": "#56d9d8",
+                  "on-secondary-fixed": "#1a1c1c",
+                  "on-primary": "#630f00",
+                  "secondary-fixed": "#e2e2e2",
+                  "on-tertiary-container": "#003939",
+                  "error": "#ffb4ab",
+                  "primary": "#ffb4a3",
+                  "surface-tint": "#ffb4a3",
+                  "surface-bright": "#393939",
+                  "error-container": "#93000a",
+                  "on-error-container": "#ffdad6",
+                  "background": "#131313",
+                  "on-primary-container": "#661000",
+                  "primary-fixed": "#ffdad2",
+                  "on-tertiary-fixed": "#002020",
+                  "on-background": "#e5e2e1",
+                  "surface-container-highest": "#353534",
+                  "outline-variant": "#59413c",
+                  "primary-container": "#ff6b4a",
+                  "surface-container-low": "#1c1b1b",
+                  "on-surface": "#e5e2e1",
+                  "on-tertiary-fixed-variant": "#00504f",
+                  "surface": "#131313",
+                  "surface-variant": "#353534",
+                  "on-secondary": "#2f3131",
+                  "surface-dim": "#131313",
+                  "inverse-surface": "#e5e2e1",
+                  "on-surface-variant": "#e1bfb8",
+                  "on-secondary-fixed-variant": "#454747",
+                  "tertiary-fixed": "#76f6f4",
+                  "outline": "#a88a83",
+                  "on-primary-fixed": "#3d0600"
+                },
+                fontFamily: {
+                  "headline": ["Space Grotesk"],
+                  "body": ["Manrope"],
+                  "label": ["Manrope"]
+                },
+                borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                animation: {
+                  'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                },
+                keyframes: {
+                  fadeInUp: {
+                    '0%': { opacity: '0', transform: 'translateY(20px)' },
+                    '100%': { opacity: '1', transform: 'translateY(0)' },
+                  }
+                }
+              },
+            },
+          }
+        </script>
+    <style>
+          .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+          }
+          .glass-nav {
+            background: rgba(32, 31, 31, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+          }
+          .gradient-primary {
+            background: linear-gradient(45deg, #ffb4a3, #ff6b4a);
+          }
+          .step-content {
+            display: none;
+          }
+          .step-content.active {
+            display: block;
+            animation: fadeInUp 0.5s ease-out forwards;
+          }
+          .option-card {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          .option-card.selected {
+            border-color: #ff6b4a;
+            background-color: rgba(255, 107, 74, 0.05);
+            transform: scale(1.02);
+          }
+          .progress-bar {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          @media (max-width: 1024px) {
+            .mobile-sticky-total {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background: rgba(32, 31, 31, 0.95);
+                backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 1rem 1.5rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                z-index: 40;
+            }
+          }
+        </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-fixed">
+    
+    <!-- Mobile Sticky Total -->
+    <div class="mobile-sticky-total lg:hidden" id="mobile-total-bar">
+        <div>
+            <p class="text-[10px] uppercase font-bold text-on-surface-variant tracking-widest">Running Estimate</p>
+            <p class="text-2xl font-headline font-black text-primary">₹<span id="mobile-total">0</span></p>
+        </div>
+        <button onclick="document.getElementById('side-total-card').scrollIntoView({behavior:'smooth'})" class="bg-surface-container-high px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 border border-outline-variant/10">
+            Details
+            <span class="material-symbols-outlined text-sm">expand_less</span>
+        </button>
+    </div>
+
+    <!-- TopNavBar -->
+    <nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl z-50 glass-nav rounded-2xl shadow-2xl transition-all duration-500">
+        <div class="flex justify-between items-center w-full px-6 py-4">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="overflow-hidden rounded-lg w-10 h-10 flex items-center justify-center bg-surface-container-high/50">
+                    <img alt="Aetherstack Fox" class="w-8 h-8 object-contain" src="/Logo%20maker%20project.png"/>
+                </div>
+                <span class="text-xl font-black tracking-tighter text-[#e5e2e1] font-headline">Aetherstack</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8 font-headline font-bold tracking-tight text-sm">
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="index.html#about">About</a>
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="services.html">Services</a>
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="pricing.html">Pricing</a>
+                <a class="text-[#ff6b4a] font-black transition-colors" href="calculator.html">Get Quote</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="window.location.href='index.html#contact'" class="hidden md:block gradient-primary text-on-primary-fixed px-5 py-2 rounded-xl font-bold tracking-tight hover:opacity-90 transition-all duration-300 active:scale-95 shadow-lg shadow-primary-container/20 text-sm">Get Started</button>
+                <button id="hamburger" onclick="toggleMenu()" class="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-[5px] rounded-lg hover:bg-surface-container-high transition-colors">
+                    <span class="ham-line block w-6 h-0.5 bg-[#e5e2e1] transition-all duration-300"></span>
+                    <span class="ham-line block w-6 h-0.5 bg-[#e5e2e1] transition-all duration-300"></span>
+                    <span class="ham-line block w-6 h-0.5 bg-[#e5e2e1] transition-all duration-300"></span>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-5 flex-col gap-4 font-headline font-bold tracking-tight text-sm border-t border-outline-variant/10 mt-1 pt-4">
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="index.html#about">About</a>
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="services.html">Services</a>
+            <a onclick="toggleMenu()" class="text-[#ff6b4a] font-black transition-colors block py-1" href="calculator.html">Get Quote</a>
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="pricing.html">Pricing</a>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-24">
+        <section class="max-w-7xl mx-auto px-6 md:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                
+                <!-- Calculator Steps (Left Column) -->
+                <div class="lg:col-span-8 bg-surface-container-low rounded-3xl p-8 md:p-12 border border-outline-variant/10 shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-surface-container-high">
+                        <div id="progress-bar" class="h-full bg-primary progress-bar" style="width: 16.6%"></div>
+                    </div>
+
+                    <!-- Step 1: Project Type -->
+                    <div id="step-1" class="step-content active">
+                        <span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">Step 01 / 06</span>
+                        <h2 class="font-headline font-black text-4xl mb-8">Choose your project type</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div onclick="selectOption('projectType', 'frontend')" class="option-card p-6 rounded-2xl border-2 border-outline-variant/10 bg-surface-container-high hover:border-primary/50" id="opt-frontend">
+                                <span class="material-symbols-outlined text-4xl text-primary mb-4">html</span>
+                                <h3 class="font-headline font-bold text-xl mb-2">Frontend Only</h3>
+                                <p class="text-sm text-on-surface-variant">HTML/CSS/Vanilla JS. Modern UI with smooth animations.</p>
+                            </div>
+                            <div onclick="selectOption('projectType', 'nodejs')" class="option-card p-6 rounded-2xl border-2 border-outline-variant/10 bg-surface-container-high hover:border-primary/50" id="opt-nodejs">
+                                <span class="material-symbols-outlined text-4xl text-tertiary mb-4">javascript</span>
+                                <h3 class="font-headline font-bold text-xl mb-2">Full Stack Node.js</h3>
+                                <p class="text-sm text-on-surface-variant">Modern scalable backend with Express and MongoDB/MySQL.</p>
+                            </div>
+                            <div onclick="selectOption('projectType', 'springboot')" class="option-card p-6 rounded-2xl border-2 border-outline-variant/10 bg-surface-container-high hover:border-primary/50" id="opt-springboot">
+                                <span class="material-symbols-outlined text-4xl text-primary-container mb-4">layers</span>
+                                <h3 class="font-headline font-bold text-xl mb-2">Full Stack Java</h3>
+                                <p class="text-sm text-on-surface-variant">Enterprise-grade backend with Java Spring Boot and MySQL.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Number of Pages -->
+                    <div id="step-2" class="step-content">
+                        <span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">Step 02 / 06</span>
+                        <h2 class="font-headline font-black text-4xl mb-8">How big is the project?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div onclick="selectOption('pages', '1')" class="option-card p-6 rounded-2xl border-2 border-outline-variant/10 bg-surface-container-high text-center" id="opt-page-1">
+                                <h3 class="font-headline font-bold text-2xl">1 Page</h3>
+                            </div>
+                            <div onclick="selectOption('pages', '2-5')" class="option-card p-6 rounded-2xl border-2 border-outline-variant/10 bg-surface-container-high text-center" id="opt-page-2-5">
+                                <h3 class="font-headline font-bold text-2xl">2–5 Pages</h3>
+                            </div>
+                            <div onclick="selectOption('pages', '6-10')" class="option-card p-6 rounded-2xl border-2 border-outline-variant/10 bg-surface-container-high text-center" id="opt-page-6-10">
+                                <h3 class="font-headline font-bold text-2xl">6–10 Pages</h3>
+                            </div>
+                            <div onclick="selectOption('pages', '10+')" class="option-card p-6 rounded-2xl border-2 border-outline-variant/10 bg-surface-container-high text-center" id="opt-page-10+">
+                                <h3 class="font-headline font-bold text-2xl">10+ Pages</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Features -->
+                    <div id="step-3" class="step-content">
+                        <span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">Step 03 / 06</span>
+                        <h2 class="font-headline font-black text-4xl mb-8">What functionality do you need?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <input type="checkbox" id="feat-form" onchange="toggleFeature('Contact Form', 0)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary" checked disabled/>
+                                <label for="feat-form" class="text-sm font-bold">Contact Form (Free)</label>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <input type="checkbox" id="feat-auth" onchange="toggleFeature('User Login/Signup', 1000)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                <label for="feat-auth" class="text-sm font-bold">User Login (+₹1,000)</label>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <input type="checkbox" id="feat-admin" onchange="toggleFeature('Admin Dashboard', 1500)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                <label for="feat-admin" class="text-sm font-bold">Admin Panel (+₹1,500)</label>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <input type="checkbox" id="feat-payment" onchange="toggleFeature('Razorpay Integration', 2000)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                <label for="feat-payment" class="text-sm font-bold">Payments (+₹2,000)</label>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <input type="checkbox" id="feat-db" onchange="toggleFeature('Database Setup', 800)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                <label for="feat-db" class="text-sm font-bold">Database (+₹800)</label>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <input type="checkbox" id="feat-api" onchange="toggleFeature('REST API', 1000)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                <label for="feat-api" class="text-sm font-bold">REST API (+₹1,000)</label>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <input type="checkbox" id="feat-whatsapp" onchange="toggleFeature('WhatsApp Button', 150)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                <label for="feat-whatsapp" class="text-sm font-bold">WhatsApp (+₹150)</label>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <input type="checkbox" id="feat-gallery" onchange="toggleFeature('Image Gallery', 300)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                <label for="feat-gallery" class="text-sm font-bold">Gallery (+₹300)</label>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <input type="checkbox" id="feat-blog" onchange="toggleFeature('Blog Section', 500)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                <label for="feat-blog" class="text-sm font-bold">Blog (+₹500)</label>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <input type="checkbox" id="feat-maps" onchange="toggleFeature('Google Maps', 150)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                <label for="feat-maps" class="text-sm font-bold">Google Maps (+₹150)</label>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <input type="checkbox" id="feat-seo" onchange="toggleFeature('SEO Setup', 500)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                <label for="feat-seo" class="text-sm font-bold">SEO (+₹500)</label>
+                            </div>
+                            <div class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <input type="checkbox" id="feat-email" onchange="toggleFeature('Email Notifications', 600)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                <label for="feat-email" class="text-sm font-bold">Email Alerts (+₹600)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Add-Ons -->
+                    <div id="step-4" class="step-content">
+                        <span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">Step 04 / 06</span>
+                        <h2 class="font-headline font-black text-4xl mb-8">Extra services on top?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-center justify-between p-6 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <div class="flex items-center gap-4">
+                                    <input type="checkbox" id="add-logo" onchange="toggleAddon('Logo Design', 400)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                    <label for="add-logo" class="font-bold">Logo Design</p>
+                                </div>
+                                <span class="font-bold text-primary">₹400</span>
+                            </div>
+                            <div class="flex items-center justify-between p-6 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <div class="flex items-center gap-4">
+                                    <input type="checkbox" id="add-domain" onchange="toggleAddon('Domain Assistance', 200)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                    <label for="add-domain" class="font-bold">Domain Help</p>
+                                </div>
+                                <span class="font-bold text-primary">₹200</span>
+                            </div>
+                            <div class="flex items-center justify-between p-6 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <div class="flex items-center gap-4">
+                                    <input type="checkbox" id="add-hosting" onchange="toggleAddon('Hosting Setup', 300)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                    <label for="add-hosting" class="font-bold">Hosting Setup</p>
+                                </div>
+                                <span class="font-bold text-primary">₹300</span>
+                            </div>
+                            <div class="flex items-center justify-between p-6 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <div class="flex items-center gap-4">
+                                    <input type="checkbox" id="add-maint" onchange="toggleAddon('Maintenance', 500)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                    <label for="add-maint" class="font-bold">Maintenance</p>
+                                </div>
+                                <span class="font-bold text-primary">₹500<small class="text-[10px] opacity-60">/mo</small></span>
+                            </div>
+                            <div class="flex items-center justify-between p-6 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <div class="flex items-center gap-4">
+                                    <input type="checkbox" id="add-analytics" onchange="toggleAddon('Google Analytics', 200)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                    <label for="add-analytics" class="font-bold">Analytics</p>
+                                </div>
+                                <span class="font-bold text-primary">₹200</span>
+                            </div>
+                            <div class="flex items-center justify-between p-6 rounded-xl bg-surface-container-high border border-outline-variant/5">
+                                <div class="flex items-center gap-4">
+                                    <input type="checkbox" id="add-page" onchange="toggleAddon('Extra Page', 300)" class="w-6 h-6 rounded border-outline-variant bg-surface text-primary focus:ring-primary"/>
+                                    <label for="add-page" class="font-bold">Extra Page</p>
+                                </div>
+                                <span class="font-bold text-primary">₹300</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Timeline -->
+                    <div id="step-5" class="step-content">
+                        <span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">Step 05 / 06</span>
+                        <h2 class="font-headline font-black text-4xl mb-8">What is your timeline?</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div onclick="selectOption('timeline', 'standard')" class="option-card p-8 rounded-2xl border-2 border-outline-variant/10 bg-surface-container-high text-center" id="opt-standard">
+                                <span class="material-symbols-outlined text-4xl text-on-surface mb-2">schedule</span>
+                                <h3 class="font-headline font-bold text-2xl">Standard Delivery</h3>
+                                <p class="text-sm text-on-surface-variant mt-2">Calculated based on complexity</p>
+                            </div>
+                            <div onclick="selectOption('timeline', 'urgent')" class="option-card p-8 rounded-2xl border-2 border-outline-variant/10 bg-surface-container-high text-center relative" id="opt-urgent">
+                                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-error text-on-error px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">+30% Urgent Surcharge</div>
+                                <span class="material-symbols-outlined text-4xl text-error mb-2">bolt</span>
+                                <h3 class="font-headline font-bold text-2xl">Urgent Priority</h3>
+                                <p class="text-sm text-on-surface-variant mt-2">Prioritized build (30% cost increase)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Result -->
+                    <div id="step-6" class="step-content">
+                        <span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">Instant Quote</span>
+                        <h2 class="font-headline font-black text-5xl mb-4">₹<span id="final-price-display">0</span></h2>
+                        <p class="text-on-surface-variant mb-8 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm">schedule</span>
+                            Delivery Time: <span id="final-delivery-display" class="font-bold">-- days</span>
+                        </p>
+
+                        <div class="bg-surface-container-highest rounded-2xl p-6 mb-8 border border-outline-variant/10">
+                            <h3 class="font-headline font-bold text-sm uppercase tracking-widest mb-4 border-b border-outline-variant/10 pb-2">Itemized Breakdown</h3>
+                            <div id="breakdown-list" class="space-y-3 text-sm">
+                                <!-- Dynamic content -->
+                            </div>
+                        </div>
+
+                        <p class="text-xs italic text-on-surface-variant mb-12 opacity-60">"This is an estimate. Final price confirmed after discussion."</p>
+
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <button onclick="submitToContact()" class="flex-grow gradient-primary py-5 rounded-2xl font-headline font-black text-xl text-on-primary-fixed hover:shadow-[0_0_40px_rgba(255,107,74,0.4)] transition-all flex items-center justify-center gap-3">
+                                Submit to AetherStack
+                                <span class="material-symbols-outlined">send</span>
+                            </button>
+                            <button onclick="resetCalculator()" class="bg-surface-container-high px-8 py-5 rounded-2xl font-bold border border-outline-variant/10 hover:bg-surface-container-highest transition-all">
+                                Recalculate
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="flex justify-between items-center mt-12 pt-8 border-t border-outline-variant/10" id="step-nav">
+                        <button id="prevBtn" onclick="changeStep(-1)" class="flex items-center gap-2 text-on-surface-variant font-bold hover:text-on-surface transition-colors disabled:opacity-30" disabled>
+                            <span class="material-symbols-outlined">west</span>
+                            Back
+                        </button>
+                        <button id="nextBtn" onclick="changeStep(1)" class="gradient-primary text-on-primary-fixed px-10 py-4 rounded-xl font-bold font-headline tracking-tight hover:opacity-90 transition-all flex items-center gap-2">
+                            Next Step
+                            <span class="material-symbols-outlined text-sm">east</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Total Sidebar (Right Column) -->
+                <div class="lg:col-span-4 space-y-8 lg:sticky lg:top-32" id="side-total-card">
+                    <div class="bg-surface-container-high rounded-3xl p-8 border border-outline-variant/10 shadow-xl relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 bg-primary h-full"></div>
+                        <h3 class="font-headline font-bold text-lg mb-6 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">payments</span>
+                            Running Total
+                        </h3>
+                        <div class="space-y-4 mb-8">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-on-surface-variant">Base Price</span>
+                                <span class="font-bold" id="side-base">₹0</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-on-surface-variant">Features</span>
+                                <span class="font-bold text-tertiary" id="side-features">₹0</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-on-surface-variant">Add-ons</span>
+                                <span class="font-bold text-primary" id="side-addons">₹0</span>
+                            </div>
+                            <div id="side-multiplier-row" class="hidden flex justify-between items-center text-sm border-t border-outline-variant/10 pt-4">
+                                <span class="text-error font-bold italic">Urgent Surcharge (1.3x)</span>
+                                <span class="font-bold text-error">Included</span>
+                            </div>
+                        </div>
+                        <div class="text-center pt-6 border-t border-outline-variant/10">
+                            <p class="text-xs uppercase font-black tracking-widest text-on-surface-variant mb-1">Total Estimate</p>
+                            <p class="text-4xl font-headline font-black text-on-surface">₹<span id="side-total">0</span></p>
+                        </div>
+                    </div>
+
+                    <div class="bg-primary/5 rounded-3xl p-6 border border-primary/10">
+                        <p class="text-sm italic text-on-surface-variant text-center leading-relaxed">
+                            "Transparency is our code. We provide exact estimates so you can plan your growth without surprises."
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-12 px-6 md:px-8 bg-[#1c1b1b] border-t border-outline-variant/5">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-7xl mx-auto">
+            <div class="flex items-center gap-3">
+                <img alt="Aetherstack" class="w-6 h-6 object-contain" src="/Logo%20maker%20project.png"/>
+                <span class="font-['Space_Grotesk'] font-bold text-[#ff6b4a]">Aetherstack</span>
+            </div>
+            <p class="font-['Manrope'] text-sm text-[#e5e2e1]">© 2026 Aetherstack. Built with Geometric Precision.</p>
+            <div class="flex flex-wrap gap-x-8 gap-y-4">
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="index.html">Home</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="services.html">Services</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="faq.html">FAQ</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="process.html">Process</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="blog.html">Blog</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="careers.html">Careers</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="privacy.html">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let currentStep = 1;
+        const state = {
+            projectType: '',
+            pages: '',
+            features: { 'Contact Form': 0 },
+            addons: {},
+            timeline: 'standard'
+        };
+
+        const prices = {
+            base: {
+                frontend: { '1': 1000, '2-5': 2500, '6-10': 4500, '10+': 6000 },
+                nodejs: { '1': 3000, '2-5': 6000, '6-10': 10000, '10+': 14000 },
+                springboot: { '1': 4000, '2-5': 8000, '6-10': 14000, '10+': 18000 }
+            }
+        };
+
+        const deliveryTimes = {
+            frontend: { '1': 5, '2-5': 10, '6-10': 15, '10+': 20 },
+            nodejs: { '1': 10, '2-5': 20, '6-10': 30, '10+': 40 },
+            springboot: { '1': 12, '2-5': 25, '6-10': 40, '10+': 55 }
+        };
+
+        function selectOption(key, value) {
+            state[key] = value;
+            
+            // UI Update for cards
+            const parent = document.getElementById(`step-${currentStep}`);
+            parent.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+            
+            if (key === 'projectType') document.getElementById(`opt-${value}`).classList.add('selected');
+            if (key === 'pages') document.getElementById(`opt-page-${value}`).classList.add('selected');
+            if (key === 'timeline') document.getElementById(`opt-${value}`).classList.add('selected');
+            
+            updateTotal();
+        }
+
+        function toggleFeature(name, price) {
+            if (state.features[name] !== undefined) delete state.features[name];
+            else state.features[name] = price;
+            updateTotal();
+        }
+
+        function toggleAddon(name, price) {
+            if (state.addons[name] !== undefined) delete state.addons[name];
+            else state.addons[name] = price;
+            updateTotal();
+        }
+
+        function updateTotal() {
+            let base = 0;
+            if (state.projectType && state.pages) {
+                base = prices.base[state.projectType][state.pages];
+            }
+            
+            let featureTotal = Object.values(state.features).reduce((a, b) => a + b, 0);
+            let addonTotal = Object.values(state.addons).reduce((a, b) => a + b, 0);
+            
+            let subtotal = base + featureTotal + addonTotal;
+            let final = subtotal;
+            
+            if (state.timeline === 'urgent') {
+                final = Math.round(subtotal * 1.3);
+                document.getElementById('side-multiplier-row').classList.remove('hidden');
+            } else {
+                document.getElementById('side-multiplier-row').classList.add('hidden');
+            }
+
+            // Update Displays
+            document.getElementById('side-base').textContent = `₹${base.toLocaleString()}`;
+            document.getElementById('side-features').textContent = `₹${featureTotal.toLocaleString()}`;
+            document.getElementById('side-addons').textContent = `₹${addonTotal.toLocaleString()}`;
+            document.getElementById('side-total').textContent = final.toLocaleString();
+            document.getElementById('mobile-total').textContent = final.toLocaleString();
+            
+            // Handle mobile bar visibility
+            const mobileBar = document.getElementById('mobile-total-bar');
+            if (currentStep === 6) mobileBar.style.display = 'none';
+            else mobileBar.style.display = 'flex';
+
+            // Final step summary
+            if (currentStep === 6) {
+                document.getElementById('final-price-display').textContent = final.toLocaleString();
+                
+                let days = 0;
+                if (state.projectType && state.pages) {
+                    days = deliveryTimes[state.projectType][state.pages];
+                }
+                if (state.timeline === 'urgent') days = Math.ceil(days * 0.7);
+                document.getElementById('final-delivery-display').textContent = `${days} days`;
+
+                const list = document.getElementById('breakdown-list');
+                let html = `<div class="flex justify-between font-bold"><span>Base (${state.projectType.toUpperCase()} - ${state.pages} pages)</span> <span>₹${base.toLocaleString()}</span></div>`;
+                
+                Object.entries(state.features).forEach(([n, p]) => {
+                    if (p > 0) html += `<div class="flex justify-between text-on-surface-variant"><span>+ ${n}</span> <span>₹${p.toLocaleString()}</span></div>`;
+                });
+                
+                Object.entries(state.addons).forEach(([n, p]) => {
+                    html += `<div class="flex justify-between text-on-surface-variant"><span>+ ${n}</span> <span>₹${p.toLocaleString()}</span></div>`;
+                });
+
+                if (state.timeline === 'urgent') {
+                    html += `<div class="flex justify-between text-error font-black border-t border-outline-variant/10 pt-2 mt-2"><span>Urgent Delivery Surcharge</span> <span>+30%</span></div>`;
+                }
+                
+                list.innerHTML = html;
+            }
+        }
+
+        function changeStep(delta) {
+            // Validation
+            if (delta === 1) {
+                if (currentStep === 1 && !state.projectType) return alert('Please select a project type');
+                if (currentStep === 2 && !state.pages) return alert('Please select number of pages');
+            }
+
+            document.getElementById(`step-${currentStep}`).classList.remove('active');
+            currentStep += delta;
+            document.getElementById(`step-${currentStep}`).classList.add('active');
+
+            // Nav UI
+            document.getElementById('prevBtn').disabled = currentStep === 1;
+            document.getElementById('nextBtn').classList.toggle('hidden', currentStep === 6);
+            document.getElementById('progress-bar').style.width = `${(currentStep / 6) * 100}%`;
+            
+            updateTotal();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetCalculator() {
+            currentStep = 1;
+            state.projectType = '';
+            state.pages = '';
+            state.features = { 'Contact Form': 0 };
+            state.addons = {};
+            state.timeline = 'standard';
+            
+            document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll('input[type="checkbox"]').forEach(i => {
+                if (!i.disabled) i.checked = false;
+            });
+            
+            document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
+            document.getElementById('step-1').classList.add('active');
+            document.getElementById('prevBtn').disabled = true;
+            document.getElementById('nextBtn').classList.remove('hidden');
+            document.getElementById('progress-bar').style.width = '16.6%';
+            
+            updateTotal();
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('flex');
+        }
+
+        function submitToContact() {
+            const total = document.getElementById('side-total').textContent;
+            const days = document.getElementById('final-delivery-display').textContent;
+            
+            let msg = `Project Estimate: ₹${total}\n`;
+            msg += `Timeline: ${days}\n\n`;
+            msg += `Stack: ${state.projectType}\n`;
+            msg += `Pages: ${state.pages}\n`;
+            msg += `Features: ${Object.keys(state.features).join(', ')}\n`;
+            msg += `Addons: ${Object.keys(state.addons).join(', ') || 'None'}\n`;
+            msg += `Priority: ${state.timeline}`;
+
+            window.location.href = `index.html?quote=${encodeURIComponent(msg)}#contact`;
+        }
+    </script>
+</body>
+</html>

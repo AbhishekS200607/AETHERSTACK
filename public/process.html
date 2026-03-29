@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="icon" href="/Logo%20maker%20project.png" type="image/png" />
+    <title>Our Process | Aetherstack</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+          tailwind.config = {
+            darkMode: "class",
+            theme: {
+              extend: {
+                colors: {
+                  "tertiary-fixed-dim": "#56d9d8",
+                  "secondary": "#c6c6c7",
+                  "surface-container-high": "#2a2a2a",
+                  "tertiary-container": "#00acab",
+                  "inverse-on-surface": "#313030",
+                  "surface-container-lowest": "#0e0e0e",
+                  "primary-fixed-dim": "#ffb4a3",
+                  "on-error": "#690005",
+                  "secondary-container": "#454747",
+                  "inverse-primary": "#ae3115",
+                  "on-tertiary": "#003736",
+                  "on-primary-fixed-variant": "#8c1900",
+                  "secondary-fixed-dim": "#c6c6c7",
+                  "surface-container": "#201f1f",
+                  "on-secondary-container": "#b4b5b5",
+                  "tertiary": "#56d9d8",
+                  "on-secondary-fixed": "#1a1c1c",
+                  "on-primary": "#630f00",
+                  "secondary-fixed": "#e2e2e2",
+                  "on-tertiary-container": "#003939",
+                  "error": "#ffb4ab",
+                  "primary": "#ffb4a3",
+                  "surface-tint": "#ffb4a3",
+                  "surface-bright": "#393939",
+                  "error-container": "#93000a",
+                  "on-error-container": "#ffdad6",
+                  "background": "#131313",
+                  "on-primary-container": "#661000",
+                  "primary-fixed": "#ffdad2",
+                  "on-tertiary-fixed": "#002020",
+                  "on-background": "#e5e2e1",
+                  "surface-container-highest": "#353534",
+                  "outline-variant": "#59413c",
+                  "primary-container": "#ff6b4a",
+                  "surface-container-low": "#1c1b1b",
+                  "on-surface": "#e5e2e1",
+                  "on-tertiary-fixed-variant": "#00504f",
+                  "surface": "#131313",
+                  "surface-variant": "#353534",
+                  "on-secondary": "#2f3131",
+                  "surface-dim": "#131313",
+                  "inverse-surface": "#e5e2e1",
+                  "on-surface-variant": "#e1bfb8",
+                  "on-secondary-fixed-variant": "#454747",
+                  "tertiary-fixed": "#76f6f4",
+                  "outline": "#a88a83",
+                  "on-primary-fixed": "#3d0600"
+                },
+                fontFamily: {
+                  "headline": ["Space Grotesk"],
+                  "body": ["Manrope"],
+                  "label": ["Manrope"]
+                },
+                borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                animation: {
+                  'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                },
+                keyframes: {
+                  fadeInUp: {
+                    '0%': { opacity: '0', transform: 'translateY(20px)' },
+                    '100%': { opacity: '1', transform: 'translateY(0)' },
+                  }
+                }
+              },
+            },
+          }
+        </script>
+    <style>
+          .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+          }
+          .glass-nav {
+            background: rgba(32, 31, 31, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+          }
+          .gradient-primary {
+            background: linear-gradient(45deg, #ffb4a3, #ff6b4a);
+          }
+          .reveal {
+            opacity: 0;
+          }
+          .reveal.active {
+            animation: fadeInUp 0.8s ease-out forwards;
+          }
+          .step-connector {
+            position: absolute;
+            left: 1.5rem;
+            top: 2rem;
+            bottom: -2rem;
+            width: 2px;
+            background: linear-gradient(to bottom, #ff6b4a 0%, transparent 100%);
+          }
+          .step-dot {
+            width: 3rem;
+            height: 3rem;
+            background: #2a2a2a;
+            border: 2px solid #ff6b4a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            flex-shrink: 0;
+          }
+        </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-fixed">
+    <!-- TopNavBar -->
+    <nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl z-50 glass-nav rounded-2xl shadow-2xl transition-all duration-500">
+        <div class="flex justify-between items-center w-full px-6 py-4">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="overflow-hidden rounded-lg w-10 h-10 flex items-center justify-center bg-surface-container-high/50">
+                    <img alt="Aetherstack Fox" class="w-8 h-8 object-contain" src="/Logo%20maker%20project.png"/>
+                </div>
+                <span class="text-xl font-black tracking-tighter text-[#e5e2e1] font-headline">Aetherstack</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8 font-headline font-bold tracking-tight text-sm">
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="index.html#about">About</a>
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="services.html">Services</a>
+                <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="pricing.html">Pricing</a>
+                <a class="text-[#ff6b4a] font-black transition-colors" href="calculator.html">Get Quote</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="window.location.href='index.html#contact'" class="hidden md:block gradient-primary text-on-primary-fixed px-5 py-2 rounded-xl font-bold tracking-tight hover:opacity-90 transition-all duration-300 active:scale-95 shadow-lg shadow-primary-container/20 text-sm">Get Started</button>
+                <button id="hamburger" onclick="toggleMenu()" class="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-[5px] rounded-lg hover:bg-surface-container-high transition-colors">
+                    <span class="ham-line block w-6 h-0.5 bg-[#e5e2e1] transition-all duration-300"></span>
+                    <span class="ham-line block w-6 h-0.5 bg-[#e5e2e1] transition-all duration-300"></span>
+                    <span class="ham-line block w-6 h-0.5 bg-[#e5e2e1] transition-all duration-300"></span>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-5 flex-col gap-4 font-headline font-bold tracking-tight text-sm border-t border-outline-variant/10 mt-1 pt-4">
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="index.html#about">About</a>
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="services.html">Services</a>
+            <a onclick="toggleMenu()" class="text-[#ff6b4a] font-black transition-colors block py-1" href="calculator.html">Get Quote</a>
+            <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="pricing.html">Pricing</a>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-24">
+        <!-- Hero Section -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-32 animate-fade-in-up">
+            <span class="text-primary font-bold uppercase tracking-widest font-label text-sm mb-4 block">The Lifecycle</span>
+            <h1 class="font-headline font-black text-6xl md:text-8xl tracking-tighter mb-8 leading-[0.9]">
+                From Idea <br/>to <span class="text-primary-container">Launch.</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-on-surface-variant max-w-3xl font-light leading-relaxed">
+                A clear, simple process so you always know what's happening with your project. No black boxes, just pure execution.
+            </p>
+        </section>
+
+        <!-- Timeline Section -->
+        <section class="max-w-4xl mx-auto px-6 md:px-8 mb-40 reveal">
+            <div class="space-y-12">
+                <!-- Step 1 -->
+                <div class="flex gap-8 relative">
+                    <div class="step-connector"></div>
+                    <div class="step-dot font-headline font-black text-primary">1</div>
+                    <div>
+                        <h3 class="font-headline font-black text-2xl mb-2">You Reach Out</h3>
+                        <p class="text-on-surface-variant leading-relaxed">Fill our contact form or WhatsApp us directly. Tell us what you need — even a rough idea is enough to get started.</p>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="flex gap-8 relative">
+                    <div class="step-connector"></div>
+                    <div class="step-dot font-headline font-black text-primary">2</div>
+                    <div>
+                        <h3 class="font-headline font-black text-2xl mb-2">Free Discussion Call</h3>
+                        <p class="text-on-surface-variant leading-relaxed">We schedule a quick 30-minute call or WhatsApp chat to understand your requirements, goals, and budget. No commitment needed.</p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="flex gap-8 relative">
+                    <div class="step-connector"></div>
+                    <div class="step-dot font-headline font-black text-primary">3</div>
+                    <div>
+                        <h3 class="font-headline font-black text-2xl mb-2">Quote and Timeline</h3>
+                        <p class="text-on-surface-variant leading-relaxed">Within 24 hours we send you a detailed quote with exact price, what's included, and how long it will take.</p>
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="flex gap-8 relative">
+                    <div class="step-connector"></div>
+                    <div class="step-dot font-headline font-black text-primary">4</div>
+                    <div>
+                        <h3 class="font-headline font-black text-2xl mb-2">Advance Payment</h3>
+                        <p class="text-on-surface-variant leading-relaxed">Once you approve the quote, 50% advance payment is made via UPI or bank transfer. This is when work officially begins.</p>
+                    </div>
+                </div>
+                <!-- Step 5 -->
+                <div class="flex gap-8 relative">
+                    <div class="step-connector"></div>
+                    <div class="step-dot font-headline font-black text-primary">5</div>
+                    <div>
+                        <h3 class="font-headline font-black text-2xl mb-2">Design and Development</h3>
+                        <p class="text-on-surface-variant leading-relaxed">We start building. You'll receive progress updates regularly via WhatsApp so you're never left wondering what's happening.</p>
+                    </div>
+                </div>
+                <!-- Step 6 -->
+                <div class="flex gap-8 relative">
+                    <div class="step-connector"></div>
+                    <div class="step-dot font-headline font-black text-primary">6</div>
+                    <div>
+                        <h3 class="font-headline font-black text-2xl mb-2">First Preview</h3>
+                        <p class="text-on-surface-variant leading-relaxed">We share a working preview link for you to review. You give feedback on what to change or improve.</p>
+                    </div>
+                </div>
+                <!-- Step 7 -->
+                <div class="flex gap-8 relative">
+                    <div class="step-connector"></div>
+                    <div class="step-dot font-headline font-black text-primary">7</div>
+                    <div>
+                        <h3 class="font-headline font-black text-2xl mb-2">Revisions</h3>
+                        <p class="text-on-surface-variant leading-relaxed">We make changes based on your feedback. 2 free revision rounds are included in all plans.</p>
+                    </div>
+                </div>
+                <!-- Step 8 -->
+                <div class="flex gap-8 relative">
+                    <div class="step-connector"></div>
+                    <div class="step-dot font-headline font-black text-primary">8</div>
+                    <div>
+                        <h3 class="font-headline font-black text-2xl mb-2">Final Delivery</h3>
+                        <p class="text-on-surface-variant leading-relaxed">Final version is delivered. Remaining payment is made. Source code and all files are handed over to you.</p>
+                    </div>
+                </div>
+                <!-- Step 9 -->
+                <div class="flex gap-8">
+                    <div class="step-dot font-headline font-black text-primary">9</div>
+                    <div>
+                        <h3 class="font-headline font-black text-2xl mb-2">Post Delivery Support</h3>
+                        <p class="text-on-surface-variant leading-relaxed">Free bug fixes for 15 days after delivery. Monthly maintenance available at ₹500/month if needed.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Preparation Checklist -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 mb-40 reveal">
+            <div class="bg-surface-container-high rounded-3xl p-10 md:p-16 border border-outline-variant/10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div>
+                        <h2 class="font-headline font-black text-4xl mb-6">What You Need <br/><span class="text-primary-container">to Provide</span></h2>
+                        <p class="text-on-surface-variant mb-8 italic text-lg">"Don't have everything ready? No problem. We'll guide you through each item."</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-center gap-3 p-4 bg-surface-container-low rounded-xl border border-outline-variant/5">
+                            <span class="material-symbols-outlined text-tertiary">check_box</span>
+                            <span class="text-sm font-bold">Business Name & Description</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-surface-container-low rounded-xl border border-outline-variant/5">
+                            <span class="material-symbols-outlined text-tertiary">check_box</span>
+                            <span class="text-sm font-bold">List of desired pages</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-surface-container-low rounded-xl border border-outline-variant/5">
+                            <span class="material-symbols-outlined text-tertiary">check_box</span>
+                            <span class="text-sm font-bold">Design references</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-surface-container-low rounded-xl border border-outline-variant/5">
+                            <span class="material-symbols-outlined text-tertiary">check_box</span>
+                            <span class="text-sm font-bold">Logo (if any)</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-surface-container-low rounded-xl border border-outline-variant/5">
+                            <span class="material-symbols-outlined text-tertiary">check_box</span>
+                            <span class="text-sm font-bold">Photos/Images</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 bg-surface-container-low rounded-xl border border-outline-variant/5">
+                            <span class="material-symbols-outlined text-tertiary">check_box</span>
+                            <span class="text-sm font-bold">Text content for pages</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bottom CTA -->
+        <section class="max-w-7xl mx-auto px-6 md:px-8 reveal">
+            <div class="bg-surface-container-highest p-12 md:p-20 rounded-[3rem] text-center border border-outline-variant/10 relative overflow-hidden">
+                <div class="absolute inset-0 bg-primary/5 pointer-events-none"></div>
+                <h2 class="font-headline font-black text-4xl md:text-6xl mb-6 relative z-10">Ready to start?</h2>
+                <p class="text-xl text-on-surface-variant mb-12 max-w-2xl mx-auto relative z-10">
+                    Let's turn your idea into a high-performance digital asset.
+                </p>
+                <div class="flex flex-wrap justify-center gap-6 relative z-10">
+                    <button onclick="window.location.href='calculator.html'" class="gradient-primary text-on-primary-fixed px-10 py-5 rounded-2xl font-black text-lg font-headline tracking-tight hover:shadow-[0_0_30px_rgba(255,107,74,0.4)] transition-all">Calculate My Cost</button>
+                    <button onclick="window.location.href='index.html#contact'" class="bg-surface-container-high text-on-surface px-10 py-5 rounded-2xl font-black text-lg font-headline tracking-tight hover:bg-surface-container-highest border border-outline-variant transition-all">Contact Us</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-12 px-6 md:px-8 bg-[#1c1b1b] border-t border-outline-variant/5">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-7xl mx-auto">
+            <div class="flex items-center gap-3">
+                <img alt="Aetherstack" class="w-6 h-6 object-contain" src="/Logo%20maker%20project.png"/>
+                <span class="font-['Space_Grotesk'] font-bold text-[#ff6b4a]">Aetherstack</span>
+            </div>
+            <p class="font-['Manrope'] text-sm text-[#e5e2e1]">© 2026 Aetherstack. Built with Geometric Precision.</p>
+            <div class="flex flex-wrap gap-x-8 gap-y-4">
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="index.html">Home</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="services.html">Services</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="faq.html">FAQ</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="process.html">Process</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="blog.html">Blog</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="careers.html">Careers</a>
+                <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="privacy.html">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const lines = document.querySelectorAll('.ham-line');
+            const isOpen = !menu.classList.contains('hidden');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('flex');
+            if (!isOpen) {
+                lines[0].style.transform = 'translateY(7px) rotate(45deg)';
+                lines[1].style.opacity = '0';
+                lines[2].style.transform = 'translateY(-7px) rotate(-45deg)';
+            } else {
+                lines[0].style.transform = '';
+                lines[1].style.opacity = '';
+                lines[2].style.transform = '';
+            }
+        }
+
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+
+        window.addEventListener("scroll", reveal);
+        window.addEventListener("load", reveal);
+    </script>
+</body>
+</html>

@@ -2,3 +2,5 @@
 node_modules/
 submissions.json
 projects.json
+.DS_Store
+*.log

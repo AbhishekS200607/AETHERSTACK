@@ -11,7 +11,7 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../public')));
 
 async function readProjects() {
   const { data, error } = await supabase.from('projects').select('*').order('id', { ascending: false });
@@ -46,15 +46,6 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Verify transporter on startup
-transporter.verify(function (error, success) {
-  if (error) {
-    console.error('Nodemailer verification failed:', error.message);
-  } else {
-    console.log('Nodemailer is ready to take messages');
-  }
-});
-
 app.post('/api/contact', async (req, res) => {
   const { name, email, projectType, budget, message } = req.body;
 
@@ -68,7 +59,7 @@ app.post('/api/contact', async (req, res) => {
     const info = await transporter.sendMail({
       from: `"Aetherstack" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
-      subject: `?? New Proposal from ${name}`,
+      subject: `New Proposal from ${name}`,
       html: `
         <div style="font-family: sans-serif; padding: 20px; color: #333;">
           <h2 style="color: #ff6b4a;">New Contact Submission</h2>
@@ -131,12 +122,14 @@ app.delete('/api/projects/:id', adminAuth, async (req, res) => {
   res.json({ success: true });
 });
 
-app.get('/', (req, res) => {
-  res.sendFile(path.resolve('public/index.html'));
-});
-
-app.get('/admin', (req, res) => {
-  res.sendFile(path.resolve('public/admin.html'));
+// 404 handler - must be last
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, '../public/404.html'));
 });
 
 module.exports = app;
+
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+}

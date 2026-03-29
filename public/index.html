@@ -147,6 +147,8 @@
     <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="#contact">Contact</a>
     <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="team.html">Team</a>
     <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="services.html">Services</a>
+    <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="pricing.html">Pricing</a>
+    <a class="text-[#ff6b4a] font-black transition-colors" href="calculator.html">Get Quote</a>
   </div>
   <div class="flex items-center gap-3">
     <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" class="hidden md:block gradient-primary text-on-primary-fixed px-5 py-2 rounded-xl font-bold tracking-tight hover:opacity-90 transition-all duration-300 active:scale-95 shadow-lg shadow-primary-container/20 text-sm">Get Started</button>
@@ -164,6 +166,8 @@
   <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="#contact">Contact</a>
   <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="team.html">Team</a>
   <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="services.html">Services</a>
+  <a onclick="toggleMenu()" class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors block py-1" href="pricing.html">Pricing</a>
+  <a onclick="toggleMenu()" class="text-[#ff6b4a] font-black transition-colors block py-1" href="calculator.html">Get Quote</a>
   <button onclick="toggleMenu(); document.getElementById('contact').scrollIntoView({behavior:'smooth'})" class="gradient-primary text-on-primary-fixed px-5 py-2 rounded-xl font-bold hover:opacity-90 transition-all text-sm w-full mt-1">Get Started</button>
 </div>
 </nav>
@@ -370,11 +374,14 @@
 <span class="font-['Space_Grotesk'] font-bold text-[#ff6b4a]">Aetherstack</span>
 </div>
 <p class="font-['Manrope'] text-sm text-[#e5e2e1]">© 2026 Aetherstack. Built with Geometric Precision.</p>
-<div class="flex gap-8">
-<a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors hover:translate-x-1 transition-transform" href="privacy.html">Privacy Policy</a>
-<a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors hover:translate-x-1 transition-transform" href="terms.html">Terms of Service</a>
-<a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors hover:translate-x-1 transition-transform" href="#">Github</a>
-<a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors hover:translate-x-1 transition-transform" href="#">LinkedIn</a>
+<div class="flex flex-wrap gap-x-8 gap-y-4">
+<a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="index.html">Home</a>
+<a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="services.html">Services</a>
+<a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="faq.html">FAQ</a>
+<a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="process.html">Process</a>
+<a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="blog.html">Blog</a>
+<a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="careers.html">Careers</a>
+<a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="privacy.html">Privacy</a>
 </div>
 </div>
 </footer>
@@ -518,6 +525,26 @@
     window.addEventListener("scroll", reveal);
     // Initial check
     reveal();
+
+    // Pre-fill contact form from quote parameter
+    window.addEventListener('load', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const quote = urlParams.get('quote');
+        if (quote) {
+            const messageField = document.getElementById('cf-message');
+            const budgetField = document.getElementById('cf-budget');
+            messageField.value = quote;
+            
+            // Extract estimate for budget field
+            const budgetMatch = quote.match(/Project Estimate: ₹([\d,]+)/);
+            if (budgetMatch) {
+                budgetField.value = `₹${budgetMatch[1]}`;
+            }
+
+            // Scroll to contact section
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        }
+    });
 </script>
 </body></html>
 

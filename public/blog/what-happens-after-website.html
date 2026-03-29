@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <link rel="icon" href="/Logo%20maker%20project.png" type="image/png"/>
+  <title>We Built a Website for a Homestay in Munnar. Here's What Happened Next. | Aetherstack</title>
+  <meta name="description" content="A small Munnar homestay was surviving on word of mouth. We built them a ₹2,500 website. Within 3 months they had their first booking from a complete stranger."/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "tertiary-fixed-dim": "#56d9d8", "secondary": "#c6c6c7", "surface-container-high": "#2a2a2a",
+            "tertiary-container": "#00acab", "inverse-on-surface": "#313030", "surface-container-lowest": "#0e0e0e",
+            "primary-fixed-dim": "#ffb4a3", "on-error": "#690005", "secondary-container": "#454747",
+            "inverse-primary": "#ae3115", "on-tertiary": "#003736", "on-primary-fixed-variant": "#8c1900",
+            "secondary-fixed-dim": "#c6c6c7", "surface-container": "#201f1f", "on-secondary-container": "#b4b5b5",
+            "tertiary": "#56d9d8", "on-secondary-fixed": "#1a1c1c", "on-primary": "#630f00",
+            "secondary-fixed": "#e2e2e2", "on-tertiary-container": "#003939", "error": "#ffb4ab",
+            "primary": "#ffb4a3", "surface-tint": "#ffb4a3", "surface-bright": "#393939",
+            "error-container": "#93000a", "on-error-container": "#ffdad6", "background": "#131313",
+            "on-primary-container": "#661000", "primary-fixed": "#ffdad2", "on-tertiary-fixed": "#002020",
+            "on-background": "#e5e2e1", "surface-container-highest": "#353534", "outline-variant": "#59413c",
+            "primary-container": "#ff6b4a", "surface-container-low": "#1c1b1b", "on-surface": "#e5e2e1",
+            "on-tertiary-fixed-variant": "#00504f", "surface": "#131313", "surface-variant": "#353534",
+            "on-secondary": "#2f3131", "surface-dim": "#131313", "inverse-surface": "#e5e2e1",
+            "on-surface-variant": "#e1bfb8", "on-secondary-fixed-variant": "#454747",
+            "tertiary-fixed": "#76f6f4", "outline": "#a88a83", "on-primary-fixed": "#3d0600"
+          },
+          fontFamily: { "headline": ["Space Grotesk"], "body": ["Manrope"], "label": ["Manrope"] },
+          borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+          animation: { 'fade-in-up': 'fadeInUp 0.8s ease-out forwards' },
+          keyframes: { fadeInUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .glass-nav { background: rgba(32,31,31,0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
+    .gradient-primary { background: linear-gradient(45deg, #ffb4a3, #ff6b4a); }
+    .prose-blog p { margin-bottom: 1.5rem; line-height: 1.9; color: #e1bfb8; font-size: 1.125rem; }
+    .prose-blog blockquote { border-left: 3px solid #ff6b4a; padding-left: 1.5rem; margin: 2rem 0; font-style: italic; color: #e5e2e1; font-size: 1.2rem; }
+    .prose-blog h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 800; font-size: 1.75rem; color: #e5e2e1; margin: 3rem 0 1rem; }
+    .prose-blog ul { list-style: none; padding: 0; margin-bottom: 1.5rem; }
+    .prose-blog ul li { padding: 0.4rem 0 0.4rem 1.75rem; position: relative; color: #e1bfb8; font-size: 1.05rem; }
+    .prose-blog ul li::before { content: '→'; position: absolute; left: 0; color: #ff6b4a; }
+    .timeline-item { border-left: 2px solid #59413c; padding-left: 1.5rem; padding-bottom: 2rem; position: relative; }
+    .timeline-item::before { content: ''; position: absolute; left: -5px; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: #ff6b4a; }
+    .timeline-item:last-child { padding-bottom: 0; }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body">
+  <nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl z-50 glass-nav rounded-2xl shadow-2xl">
+    <div class="flex justify-between items-center w-full px-6 py-4">
+      <a href="/index.html" class="flex items-center gap-3">
+        <div class="rounded-lg w-10 h-10 flex items-center justify-center bg-surface-container-high/50">
+          <img alt="Aetherstack" class="w-8 h-8 object-contain" src="/Logo%20maker%20project.png"/>
+        </div>
+        <span class="text-xl font-black tracking-tighter text-[#e5e2e1] font-headline">Aetherstack</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8 font-headline font-bold tracking-tight text-sm">
+        <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="/index.html#about">About</a>
+        <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="/services.html">Services</a>
+        <a class="text-[#e5e2e1] hover:text-[#ff6b4a] transition-colors" href="/pricing.html">Pricing</a>
+        <a class="text-[#ff6b4a]" href="/blog.html">Blog</a>
+      </div>
+      <a href="/index.html#contact" class="hidden md:block gradient-primary text-on-primary-fixed px-5 py-2 rounded-xl font-bold text-sm hover:opacity-90 transition-all">Get Started</a>
+    </div>
+  </nav>
+
+  <main class="pt-36 pb-24">
+    <article class="max-w-2xl mx-auto px-6">
+
+      <div class="animate-fade-in-up">
+        <span class="text-primary font-bold uppercase tracking-widest font-label text-xs">Case Study · Tourism · Kerala</span>
+        <h1 class="font-headline font-black text-4xl md:text-5xl tracking-tighter mt-4 mb-6 text-on-surface leading-tight">
+          We Built a Website for a Homestay in Munnar. Here's What Happened Next.
+        </h1>
+        <div class="flex items-center gap-4 text-on-surface-variant text-sm mb-12 pb-8 border-b border-outline-variant/20">
+          <span>Aetherstack Team</span>
+          <span>·</span>
+          <span>5 min read</span>
+        </div>
+      </div>
+
+      <div class="prose-blog">
+        <p>A small homestay in Munnar was getting bookings only through word of mouth. Fully booked in peak season, nearly empty in the off season.</p>
+
+        <blockquote>
+          The owner had tried posting on Facebook. A few shares, a few comments. Nothing that translated into actual bookings from new people.
+        </blockquote>
+
+        <p>The problem wasn't the homestay. The rooms were clean, the food was good, the location was beautiful. The problem was that nobody outside their existing network could find them.</p>
+
+        <h2>The Problem With Word of Mouth</h2>
+
+        <p>Word of mouth is the best marketing in the world — when it works. But it has a hard ceiling.</p>
+
+        <p>It only reaches people who know someone who knows you. It doesn't reach the family in Bangalore who is planning a Munnar trip right now and searching Google for "quiet homestay Munnar with good food." That family has money, they're ready to book, and they'll never hear about this place through word of mouth.</p>
+
+        <p>That's the gap a website fills.</p>
+
+        <h2>What We Built</h2>
+
+        <p>Three pages. That's it.</p>
+        <ul>
+          <li>Home — a welcoming intro, a few photos, the location, what makes it special</li>
+          <li>Rooms — photos of each room, what's included, pricing per night</li>
+          <li>Contact — a WhatsApp button, phone number, and a simple inquiry form</li>
+        </ul>
+
+        <p>No booking engine. No payment gateway. No complex features. Just clean, fast pages that load well on mobile and tell Google exactly what this place is and where it is.</p>
+
+        <p>Total cost: ₹2,500. Delivered in 7 days.</p>
+
+        <h2>What Happened — Week by Week</h2>
+
+        <div class="not-prose my-8 space-y-0">
+          <div class="timeline-item">
+            <p class="font-headline font-bold text-on-surface mb-1">Week 1–2</p>
+            <p class="text-on-surface-variant text-sm">Website goes live. Google starts crawling it. No visible traffic yet — this is normal. SEO takes time.</p>
+          </div>
+          <div class="timeline-item">
+            <p class="font-headline font-bold text-on-surface mb-1">Week 3–4</p>
+            <p class="text-on-surface-variant text-sm">Google indexes the site. It starts appearing in search results for "homestay Munnar" — not on page 1 yet, but it's there.</p>
+          </div>
+          <div class="timeline-item">
+            <p class="font-headline font-bold text-on-surface mb-1">Week 6</p>
+            <p class="text-on-surface-variant text-sm">First WhatsApp inquiry from someone who found the site on Google. A couple from Kochi asking about availability for the following month.</p>
+          </div>
+          <div class="timeline-item">
+            <p class="font-headline font-bold text-on-surface mb-1">Month 2</p>
+            <p class="text-on-surface-variant text-sm">3 more inquiries via WhatsApp. 2 convert into bookings. Both from people who had never heard of the homestay before finding it online.</p>
+          </div>
+          <div class="timeline-item">
+            <p class="font-headline font-bold text-on-surface mb-1">Month 3</p>
+            <p class="text-on-surface-variant text-sm">First booking from a complete stranger — a family from Bangalore who searched "quiet homestay Munnar" and found the site on page 2 of Google. They booked 3 nights.</p>
+          </div>
+        </div>
+
+        <h2>The Math</h2>
+
+        <p>That Bangalore family's 3-night stay: ₹3,500 per night. Total: ₹10,500.</p>
+
+        <p>The website cost ₹2,500.</p>
+
+        <p>That single booking paid for the website four times over. Every booking after that is pure return on a one-time investment.</p>
+
+        <p>And unlike a Facebook ad that stops working the moment you stop paying — the website keeps working. It's there at 2am when someone is planning their trip. It's there on a Sunday when the owner is asleep. It never stops.</p>
+
+        <h2>What the Site Actually Had</h2>
+
+        <p>Nothing fancy. No animations, no booking system, no chatbot. Just:</p>
+        <ul>
+          <li>Good photos of the rooms and surroundings</li>
+          <li>Clear description of what's included (meals, parking, Wi-Fi)</li>
+          <li>Pricing written clearly — no "DM for price" ambiguity</li>
+          <li>A WhatsApp button that opens a pre-filled message</li>
+          <li>The location on Google Maps embedded on the contact page</li>
+        </ul>
+
+        <p>That's all it took. Clean, honest, easy to navigate on a phone. Google rewarded it with visibility. Visitors rewarded it with inquiries.</p>
+
+        <h2>Your Business Has a Story. Let People Find It.</h2>
+
+        <p>Every small business has something real to offer. A homestay with character. A repair shop with honest work. A tutor who actually cares. A food business with a recipe passed down through generations.</p>
+
+        <p>The tragedy is when that story stays invisible — locked inside word of mouth, never reaching the people who are actively searching for exactly what you offer.</p>
+
+        <p>A website is how you tell that story to the internet. And the internet never sleeps.</p>
+      </div>
+
+      <div class="mt-16 p-8 bg-surface-container-low rounded-2xl border border-outline-variant/10 text-center">
+        <p class="text-on-surface-variant mb-2 text-sm uppercase tracking-widest font-bold font-label">Your business has a story</p>
+        <h3 class="font-headline font-black text-2xl mb-4">Let people find it.</h3>
+        <a href="/index.html#contact" class="inline-block gradient-primary text-on-primary-fixed px-8 py-4 rounded-xl font-bold font-headline hover:opacity-90 transition-all">Get a Free Quote →</a>
+        <p class="text-xs text-on-surface-variant mt-4 italic">3-page websites from ₹2,500 · Delivered in 7 days</p>
+      </div>
+
+      <div class="mt-12 text-center">
+        <a href="/blog.html" class="text-primary hover:text-primary-container transition-colors font-bold text-sm">← Back to all articles</a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="w-full py-12 px-6 bg-[#1c1b1b] border-t border-outline-variant/5">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-7xl mx-auto">
+      <div class="flex items-center gap-3">
+        <img alt="Aetherstack" class="w-6 h-6 object-contain" src="/Logo%20maker%20project.png"/>
+        <span class="font-['Space_Grotesk'] font-bold text-[#ff6b4a]">Aetherstack</span>
+      </div>
+      <p class="font-['Manrope'] text-sm text-[#e5e2e1]">© 2026 Aetherstack. Built with Geometric Precision.</p>
+      <div class="flex gap-8">
+        <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="/privacy.html">Privacy Policy</a>
+        <a class="text-[#e5e2e1]/60 hover:text-[#ff6b4a] transition-colors" href="/terms.html">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
