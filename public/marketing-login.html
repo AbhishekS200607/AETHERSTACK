@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Marketer Login | Aetherstack</title>
+  <link rel="icon" href="/Logo%20maker%20project.png" type="image/png"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#ff6035",
+            "primary-container": "#ff6035",
+            "on-primary": "#ffffff",
+            "on-primary-fixed": "#ffffff",
+            "tertiary": "#7b61ff",
+            "background": "#f7f7f8",
+            "surface": "#ffffff",
+            "on-background": "#111111",
+            "on-surface": "#111111",
+            "on-surface-variant": "#666666",
+            "outline": "#c4c4c8",
+            "outline-variant": "#dcdce0",
+          },
+          fontFamily: { "headline": ["Space Grotesk"], "body": ["Manrope"] },
+          borderRadius: { "2xl": "1rem", "3xl": "1.5rem" }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .glass-nav { background: rgba(255,255,255,0.82); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 2px 32px rgba(0,0,0,0.07); }
+    .gradient-primary { background: linear-gradient(135deg, #ff6035 0%, #ff8c42 100%); position: relative; overflow: hidden; }
+    .gradient-primary::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, #ff8c42 0%, #ff6035 100%); opacity: 0; transition: opacity 0.4s; }
+    .gradient-primary:hover::after { opacity: 1; }
+    .gradient-primary > * { position: relative; z-index: 1; }
+    
+    .hero-noise::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+      background-size: 80px 80px; pointer-events: none; z-index: 1;
+    }
+
+    .float-field { position: relative; margin-bottom: 1.5rem; }
+    .float-field input {
+      width: 100%; background: transparent; border: none; border-bottom: 2px solid #c4c4c8;
+      padding: 20px 0 6px 0; font-family: 'Manrope', sans-serif; font-size: 1rem; color: #111111;
+      outline: none !important; border-radius: 0; transition: border-color 0.3s;
+    }
+    .float-field input:focus { border-color: #ff6035; }
+    .float-field label {
+      position: absolute; left: 0; top: 20px; color: #666666; font-size: 1rem; pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.22,1,0.36,1); font-weight: 500;
+    }
+    .float-field input:focus ~ label,
+    .float-field input:not(:placeholder-shown) ~ label { top: 0; font-size: 0.75rem; color: #ff6035; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .eye-btn { position: absolute; right: 0; top: 20px; color: #666666; cursor: pointer; padding: 4px; transition: color 0.2s; }
+    .eye-btn:hover { color: #ff6035; }
+
+    .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.875rem; z-index: 9999; transition: opacity 0.3s; white-space: nowrap; }
+    #toast.success { background: #16a34a; color: #fff; }
+    #toast.error   { background: #dc2626; color: #fff; }
+    #toast.hidden  { opacity: 0; pointer-events: none; }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%,60% { transform: translateX(-8px); }
+      40%,80% { transform: translateX(8px); }
+    }
+    .shake { animation: shake 0.4s ease; }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-fixed min-h-screen flex flex-col hero-noise">
+
+  <nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl z-50 glass-nav rounded-2xl shadow-2xl">
+    <div class="flex justify-between items-center w-full px-6 py-4">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="overflow-hidden rounded-lg w-10 h-10 flex items-center justify-center bg-surface-container-high/50">
+          <img alt="Aetherstack Fox" class="w-8 h-8 object-contain" src="/Logo%20maker%20project.png"/>
+        </div>
+        <span class="text-xl font-black tracking-tighter text-[#111111] font-headline">Aetherstack</span>
+      </a>
+      <a href="marketing-join.html" class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">Join Team</a>
+    </div>
+  </nav>
+
+  <main class="flex-1 flex items-center justify-center pt-32 pb-20 px-4 relative z-10">
+    <div id="toast" class="hidden"></div>
+
+    <div class="bg-white rounded-[2.5rem] w-full max-w-md p-8 md:p-12 shadow-2xl border border-outline-variant/30" id="card">
+      
+      <div class="flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/5 mb-8">
+        <span class="material-symbols-outlined text-primary text-3xl">login</span>
+      </div>
+
+      <h1 class="font-headline font-black text-4xl tracking-tighter text-on-background mb-2">Welcome back</h1>
+      <p class="text-on-surface-variant text-sm mb-10 font-medium">Sign in to your marketer dashboard.</p>
+
+      <form id="login-form" novalidate class="space-y-4">
+        <div class="float-field">
+          <input id="f-email" type="email" placeholder=" " autocomplete="email" required/>
+          <label>Email Address *</label>
+        </div>
+
+        <div class="float-field">
+          <input id="f-password" type="password" placeholder=" " autocomplete="current-password" required/>
+          <label>Password *</label>
+          <button type="button" class="eye-btn" id="toggle-pw">
+            <span class="material-symbols-outlined text-lg">visibility</span>
+          </button>
+        </div>
+
+        <p id="error-msg" class="text-error text-xs font-bold hidden"></p>
+
+        <button type="submit" id="btn-login" class="gradient-primary w-full py-5 rounded-2xl font-headline font-black text-lg text-white shadow-xl mt-4 transition-all active:scale-[0.98]">
+          Login
+        </button>
+      </form>
+
+      <div class="flex items-center gap-4 my-8">
+        <div class="flex-1 h-px bg-outline-variant/50"></div>
+        <span class="text-on-surface-variant/40 text-[10px] font-black uppercase tracking-widest">OR</span>
+        <div class="flex-1 h-px bg-outline-variant/50"></div>
+      </div>
+
+      <p class="text-center text-on-surface-variant text-sm font-medium">
+        New marketer?
+        <a href="marketing-join.html" class="text-primary font-bold hover:underline ml-1">Create an account</a>
+      </p>
+
+    </div>
+  </main>
+
+  <script>
+    if (localStorage.getItem('mkt_token')) window.location.replace('marketing-dashboard.html');
+
+    function showToast(msg, type = 'error') {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.className = type;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 4000);
+    }
+
+    function setLoading(loading) {
+      const btn = document.getElementById('btn-login');
+      btn.disabled = loading;
+      btn.innerHTML = loading ? '<span class="spinner"></span>' : 'Login';
+    }
+
+    document.getElementById('toggle-pw').addEventListener('click', function() {
+      const inp = document.getElementById('f-password');
+      const isPw = inp.type === 'password';
+      inp.type = isPw ? 'text' : 'password';
+      this.querySelector('span').textContent = isPw ? 'visibility_off' : 'visibility';
+    });
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errMsg = document.getElementById('error-msg');
+      errMsg.classList.add('hidden');
+
+      const email = document.getElementById('f-email').value.trim();
+      const password = document.getElementById('f-password').value;
+
+      if (!email || !password) {
+        errMsg.textContent = 'Please enter your email and password.';
+        errMsg.classList.remove('hidden');
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const res = await fetch('/api/marketing/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.token) {
+          localStorage.setItem('mkt_token', data.token);
+          showToast('Login successful! Redirecting...', 'success');
+          setTimeout(() => window.location.replace('marketing-dashboard.html'), 800);
+        } else {
+          const card = document.getElementById('card');
+          card.classList.add('shake');
+          setTimeout(() => card.classList.remove('shake'), 400);
+          errMsg.textContent = data.error || 'Invalid email or password.';
+          errMsg.classList.remove('hidden');
+          setLoading(false);
+        }
+      } catch {
+        errMsg.textContent = 'Could not connect to server.';
+        errMsg.classList.remove('hidden');
+        setLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>

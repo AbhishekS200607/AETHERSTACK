@@ -2,242 +2,623 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>Admin Panel – Aetherstack</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-950 text-gray-100 min-h-screen p-8">
-  <div class="max-w-5xl mx-auto">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Admin Panel | Aetherstack</title>
+  <link rel="icon" href="/Logo%20maker%20project.png" type="image/png"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#ff6035",
+            "primary-container": "#ff6035",
+            "on-primary": "#ffffff",
+            "on-primary-fixed": "#ffffff",
+            "tertiary": "#7b61ff",
+            "tertiary-container": "#7b61ff",
+            "background": "#f7f7f8",
+            "surface": "#ffffff",
+            "surface-container-low": "#f0f0f2",
+            "surface-container": "#e8e8eb",
+            "surface-container-high": "#e0e0e4",
+            "surface-container-highest": "#d4d4d8",
+            "on-background": "#111111",
+            "on-surface": "#111111",
+            "on-surface-variant": "#666666",
+            "outline": "#c4c4c8",
+            "outline-variant": "#dcdce0",
+            "secondary": "#666666",
+            "error": "#d32f2f",
+            "inverse-surface": "#111111",
+            "inverse-on-surface": "#f7f7f8"
+          },
+          fontFamily: { "headline": ["Space Grotesk"], "body": ["Manrope"], "label": ["Manrope"] },
+          borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "2xl": "1rem", "3xl": "1.5rem", "full": "9999px" },
+          animation: {
+            'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+            'fox-entrance': 'foxEntrance 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+          },
+          keyframes: {
+            fadeInUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+            foxEntrance: { '0%': { opacity: '0', transform: 'perspective(1000px) rotateX(-90deg) rotateY(45deg) scale(0.5)' }, '100%': { opacity: '1', transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)' } }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .glass-nav { background: rgba(255,255,255,0.82); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 2px 32px rgba(0,0,0,0.07); }
+    .gradient-primary { background: linear-gradient(135deg, #ff6035 0%, #ff8c42 100%); position: relative; overflow: hidden; }
+    .gradient-primary::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, #ff8c42 0%, #ff6035 100%); opacity: 0; transition: opacity 0.4s; }
+    .gradient-primary:hover::after { opacity: 1; }
+    .gradient-primary > * { position: relative; z-index: 1; }
+    .btn-magnetic { transition: transform 0.2s cubic-bezier(0.23,1,0.32,1), box-shadow 0.2s; }
+    .btn-magnetic:hover { box-shadow: 0 12px 40px rgba(255,96,53,0.35); }
+    .hero-noise::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 80px 80px; pointer-events: none; z-index: 1; }
+    .sr { opacity: 0; transform: translateY(40px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+    .sr.visible { opacity: 1; transform: translateY(0); }
+    .tilt-card { transform-style: preserve-3d; transition: transform 0.08s linear, box-shadow 0.3s; will-change: transform; }
+    .tilt-card:hover { box-shadow: 0 24px 60px rgba(0,0,0,0.12); }
+    .tilt-card .card-shine { position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.28) 0%, transparent 60%); opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 10; }
+    .tilt-card:hover .card-shine { opacity: 1; }
+    #page-loader { position: fixed; inset: 0; z-index: 99999; background: #111111; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s ease, visibility 0.5s ease; }
+    #page-loader.done { opacity: 0; visibility: hidden; }
+    #page-loader svg { animation: loaderSpin 0.9s cubic-bezier(0.4,0,0.2,1) forwards; }
+    @keyframes loaderSpin { 0% { transform: scale(0.4) rotate(-180deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+    
+    /* ── Cursor: Hide on Touch ── */
+    @media (hover: hover) and (pointer: fine) {
+      * { cursor: none !important; }
+      #cursor-dot, #cursor-ring { display: block; }
+    }
+    @media (hover: none), (pointer: coarse) {
+      #cursor-dot, #cursor-ring { display: none; }
+    }
 
-    <!-- Header -->
-    <div class="flex items-center justify-between mb-8">
-      <h1 class="text-3xl font-bold text-orange-400">Aetherstack Admin</h1>
-      <div class="flex gap-2">
-        <input id="secret" type="password" placeholder="Admin secret" class="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-orange-400"/>
-        <button onclick="authenticate()" class="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded text-sm font-bold transition">Login</button>
+    #cursor-dot { position: fixed; top: 0; left: 0; width: 8px; height: 8px; background: #ff6035; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width 0.2s, height 0.2s; display: none; }
+    #cursor-ring { position: fixed; top: 0; left: 0; width: 36px; height: 36px; border: 2px solid rgba(255,96,53,0.6); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); will-change: transform; transition: width 0.3s, height 0.3s, border-color 0.3s; display: none; }
+    body.cursor-hover #cursor-dot { width: 12px; height: 12px; }
+    body.cursor-hover #cursor-ring { width: 56px; height: 56px; border-color: #ff6035; mix-blend-mode: difference; }
+
+    /* ── Floating Labels ── */
+    .float-field { position: relative; margin-bottom: 2rem; }
+    .float-field input, .float-field textarea, .float-field select { width: 100%; background: transparent; border: none; border-bottom: 2px solid #c4c4c8; padding: 20px 0 6px 0; font-family: 'Manrope', sans-serif; font-size: 1rem; color: #111111; transition: border-color 0.3s; outline: none !important; border-radius: 0; }
+    .float-field input:focus, .float-field textarea:focus, .float-field select:focus { border-color: #ff6035; }
+    .float-field label { position: absolute; left: 0; top: 20px; color: #666666; font-size: 1rem; pointer-events: none; transition: all 0.3s cubic-bezier(0.22,1,0.36,1); font-weight: 500; }
+    .float-field input:focus ~ label, .float-field input:not(:placeholder-shown) ~ label,
+    .float-field textarea:focus ~ label, .float-field textarea:not(:placeholder-shown) ~ label,
+    .float-field select:focus ~ label, .float-field select:not([value=""]) ~ label { top: 0; font-size: 0.75rem; color: #ff6035; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* ── Tables ── */
+    .admin-table th { text-align: left; font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #666; padding: 1rem; border-bottom: 1px solid #e8e8eb; }
+    .admin-table td { padding: 1.25rem 1rem; font-size: 0.9rem; border-bottom: 1px solid #f0f0f2; vertical-align: middle; }
+    .tab-btn { position: relative; transition: all 0.3s; white-space: nowrap; }
+    .tab-btn.active { color: #ff6035; }
+    .tab-btn.active::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 100%; height: 2px; background: #ff6035; }
+    
+    /* ── Scrollbar Hide ── */
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-fixed">
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="28" cy="28" r="24" stroke="#ff6035" stroke-width="3" stroke-dasharray="80 72" stroke-linecap="round"/>
+      <text x="28" y="33" text-anchor="middle" fill="#ff6035" font-size="13" font-family="Space Grotesk" font-weight="900">A</text>
+    </svg>
+  </div>
+  <!-- Custom Cursor -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-7xl z-50 glass-nav rounded-2xl shadow-2xl transition-all duration-500">
+    <div class="flex flex-col md:flex-row justify-between items-center w-full px-6 py-4 gap-4 md:gap-0">
+      <div class="flex items-center justify-between w-full md:w-auto">
+        <div class="flex items-center gap-3 group">
+          <div class="animate-fox-entrance overflow-hidden rounded-lg w-10 h-10 flex items-center justify-center bg-surface-container-high/50">
+            <img alt="Aetherstack Fox" class="w-8 h-8 object-contain" src="/Logo%20maker%20project.png"/>
+          </div>
+          <span class="text-xl font-black tracking-tighter text-[#111111] font-headline">Aetherstack <span class="hidden sm:inline text-primary/60 ml-2 text-sm uppercase tracking-widest font-bold">Admin</span></span>
+        </div>
+        <button id="mobile-auth-toggle" class="md:hidden text-primary p-2 rounded-xl bg-surface-container-low" onclick="toggleMobileAuth()">
+          <span class="material-symbols-outlined">expand_more</span>
+        </button>
+      </div>
+
+      <div id="auth-container" class="hidden md:flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+        <div id="login-bar" class="flex gap-2 w-full md:w-auto">
+          <input id="secret" type="password" placeholder="Admin Secret" class="flex-1 md:flex-none bg-surface-container-low border border-outline-variant/50 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-primary md:w-52 transition-all"/>
+          <button onclick="authenticate()" class="gradient-primary btn-magnetic text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg">Login</button>
+        </div>
+        <div id="logged-bar" class="hidden items-center justify-between md:justify-end gap-6 w-full md:w-auto">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Live Session</span>
+          </div>
+          <button onclick="logout()" class="text-xs font-bold text-on-surface-variant hover:text-error transition-colors uppercase tracking-widest">Logout</button>
+        </div>
       </div>
     </div>
+  </nav>
 
-    <div id="status" class="text-gray-400 text-sm mb-4"></div>
-
-    <!-- Tabs -->
-    <div id="panel" class="hidden">
-      <div class="flex gap-1 mb-6 bg-gray-900 p-1 rounded-xl w-fit">
-        <button onclick="switchTab('submissions')" id="tab-submissions" class="tab-btn px-5 py-2 rounded-lg text-sm font-bold transition bg-orange-500 text-white">Submissions</button>
-        <button onclick="switchTab('projects')" id="tab-projects" class="tab-btn px-5 py-2 rounded-lg text-sm font-bold transition text-gray-400 hover:text-white">Projects</button>
+  <main id="panel" class="hidden pt-44 md:pt-36 pb-24 relative overflow-hidden hero-noise min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 md:px-8">
+      
+      <!-- Tabs -->
+      <div class="flex gap-8 border-b border-outline-variant mb-12 overflow-x-auto scrollbar-hide">
+        <button onclick="switchTab('submissions')" id="tab-submissions" class="tab-btn active pb-4 font-headline font-bold text-lg">Submissions</button>
+        <button onclick="switchTab('projects')" id="tab-projects" class="tab-btn pb-4 font-headline font-bold text-lg">Projects</button>
+        <button onclick="switchTab('marketers')" id="tab-marketers" class="tab-btn pb-4 font-headline font-bold text-lg">Marketing Team</button>
       </div>
 
-      <!-- Submissions Tab -->
-      <div id="pane-submissions">
-        <div id="submissions-count" class="text-gray-400 text-sm mb-4"></div>
-        <div id="submissions-list" class="space-y-4"></div>
+      <!-- Pane: Submissions -->
+      <div id="pane-submissions" class="sr visible">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
+          <div>
+            <h2 class="font-headline font-black text-3xl md:text-4xl tracking-tighter">Client Inquiries</h2>
+            <p id="submissions-count" class="text-on-surface-variant font-medium mt-1">Loading...</p>
+          </div>
+          <button onclick="loadSubmissions()" class="text-primary font-bold text-sm flex items-center gap-2 hover:opacity-70 transition-all bg-white sm:bg-transparent px-4 py-2 rounded-xl border border-outline-variant sm:border-none shadow-sm sm:shadow-none">
+            <span class="material-symbols-outlined text-lg">refresh</span> Refresh
+          </button>
+        </div>
+        <div id="submissions-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"></div>
       </div>
 
-      <!-- Projects Tab -->
-      <div id="pane-projects" class="hidden">
+      <!-- Pane: Projects -->
+      <div id="pane-projects" class="hidden sr visible">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
+          <div class="lg:col-span-4">
+            <div class="bg-white rounded-3xl p-6 md:p-8 border border-outline-variant shadow-sm lg:sticky lg:top-32">
+              <h2 id="form-title" class="font-headline font-black text-2xl mb-8">Add Project</h2>
+              <input type="hidden" id="edit-id"/>
+              
+              <div class="float-field">
+                <input id="p-title" type="text" placeholder=" " required />
+                <label>Project Title *</label>
+              </div>
+              <div class="float-field">
+                <input id="p-tags" type="text" placeholder=" " />
+                <label>Tags (Comma separated)</label>
+              </div>
+              <div class="float-field">
+                <input id="p-image" type="url" placeholder=" " />
+                <label>Image URL</label>
+              </div>
+              <div class="float-field">
+                <input id="p-link" type="url" placeholder=" " />
+                <label>Direct Link</label>
+              </div>
+              <div class="float-field">
+                <textarea id="p-desc" rows="3" placeholder=" " required></textarea>
+                <label>Description *</label>
+              </div>
 
-        <!-- Add / Edit Form -->
-        <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
-          <h2 id="form-title" class="text-lg font-bold text-orange-400 mb-4">Add New Project</h2>
-          <input type="hidden" id="edit-id"/>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label class="text-xs uppercase text-gray-500 font-bold tracking-widest block mb-1">Title *</label>
-              <input id="p-title" type="text" placeholder="Project name" class="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-orange-400"/>
-            </div>
-            <div>
-              <label class="text-xs uppercase text-gray-500 font-bold tracking-widest block mb-1">Tags (comma separated)</label>
-              <input id="p-tags" type="text" placeholder="React, Node.js, Tailwind" class="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-orange-400"/>
+              <div class="flex gap-3">
+                <button onclick="saveProject()" class="flex-1 gradient-primary btn-magnetic text-white py-4 rounded-2xl font-bold shadow-xl">Save Project</button>
+                <button onclick="cancelEdit()" id="cancel-btn" class="hidden px-6 bg-surface-container-high rounded-2xl font-bold text-on-surface-variant">Cancel</button>
+              </div>
+              <p id="form-status" class="text-xs mt-4 text-center font-bold"></p>
             </div>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label class="text-xs uppercase text-gray-500 font-bold tracking-widest block mb-1">Image URL</label>
-              <input id="p-image" type="url" placeholder="https://image.com/photo.jpg" class="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-orange-400"/>
-            </div>
-            <div>
-              <label class="text-xs uppercase text-gray-500 font-bold tracking-widest block mb-1">Project Link</label>
-              <input id="p-link" type="url" placeholder="https://yourproject.com" class="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-orange-400"/>
-            </div>
+          <div class="lg:col-span-8">
+            <div id="projects-list" class="space-y-4"></div>
           </div>
-          <div class="mb-4">
-            <label class="text-xs uppercase text-gray-500 font-bold tracking-widest block mb-1">Description *</label>
-            <textarea id="p-desc" rows="3" placeholder="What problem did this project solve?" class="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-orange-400 resize-none"></textarea>
+        </div>
+      </div>
+
+      <!-- Pane: Marketers -->
+      <div id="pane-marketers" class="hidden sr visible">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-12">
+          <div class="tilt-card bg-white rounded-3xl p-6 md:p-8 border border-outline-variant shadow-sm">
+            <div class="card-shine"></div>
+            <p class="overline mb-2">Network Size</p>
+            <p class="text-3xl md:text-4xl font-black font-headline" id="stat-total-marketers">—</p>
           </div>
-          <div class="flex gap-3">
-            <button onclick="saveProject()" class="bg-orange-500 hover:bg-orange-600 px-5 py-2 rounded text-sm font-bold transition">Save Project</button>
-            <button onclick="cancelEdit()" id="cancel-btn" class="hidden bg-gray-700 hover:bg-gray-600 px-5 py-2 rounded text-sm font-bold transition">Cancel</button>
+          <div class="tilt-card bg-white rounded-3xl p-6 md:p-8 border border-outline-variant shadow-sm">
+            <div class="card-shine"></div>
+            <p class="overline mb-2" style="color:#7b61ff">Inbound Leads</p>
+            <p class="text-3xl md:text-4xl font-black font-headline" id="stat-total-leads">—</p>
           </div>
-          <p id="form-status" class="text-sm mt-3"></p>
+          <div class="tilt-card bg-white rounded-3xl p-6 md:p-8 border border-outline-variant shadow-sm">
+            <div class="card-shine"></div>
+            <p class="overline mb-2" style="color:#111">Verified Sales</p>
+            <p class="text-3xl md:text-4xl font-black font-headline" id="stat-total-sales">—</p>
+          </div>
         </div>
 
-        <!-- Projects List -->
-        <div id="projects-list" class="space-y-4"></div>
+        <!-- Marketers List (Responsive) -->
+        <div class="bg-white rounded-3xl border border-outline-variant shadow-sm overflow-hidden">
+          <!-- Desktop Table -->
+          <div class="hidden md:block overflow-x-auto">
+            <table class="w-full admin-table">
+              <thead>
+                <tr>
+                  <th>Marketer</th>
+                  <th>Contact</th>
+                  <th>Code</th>
+                  <th>Leads</th>
+                  <th>Sales (₹)</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="marketers-tbody"></tbody>
+            </table>
+          </div>
+          <!-- Mobile Cards -->
+          <div id="marketers-cards" class="md:hidden divide-y divide-outline-variant"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="w-full py-12 px-6 md:px-8 bg-[#f0f0f2] border-t border-outline-variant">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-8 max-w-7xl mx-auto">
+      <div class="flex items-center gap-3">
+        <img alt="Aetherstack" class="w-6 h-6 object-contain" src="/Logo%20maker%20project.png"/>
+        <span class="font-['Space_Grotesk'] font-bold text-[#ff6035]">Aetherstack</span>
+      </div>
+      <p class="font-['Manrope'] text-sm text-[#666666] text-center md:text-left">© 2026 Aetherstack. Admin Interface v2.0</p>
+      <div class="flex flex-wrap justify-center gap-x-8 gap-y-3">
+        <a class="text-[#666666] hover:text-[#ff6035] transition-colors text-sm" href="index.html">Live Site</a>
+        <a class="text-[#666666] hover:text-[#ff6035] transition-colors text-sm" href="blog.html">Blog Admin</a>
+        <a class="text-[#666666] hover:text-[#ff6035] transition-colors text-sm" href="mailto:stackaether@gmail.com">Support</a>
       </div>
     </div>
-  </div>
+  </footer>
 
   <script>
     let SECRET = '';
 
+    function toggleMobileAuth() {
+      const container = document.getElementById('auth-container');
+      const icon = document.querySelector('#mobile-auth-toggle span');
+      container.classList.toggle('hidden');
+      container.classList.toggle('flex');
+      icon.textContent = container.classList.contains('hidden') ? 'expand_more' : 'expand_less';
+    }
+
+    // ── Auth ───────────────────────────────────────────────
     function authenticate() {
-      SECRET = document.getElementById('secret').value;
-      if (!SECRET) { document.getElementById('status').textContent = 'Enter admin secret.'; return; }
+      SECRET = document.getElementById('secret').value.trim();
+      if (!SECRET) return alert('Enter secret.');
       loadSubmissions();
       loadProjects();
+      // If we got here without immediate failure (will be caught in loadSubmissions)
       document.getElementById('panel').classList.remove('hidden');
-      document.getElementById('status').textContent = '';
+      document.getElementById('login-bar').classList.add('hidden');
+      document.getElementById('logged-bar').classList.remove('hidden');
+      document.getElementById('logged-bar').classList.add('flex');
+      if (window.innerWidth < 768) {
+        document.getElementById('auth-container').classList.add('hidden');
+        document.getElementById('auth-container').classList.remove('flex');
+        document.querySelector('#mobile-auth-toggle span').textContent = 'expand_more';
+      }
+    }
+
+    function logout() {
+      SECRET = '';
+      document.getElementById('panel').classList.add('hidden');
+      document.getElementById('login-bar').classList.remove('hidden');
+      document.getElementById('logged-bar').classList.add('hidden');
+      document.getElementById('secret').value = '';
     }
 
     document.getElementById('secret').addEventListener('keydown', e => e.key === 'Enter' && authenticate());
 
+    // ── Tabs ───────────────────────────────────────────────
     function switchTab(tab) {
-      ['submissions', 'projects'].forEach(t => {
-        document.getElementById(`pane-${t}`).classList.toggle('hidden', t !== tab);
-        const btn = document.getElementById(`tab-${t}`);
-        btn.className = t === tab
-          ? 'tab-btn px-5 py-2 rounded-lg text-sm font-bold transition bg-orange-500 text-white'
-          : 'tab-btn px-5 py-2 rounded-lg text-sm font-bold transition text-gray-400 hover:text-white';
+      ['submissions', 'projects', 'marketers'].forEach(t => {
+        document.getElementById('pane-' + t).classList.toggle('hidden', t !== tab);
+        const btn = document.getElementById('tab-' + t);
+        btn.classList.toggle('active', t === tab);
       });
+      if (tab === 'marketers') loadMarketers();
     }
 
-    // ── Submissions ──────────────────────────────────────────
+    // ── Submissions ────────────────────────────────────────
     async function loadSubmissions() {
       try {
-        const res = await fetch(`/api/submissions?secret=${encodeURIComponent(SECRET)}`);
-        if (!res.ok) { document.getElementById('status').textContent = 'Unauthorized.'; document.getElementById('panel').classList.add('hidden'); return; }
+        const res = await fetch('/api/submissions', { headers: { 'x-admin-secret': SECRET } });
+        if (!res.ok) { logout(); return; }
         const data = await res.json();
-        document.getElementById('submissions-count').textContent = `${data.length} submission(s)`;
-        document.getElementById('submissions-list').innerHTML = data.length
-          ? data.map(s => `
-            <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 space-y-2">
-              <div class="flex justify-between items-start">
-                <div>
-                  <p class="text-lg font-bold text-white">${s.name}</p>
-                  <a href="mailto:${s.email}" class="text-orange-400 text-sm">${s.email}</a>
-                </div>
-                <span class="text-xs text-gray-500">${new Date(s.date).toLocaleString()}</span>
+        document.getElementById('submissions-count').textContent = `${data.length} active leads recorded`;
+        document.getElementById('submissions-list').innerHTML = data.map(s => `
+          <div class="tilt-card bg-white rounded-3xl p-6 md:p-8 border border-outline-variant shadow-sm relative overflow-hidden group">
+            <div class="card-shine"></div>
+            <div class="flex justify-between items-start mb-6">
+              <div class="pr-4">
+                <h3 class="font-headline font-black text-xl md:text-2xl break-words">${esc(s.name)}</h3>
+                <a href="mailto:${esc(s.email)}" class="text-primary font-bold text-xs md:text-sm hover-line break-all">${esc(s.email)}</a>
               </div>
-              <div class="flex gap-4 text-sm text-gray-400">
-                <span>📁 ${s.projectType || '—'}</span>
-                <span>💰 ${s.budget || '—'}</span>
+              <span class="shrink-0 text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-on-surface-variant bg-surface-container-low px-2 md:px-3 py-1 rounded-full">
+                ${s.date ? new Date(s.date).toLocaleDateString() : 'New'}
+              </span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 md:gap-4 mb-6">
+              <div class="bg-surface-container-low/30 rounded-2xl p-3 md:p-4">
+                <p class="overline mb-1" style="font-size:0.55rem">Plan</p>
+                <p class="font-bold text-xs md:text-sm text-on-surface">${esc(s.projectType || 'Standard')}</p>
               </div>
-              <p class="text-gray-300 text-sm border-t border-gray-800 pt-3">${s.message}</p>
-            </div>`).join('')
-          : '<p class="text-gray-500">No submissions yet.</p>';
-      } catch { document.getElementById('status').textContent = 'Could not connect to server.'; }
+              <div class="bg-surface-container-low/30 rounded-2xl p-3 md:p-4">
+                <p class="overline mb-1" style="font-size:0.55rem">Budget</p>
+                <p class="font-bold text-xs md:text-sm text-on-surface">${esc(s.budget || 'Custom')}</p>
+              </div>
+            </div>
+            <div class="bg-surface-container-low/50 rounded-2xl p-4 md:p-5 mb-6">
+              <p class="text-xs md:text-sm leading-relaxed text-on-surface-variant">${esc(s.message)}</p>
+            </div>
+            ${s.referralCode ? `
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-tertiary text-sm">verified</span>
+                <span class="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-tertiary">Credited to: ${esc(s.referralCode)}</span>
+              </div>
+            ` : ''}
+          </div>
+        `).join('');
+        document.querySelectorAll('.tilt-card').forEach(initTilt);
+      } catch (err) { alert('Connection failed.'); }
     }
 
-    // ── Projects ─────────────────────────────────────────────
+    // ── Projects CRUD ──────────────────────────────────────
     let projects = [];
-
     async function loadProjects() {
       const res = await fetch('/api/projects');
       projects = await res.json();
       renderProjects();
     }
-
     function renderProjects() {
       const el = document.getElementById('projects-list');
-      if (!projects.length) { el.innerHTML = '<p class="text-gray-500">No projects yet. Add one above.</p>'; return; }
       el.innerHTML = projects.map(p => `
-        <div class="bg-gray-900 border border-gray-800 rounded-xl p-5 flex gap-4 items-start">
-          ${p.imageUrl
-            ? `<img src="${p.imageUrl}" class="w-24 h-16 object-cover rounded-lg flex-shrink-0"/>`
-            : p.link
-            ? `<img src="https://api.microlink.io/?url=${encodeURIComponent(p.link)}&screenshot=true&meta=false&embed=screenshot.url" class="w-24 h-16 object-cover rounded-lg flex-shrink-0"/>`
-            : '<div class="w-24 h-16 bg-gray-800 rounded-lg flex-shrink-0 flex items-center justify-center text-gray-600 text-xs">No image</div>'}
-          <div class="flex-1 min-w-0">
-            <div class="flex justify-between items-start gap-2">
-              <div>
-                <p class="font-bold text-white text-lg">${p.title}</p>
-                ${p.link ? `<a href="${p.link}" target="_blank" class="text-orange-400 text-xs hover:underline">${p.link}</a>` : '<span class="text-gray-600 text-xs">No link</span>'}
+        <div class="bg-white rounded-3xl border border-outline-variant shadow-sm overflow-hidden group flex flex-col md:flex-row">
+          <div class="w-full md:w-48 aspect-video md:aspect-square bg-surface-container-high shrink-0 overflow-hidden">
+            ${p.imageUrl ? `<img src="${esc(p.imageUrl)}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"/>` : '<div class="w-full h-full flex items-center justify-center text-on-surface-variant/20"><span class="material-symbols-outlined text-4xl">image</span></div>'}
+          </div>
+          <div class="p-6 md:p-8 flex-1">
+            <div class="flex justify-between items-start gap-4 mb-4">
+              <div class="pr-2">
+                <h3 class="font-headline font-black text-xl">${esc(p.title)}</h3>
+                ${p.link ? `<a href="${esc(p.link)}" target="_blank" class="text-primary text-[10px] md:text-xs font-bold hover-line uppercase tracking-widest mt-1 inline-block">View Live Project</a>` : ''}
               </div>
-              <div class="flex gap-2 flex-shrink-0">
-                <button onclick="editProject(${p.id})" class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded text-xs font-bold transition">Edit</button>
-                <button onclick="deleteProject(${p.id})" class="bg-red-900 hover:bg-red-800 px-3 py-1 rounded text-xs font-bold transition">Delete</button>
+              <div class="flex gap-2 shrink-0">
+                <button onclick="editProject(${p.id})" class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-surface-container-low hover:bg-primary hover:text-white transition-all flex items-center justify-center"><span class="material-symbols-outlined text-lg">edit</span></button>
+                <button onclick="deleteProject(${p.id})" class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-surface-container-low hover:bg-error hover:text-white transition-all flex items-center justify-center"><span class="material-symbols-outlined text-lg">delete</span></button>
               </div>
             </div>
-            <p class="text-gray-400 text-sm mt-1">${p.description}</p>
-            <div class="flex gap-2 mt-2 flex-wrap">
-              ${(p.tags || []).map(t => `<span class="bg-gray-800 text-orange-400 text-xs px-2 py-0.5 rounded">${t}</span>`).join('')}
+            <p class="text-xs md:text-sm text-on-surface-variant leading-relaxed mb-4 line-clamp-2">${esc(p.description)}</p>
+            <div class="flex gap-2 flex-wrap">
+              ${(p.tags || []).map(t => `<span class="px-3 py-1 rounded-lg bg-surface-container-low text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">${esc(t)}</span>`).join('')}
             </div>
           </div>
-        </div>`).join('');
+        </div>
+      `).join('');
     }
 
     async function saveProject() {
       const id = document.getElementById('edit-id').value;
       const body = {
-        secret: SECRET,
         title: document.getElementById('p-title').value.trim(),
         description: document.getElementById('p-desc').value.trim(),
         tags: document.getElementById('p-tags').value.split(',').map(t => t.trim()).filter(Boolean),
         imageUrl: document.getElementById('p-image').value.trim(),
         link: document.getElementById('p-link').value.trim()
       };
-      const st = document.getElementById('form-status');
-      if (!body.title || !body.description) { st.textContent = 'Title and description are required.'; st.className = 'text-sm mt-3 text-red-400'; return; }
-
-      const url = id ? `/api/projects/${id}` : '/api/projects';
-      const method = id ? 'PUT' : 'POST';
-      const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-      if (res.ok) {
-        st.textContent = id ? '✅ Project updated!' : '✅ Project added!';
-        st.style.color = '#4ade80';
-        cancelEdit();
-        loadProjects();
-        updateFrontend();
-        setTimeout(() => st.textContent = '', 3000);
-      } else {
-        st.textContent = '❌ Error saving project.';
-        st.style.color = '#f87171';
-      }
+      if (!body.title || !body.description) return alert('Title/Desc required.');
+      const res = await fetch(id ? '/api/projects/'+id : '/api/projects', {
+        method: id ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-secret': SECRET },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) { cancelEdit(); loadProjects(); }
+      else alert('Error saving.');
     }
 
     function editProject(id) {
-      const p = projects.find(x => x.id === id);
-      if (!p) return;
+      const p = projects.find(x => x.id === id); if (!p) return;
       document.getElementById('edit-id').value = p.id;
       document.getElementById('p-title').value = p.title;
       document.getElementById('p-desc').value = p.description;
       document.getElementById('p-tags').value = (p.tags || []).join(', ');
       document.getElementById('p-image').value = p.imageUrl || '';
       document.getElementById('p-link').value = p.link || '';
+      document.querySelectorAll('.float-field input, .float-field textarea').forEach(el => el.dispatchEvent(new Event('input')));
       document.getElementById('form-title').textContent = 'Edit Project';
       document.getElementById('cancel-btn').classList.remove('hidden');
-      document.getElementById('form-status').className = 'text-sm mt-3 hidden';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function cancelEdit() {
-      document.getElementById('edit-id').value = '';
-      document.getElementById('p-title').value = '';
-      document.getElementById('p-desc').value = '';
-      document.getElementById('p-tags').value = '';
-      document.getElementById('p-image').value = '';
-      document.getElementById('p-link').value = '';
-      document.getElementById('form-title').textContent = 'Add New Project';
+      ['edit-id','p-title','p-desc','p-tags','p-image','p-link'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('form-title').textContent = 'Add Project';
       document.getElementById('cancel-btn').classList.add('hidden');
-      document.getElementById('form-status').textContent = '';
     }
 
     async function deleteProject(id) {
-      const p = projects.find(x => x.id === id);
-      if (!confirm(`Delete "${p?.title}"? This will remove it from the frontend.`)) return;
-      const res = await fetch(`/api/projects/${id}?secret=${encodeURIComponent(SECRET)}`, { method: 'DELETE' });
-      if (res.ok) {
-        loadProjects();
-        updateFrontend();
-      } else {
-        alert('Failed to delete. Check your secret.');
-      }
+      if (!confirm('Delete this project?')) return;
+      const res = await fetch('/api/projects/'+id, { method: 'DELETE', headers: { 'x-admin-secret': SECRET } });
+      if (res.ok) loadProjects();
     }
 
-    // Notify index.html to reload projects via localStorage event
-    function updateFrontend() {
-      localStorage.setItem('projects_updated', Date.now());
+    // ── Marketing Team ─────────────────────────────────────
+    async function loadMarketers() {
+      try {
+        const res = await fetch('/api/marketing/admin/stats', { headers: { 'x-admin-secret': SECRET } });
+        const { stats, marketers } = await res.json();
+        document.getElementById('stat-total-marketers').textContent = stats.totalMarketers;
+        document.getElementById('stat-total-leads').textContent = stats.totalLeads;
+        document.getElementById('stat-total-sales').textContent = `₹${stats.totalSales.toLocaleString()}`;
+
+        // Render Desktop Table
+        document.getElementById('marketers-tbody').innerHTML = marketers.map(m => `
+          <tr>
+            <td>
+              <div class="font-headline font-bold text-on-surface">${esc(m.name)}</div>
+              <div class="text-[10px] text-on-surface-variant font-medium uppercase tracking-widest">${m.id.slice(0,8)}...</div>
+            </td>
+            <td>
+              <div class="text-sm font-medium">${esc(m.email)}</div>
+              <div class="text-xs text-on-surface-variant">${esc(m.mobile)}</div>
+            </td>
+            <td>
+              <span class="px-3 py-1 rounded-lg bg-primary/10 text-primary font-black tracking-widest text-sm">${esc(m.referral_code)}</span>
+            </td>
+            <td class="font-bold text-tertiary">${m.total_leads}</td>
+            <td>
+              <input type="number" value="${m.total_sales}" class="w-24 bg-surface-container-low border-none rounded-lg text-sm font-bold p-2 focus:ring-2 focus:ring-primary" 
+                onchange="updateMarketerField('${m.id}', 'total_sales', this.value)"/>
+            </td>
+            <td>
+              <select class="bg-surface-container-low border-none rounded-lg text-xs font-bold p-2 focus:ring-2 focus:ring-primary uppercase tracking-widest" 
+                onchange="updateMarketerField('${m.id}', 'status', this.value)">
+                <option value="active" ${m.status === 'active' ? 'selected' : ''}>Active</option>
+                <option value="banned" ${m.status === 'banned' ? 'selected' : ''}>Banned</option>
+                <option value="revoked" ${m.status === 'revoked' ? 'selected' : ''}>Revoked</option>
+              </select>
+            </td>
+            <td>
+              <button onclick="confirmDeleteMarketer('${m.id}', '${esc(m.name)}')" class="text-error font-bold text-xs uppercase tracking-widest hover:opacity-70">Remove</button>
+            </td>
+          </tr>
+        `).join('');
+
+        // Render Mobile Cards
+        document.getElementById('marketers-cards').innerHTML = marketers.map(m => `
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h3 class="font-headline font-bold text-lg">${esc(m.name)}</h3>
+                <p class="text-[10px] text-on-surface-variant uppercase tracking-widest">${m.id.slice(0,12)}...</p>
+              </div>
+              <span class="px-3 py-1 rounded-lg bg-primary/10 text-primary font-black tracking-widest text-sm">${esc(m.referral_code)}</span>
+            </div>
+            
+            <div class="space-y-3 mb-6">
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-on-surface-variant">Contact</span>
+                <div class="text-right">
+                  <div class="font-medium">${esc(m.email)}</div>
+                  <div class="text-xs text-on-surface-variant">${esc(m.mobile)}</div>
+                </div>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-on-surface-variant">Leads Recorded</span>
+                <span class="font-bold text-tertiary">${m.total_leads}</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-6">
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Total Sales (₹)</label>
+                <input type="number" value="${m.total_sales}" class="w-full bg-surface-container-low border-none rounded-xl text-sm font-bold p-3 focus:ring-2 focus:ring-primary" 
+                  onchange="updateMarketerField('${m.id}', 'total_sales', this.value)"/>
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Account Status</label>
+                <select class="w-full bg-surface-container-low border-none rounded-xl text-xs font-bold p-3 focus:ring-2 focus:ring-primary uppercase tracking-widest" 
+                  onchange="updateMarketerField('${m.id}', 'status', this.value)">
+                  <option value="active" ${m.status === 'active' ? 'selected' : ''}>Active</option>
+                  <option value="banned" ${m.status === 'banned' ? 'selected' : ''}>Banned</option>
+                  <option value="revoked" ${m.status === 'revoked' ? 'selected' : ''}>Revoked</option>
+                </select>
+              </div>
+            </div>
+
+            <button onclick="confirmDeleteMarketer('${m.id}', '${esc(m.name)}')" class="w-full py-3 bg-error/10 text-error font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-error hover:text-white transition-all">Remove Marketer</button>
+          </div>
+        `).join('');
+
+      } catch (err) { alert('Failed to load marketers.'); }
     }
+
+    async function updateMarketerField(id, field, value) {
+      const res = await fetch('/api/marketing/admin/update-sales', { // backend handles all updates in this endpoint now
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'x-admin-secret': SECRET },
+        body: JSON.stringify({ id, [field]: value })
+      });
+      if (res.ok) { loadMarketers(); }
+    }
+
+    async function confirmDeleteMarketer(id, name) {
+      if (!confirm(`Delete marketer "${name}"?`)) return;
+      const res = await fetch('/api/marketing/admin/delete/'+id, { method: 'DELETE', headers: { 'x-admin-secret': SECRET } });
+      if (res.ok) loadMarketers();
+    }
+
+    // ── Utilities ──────────────────────────────────────────
+    function esc(s) { return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    
+    function initTilt(el) {
+      if (window.innerWidth < 1024) return; // Disable tilt on touch/small screens for performance
+      const shine = el.querySelector('.card-shine');
+      el.addEventListener('mousemove', e => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transform = `perspective(800px) rotateY(${x * 10}deg) rotateX(${-y * 10}deg) scale(1.01)`;
+        if (shine) {
+          const px = ((e.clientX - r.left) / r.width * 100).toFixed(1);
+          const py = ((e.clientY - r.top) / r.height * 100).toFixed(1);
+          shine.style.background = `radial-gradient(circle at ${px}% ${py}%, rgba(255,255,255,0.3) 0%, transparent 60%)`;
+          shine.style.opacity = '1';
+        }
+      });
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) scale(1)';
+        if (shine) shine.style.opacity = '0';
+      });
+    }
+
+    // Page Loader
+    window.addEventListener('load', () => {
+      setTimeout(() => document.getElementById('page-loader').classList.add('done'), 800);
+    });
+
+    // Custom Cursor
+    const cursorDot = document.getElementById('cursor-dot');
+    const cursorRing = document.getElementById('cursor-ring');
+    let ringX = 0, ringY = 0, dotX = 0, dotY = 0;
+    
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (!isTouch) {
+      window.addEventListener('mousemove', e => { dotX = e.clientX; dotY = e.clientY; });
+      (function animateCursor() {
+        ringX += (dotX - ringX) * 0.12;
+        ringY += (dotY - ringY) * 0.12;
+        cursorDot.style.left = dotX + 'px';
+        cursorDot.style.top = dotY + 'px';
+        cursorRing.style.left = ringX + 'px';
+        cursorRing.style.top = ringY + 'px';
+        requestAnimationFrame(animateCursor);
+      })();
+      document.querySelectorAll('a,button,[onclick],input,textarea,select').forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+      });
+    }
+
+    // Magnetic
+    document.querySelectorAll('.btn-magnetic').forEach(btn => {
+      if (isTouch) return;
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        const x = (e.clientX - r.left - r.width / 2) * 0.25;
+        const y = (e.clientY - r.top - r.height / 2) * 0.25;
+        btn.style.transform = `translate(${x}px, ${y}px)`;
+      });
+      btn.addEventListener('mouseleave', () => btn.style.transform = 'translate(0,0)');
+    });
   </script>
 </body>
 </html>
-

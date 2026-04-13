@@ -4,3 +4,6 @@ submissions.json
 projects.json
 .DS_Store
 *.log
+api/seed.js
+api/seed-submissions.js
+api/test-db.js

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Dashboard | Aetherstack Marketers</title>
+  <link rel="icon" href="/Logo%20maker%20project.png" type="image/png"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#ff6035",
+            "primary-container": "#ff6035",
+            "on-primary": "#ffffff",
+            "on-primary-fixed": "#ffffff",
+            "tertiary": "#7b61ff",
+            "background": "#f7f7f8",
+            "surface": "#ffffff",
+            "on-background": "#111111",
+            "on-surface": "#111111",
+            "on-surface-variant": "#666666",
+            "outline": "#c4c4c8",
+            "outline-variant": "#dcdce0",
+          },
+          fontFamily: { "headline": ["Space Grotesk"], "body": ["Manrope"] },
+          borderRadius: { "2xl": "1rem", "3xl": "1.5rem" }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .glass-nav { background: rgba(255,255,255,0.82); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 2px 32px rgba(0,0,0,0.07); }
+    .gradient-primary { background: linear-gradient(135deg, #ff6035 0%, #ff8c42 100%); position: relative; overflow: hidden; }
+    .gradient-primary::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, #ff8c42 0%, #ff6035 100%); opacity: 0; transition: opacity 0.4s; }
+    .gradient-primary:hover::after { opacity: 1; }
+    .gradient-primary > * { position: relative; z-index: 1; }
+    
+    .hero-noise::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+      background-size: 80px 80px; pointer-events: none; z-index: 1;
+    }
+
+    .tilt-card { transform-style: preserve-3d; transition: transform 0.08s linear, box-shadow 0.3s; will-change: transform; }
+    .tilt-card:hover { box-shadow: 0 24px 60px rgba(0,0,0,0.08); }
+
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f2 25%, #e8e8eb 50%, #f0f0f2 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 1rem;
+    }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.875rem; z-index: 9999; transition: opacity 0.3s; white-space: nowrap; }
+    #toast.success { background: #16a34a; color: #fff; }
+    #toast.error   { background: #dc2626; color: #fff; }
+    #toast.hidden  { opacity: 0; pointer-events: none; }
+
+    #qr-modal {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(17,17,17,0.8); backdrop-filter: blur(12px);
+      display: none; align-items: center; justify-content: center; padding: 24px;
+    }
+    #qr-modal.open { display: flex; animation: fadeIn 0.3s ease; }
+    #qr-wrap { background: #fff; padding: 2rem; border-radius: 2.5rem; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-fixed min-h-screen flex flex-col hero-noise">
+
+  <!-- Nav -->
+  <nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl z-50 glass-nav rounded-2xl shadow-2xl">
+    <div class="flex justify-between items-center w-full px-6 py-4">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="overflow-hidden rounded-lg w-10 h-10 flex items-center justify-center bg-surface-container-high/50">
+          <img alt="Aetherstack Fox" class="w-8 h-8 object-contain" src="/Logo%20maker%20project.png"/>
+        </div>
+        <span class="text-xl font-black tracking-tighter text-[#111111] font-headline">Aetherstack</span>
+      </a>
+      <button onclick="logout()" class="text-sm font-bold text-on-surface-variant hover:text-error transition-colors uppercase tracking-widest flex items-center gap-2">
+        <span class="material-symbols-outlined text-lg">logout</span> Logout
+      </button>
+    </div>
+  </nav>
+
+  <main class="flex-1 max-w-5xl mx-auto w-full pt-36 pb-20 px-6 relative z-10">
+    <div id="toast" class="hidden"></div>
+
+    <!-- Loading Skeleton -->
+    <div id="loading-state" class="space-y-8">
+      <div class="skeleton h-12 w-64 mb-4"></div>
+      <div class="skeleton h-6 w-48 mb-12"></div>
+      <div class="skeleton h-64 w-full rounded-[2.5rem]"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="skeleton h-48 rounded-3xl"></div>
+        <div class="skeleton h-48 rounded-3xl"></div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div id="dashboard-content" class="hidden animate-fade-in-up">
+      <div class="mb-12">
+        <p class="text-primary font-bold uppercase tracking-[0.2em] font-headline text-xs mb-3">Welcome back</p>
+        <h1 class="font-headline font-black text-5xl md:text-6xl tracking-tighter text-on-background" id="greeting-name">—</h1>
+        <p class="text-on-surface-variant font-medium mt-2">Member since <span id="member-since">—</span></p>
+      </div>
+
+      <!-- Referral Card -->
+      <div class="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-xl border border-outline-variant/30 mb-8 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+        <div class="relative z-10 flex flex-col lg:flex-row justify-between lg:items-center gap-10">
+          <div>
+            <span class="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant mb-4 block">Your Referral Code</span>
+            <div class="flex items-center gap-6">
+              <span id="referral-code" class="font-headline font-black text-6xl md:text-8xl text-primary tracking-tight">——</span>
+              <button id="btn-copy" class="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-all active:scale-90">
+                <span class="material-symbols-outlined">content_copy</span>
+              </button>
+            </div>
+            <p class="text-on-surface-variant text-sm mt-6 font-medium max-w-sm">Share this code with clients. Every lead is automatically tracked to your profile.</p>
+          </div>
+
+          <div class="flex flex-col gap-3 shrink-0">
+            <button id="btn-share-wa" class="flex items-center gap-3 px-6 py-4 rounded-2xl bg-[#25D366]/10 text-[#25D366] text-sm font-black uppercase tracking-widest hover:bg-[#25D366]/20 transition-all">
+              <span class="material-symbols-outlined">chat</span> Share on WhatsApp
+            </button>
+            <button id="btn-qr" class="flex items-center gap-3 px-6 py-4 rounded-2xl bg-tertiary/10 text-tertiary text-sm font-black uppercase tracking-widest hover:bg-tertiary/20 transition-all">
+              <span class="material-symbols-outlined">qr_code_2</span> Get QR Code
+            </button>
+            <button id="btn-copy-link" class="flex items-center gap-3 px-6 py-4 rounded-2xl bg-on-background/5 text-on-background/60 text-sm font-black uppercase tracking-widest hover:bg-on-background/10 transition-all">
+              <span class="material-symbols-outlined">link</span> Copy Share Link
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <div class="tilt-card bg-white rounded-[2rem] p-10 border border-outline-variant/30 shadow-lg group">
+          <div class="flex items-center justify-between mb-8">
+            <div class="w-14 h-14 rounded-2xl bg-tertiary/10 text-tertiary flex items-center justify-center">
+              <span class="material-symbols-outlined text-3xl">trending_up</span>
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-tertiary">Performance</span>
+          </div>
+          <p class="font-headline font-black text-6xl text-on-background mb-1" id="stat-leads">—</p>
+          <p class="text-on-surface-variant font-bold text-xs uppercase tracking-widest">Total Leads Recorded</p>
+        </div>
+
+        <div class="tilt-card bg-white rounded-[2rem] p-10 border border-outline-variant/30 shadow-lg group">
+          <div class="flex items-center justify-between mb-8">
+            <div class="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+              <span class="material-symbols-outlined text-3xl">payments</span>
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-primary">Earnings</span>
+          </div>
+          <p class="font-headline font-black text-6xl text-on-background mb-1">₹<span id="stat-sales">—</span></p>
+          <p class="text-on-surface-variant font-bold text-xs uppercase tracking-widest">Confirmed Sales Value</p>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="bg-surface-container-low/50 rounded-3xl p-8 flex flex-col md:flex-row items-center gap-6 border border-outline-variant/20">
+        <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shrink-0 shadow-sm">
+          <span class="material-symbols-outlined text-primary">info</span>
+        </div>
+        <p class="text-on-surface-variant text-sm font-medium leading-relaxed">
+          Commissions are tracked when clients mention your code during the discovery phase. Sales values are updated manually by the admin team upon project confirmation.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- QR Modal -->
+  <div id="qr-modal" onclick="closeQR()">
+    <div id="qr-wrap" onclick="event.stopPropagation()">
+      <div class="text-center mb-8">
+        <h3 class="font-headline font-black text-2xl mb-1">Your Personal QR</h3>
+        <p class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">Aetherstack Marketer</p>
+      </div>
+      <div id="qrcode" class="flex justify-center mb-10">
+        <img id="qr-img" src="" alt="QR Code" class="w-[220px] h-[220px] hidden" onload="this.classList.remove('hidden')"/>
+        <div id="qr-loader" class="w-[220px] h-[220px] flex items-center justify-center bg-surface-container-low rounded-2xl">
+          <span class="spinner"></span>
+        </div>
+      </div>
+      <button onclick="closeQR()" class="w-full py-4 bg-on-background text-white rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('mkt_token');
+    if (!token) window.location.replace('marketing-login.html');
+
+    function showToast(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.className = type;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 3000);
+    }
+
+    async function loadDashboard() {
+      try {
+        const res = await fetch('/api/marketing/dashboard', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.status === 401) { logout(); return; }
+        if (!res.ok) throw new Error();
+
+        const { data } = await res.json();
+        document.getElementById('greeting-name').textContent = data.name;
+        document.getElementById('member-since').textContent = new Date(data.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+        document.getElementById('referral-code').textContent = data.referral_code;
+        document.getElementById('stat-leads').textContent = data.total_leads.toLocaleString('en-IN');
+        document.getElementById('stat-sales').textContent = data.total_sales.toLocaleString('en-IN');
+
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('dashboard-content').classList.remove('hidden');
+        wireButtons(data.referral_code);
+      } catch {
+        showToast('Session error. Please re-login.', 'error');
+      }
+    }
+
+    function wireButtons(code) {
+      const shareUrl = `${window.location.origin}/index.html?ref=${code}`;
+      
+      document.getElementById('btn-copy').onclick = () => {
+        navigator.clipboard.writeText(code);
+        showToast('Code copied to clipboard!');
+      };
+
+      document.getElementById('btn-copy-link').onclick = () => {
+        navigator.clipboard.writeText(shareUrl);
+        showToast('Referral link copied!');
+      };
+
+      document.getElementById('btn-share-wa').onclick = () => {
+        const msg = encodeURIComponent(`Hey! Check out Aetherstack for premium web solutions. Use my referral code *${code}* or this link: ${shareUrl}`);
+        window.open(`https://wa.me/?text=${msg}`, '_blank');
+      };
+
+      document.getElementById('btn-qr').onclick = () => {
+        const qrImg = document.getElementById('qr-img');
+        const qrLoader = document.getElementById('qr-loader');
+        qrImg.classList.add('hidden');
+        qrLoader.classList.remove('hidden');
+        
+        // Use a reliable QR API
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=10&data=${encodeURIComponent(shareUrl)}`;
+        
+        document.getElementById('qr-modal').classList.add('open');
+        
+        qrImg.onload = () => {
+          qrImg.classList.remove('hidden');
+          qrLoader.classList.add('hidden');
+        };
+      };
+    }
+
+    function closeQR() { document.getElementById('qr-modal').classList.remove('open'); }
+    function logout() { localStorage.removeItem('mkt_token'); window.location.replace('marketing-login.html'); }
+    
+    function initTilt(el) {
+      if (window.innerWidth < 1024) return;
+      el.addEventListener('mousemove', e => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transform = `perspective(1000px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateY(-4px)`;
+      });
+      el.addEventListener('mouseleave', () => el.style.transform = '');
+    }
+    document.querySelectorAll('.tilt-card').forEach(initTilt);
+
+    loadDashboard();
+  </script>
+</body>
+</html>
