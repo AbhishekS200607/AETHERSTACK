@@ -75,15 +75,14 @@
     
     /* ── Cursor: Hide on Touch ── */
     @media (hover: hover) and (pointer: fine) {
-      * { cursor: none !important; }
-      #cursor-dot, #cursor-ring { display: block; }
+      *, *::before, *::after { cursor: none !important; }
     }
     @media (hover: none), (pointer: coarse) {
-      #cursor-dot, #cursor-ring { display: none; }
+      #cursor-dot, #cursor-ring { display: none !important; }
     }
 
-    #cursor-dot { position: fixed; top: 0; left: 0; width: 8px; height: 8px; background: #ff6035; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width 0.2s, height 0.2s; display: none; }
-    #cursor-ring { position: fixed; top: 0; left: 0; width: 36px; height: 36px; border: 2px solid rgba(255,96,53,0.6); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); will-change: transform; transition: width 0.3s, height 0.3s, border-color 0.3s; display: none; }
+    #cursor-dot { position: fixed; top: 0; left: 0; width: 8px; height: 8px; background: #ff6035; border-radius: 50%; pointer-events: none; z-index: 99999; transform: translate(-50%,-50%); transition: width 0.2s, height 0.2s, opacity 0.2s; opacity: 0; }
+    #cursor-ring { position: fixed; top: 0; left: 0; width: 36px; height: 36px; border: 2px solid rgba(255,96,53,0.6); border-radius: 50%; pointer-events: none; z-index: 99998; transform: translate(-50%,-50%); will-change: left, top; transition: width 0.3s, height 0.3s, border-color 0.3s, opacity 0.2s; opacity: 0; }
     body.cursor-hover #cursor-dot { width: 12px; height: 12px; }
     body.cursor-hover #cursor-ring { width: 56px; height: 56px; border-color: #ff6035; mix-blend-mode: difference; }
 
@@ -248,6 +247,8 @@
                   <th>Code</th>
                   <th>Leads</th>
                   <th>Sales (₹)</th>
+                  <th>Projects</th>
+                  <th>Reward</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
@@ -461,7 +462,7 @@
 
         // Render Desktop Table
         document.getElementById('marketers-tbody').innerHTML = marketers.map(m => `
-          <tr>
+          <tr id="row-${m.id}">
             <td>
               <div class="font-headline font-bold text-on-surface">${esc(m.name)}</div>
               <div class="text-[10px] text-on-surface-variant font-medium uppercase tracking-widest">${m.id.slice(0,8)}...</div>
@@ -475,26 +476,36 @@
             </td>
             <td class="font-bold text-tertiary">${m.total_leads}</td>
             <td>
-              <input type="number" value="${m.total_sales}" class="w-24 bg-surface-container-low border-none rounded-lg text-sm font-bold p-2 focus:ring-2 focus:ring-primary" 
-                onchange="updateMarketerField('${m.id}', 'total_sales', this.value)"/>
+              <input type="number" id="sales-${m.id}" value="${m.total_sales}" class="w-24 bg-surface-container-low border-none rounded-lg text-sm font-bold p-2 focus:ring-2 focus:ring-primary"/>
             </td>
             <td>
-              <select class="bg-surface-container-low border-none rounded-lg text-xs font-bold p-2 focus:ring-2 focus:ring-primary uppercase tracking-widest" 
-                onchange="updateMarketerField('${m.id}', 'status', this.value)">
+              <input type="number" id="projects-${m.id}" value="${m.successful_projects || 0}" class="w-16 bg-surface-container-low border-none rounded-lg text-sm font-bold p-2 focus:ring-2 focus:ring-primary"/>
+            </td>
+            <td>
+              <select id="reward-${m.id}" class="bg-surface-container-low border-none rounded-lg text-[10px] font-bold p-2 focus:ring-2 focus:ring-primary uppercase">
+                <option value="false" ${!m.reward_claimed ? 'selected' : ''}>None</option>
+                <option value="true" ${m.reward_claimed ? 'selected' : ''}>Claimed 🎁</option>
+              </select>
+            </td>
+            <td>
+              <select id="status-${m.id}" class="bg-surface-container-low border-none rounded-lg text-xs font-bold p-2 focus:ring-2 focus:ring-primary uppercase tracking-widest">
                 <option value="active" ${m.status === 'active' ? 'selected' : ''}>Active</option>
                 <option value="banned" ${m.status === 'banned' ? 'selected' : ''}>Banned</option>
                 <option value="revoked" ${m.status === 'revoked' ? 'selected' : ''}>Revoked</option>
               </select>
             </td>
             <td>
-              <button onclick="confirmDeleteMarketer('${m.id}', '${esc(m.name)}')" class="text-error font-bold text-xs uppercase tracking-widest hover:opacity-70">Remove</button>
+              <div class="flex flex-col gap-2">
+                <button onclick="updateMarketer('${m.id}')" class="bg-primary text-white text-[10px] font-black uppercase tracking-widest px-3 py-2 rounded-lg hover:opacity-80 transition-all">Update</button>
+                <button onclick="confirmDeleteMarketer('${m.id}', '${esc(m.name)}')" class="text-error font-bold text-[10px] uppercase tracking-widest hover:opacity-70">Remove</button>
+              </div>
             </td>
           </tr>
         `).join('');
 
         // Render Mobile Cards
         document.getElementById('marketers-cards').innerHTML = marketers.map(m => `
-          <div class="p-6">
+          <div class="p-6" id="card-${m.id}">
             <div class="flex justify-between items-start mb-4">
               <div>
                 <h3 class="font-headline font-bold text-lg">${esc(m.name)}</h3>
@@ -519,14 +530,23 @@
 
             <div class="grid grid-cols-2 gap-4 mb-6">
               <div>
-                <label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Total Sales (₹)</label>
-                <input type="number" value="${m.total_sales}" class="w-full bg-surface-container-low border-none rounded-xl text-sm font-bold p-3 focus:ring-2 focus:ring-primary" 
-                  onchange="updateMarketerField('${m.id}', 'total_sales', this.value)"/>
+                <label class="block text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Sales (₹)</label>
+                <input type="number" id="m-sales-${m.id}" value="${m.total_sales}" class="w-full bg-surface-container-low border-none rounded-xl text-sm font-bold p-3 focus:ring-2 focus:ring-primary"/>
               </div>
               <div>
-                <label class="block text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Account Status</label>
-                <select class="w-full bg-surface-container-low border-none rounded-xl text-xs font-bold p-3 focus:ring-2 focus:ring-primary uppercase tracking-widest" 
-                  onchange="updateMarketerField('${m.id}', 'status', this.value)">
+                <label class="block text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Projects</label>
+                <input type="number" id="m-projects-${m.id}" value="${m.successful_projects || 0}" class="w-full bg-surface-container-low border-none rounded-xl text-sm font-bold p-3 focus:ring-2 focus:ring-primary"/>
+              </div>
+              <div>
+                <label class="block text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Reward</label>
+                <select id="m-reward-${m.id}" class="w-full bg-surface-container-low border-none rounded-xl text-[10px] font-bold p-3 focus:ring-2 focus:ring-primary uppercase">
+                  <option value="false" ${!m.reward_claimed ? 'selected' : ''}>None</option>
+                  <option value="true" ${m.reward_claimed ? 'selected' : ''}>Claimed</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Status</label>
+                <select id="m-status-${m.id}" class="w-full bg-surface-container-low border-none rounded-xl text-[10px] font-bold p-3 focus:ring-2 focus:ring-primary uppercase tracking-widest">
                   <option value="active" ${m.status === 'active' ? 'selected' : ''}>Active</option>
                   <option value="banned" ${m.status === 'banned' ? 'selected' : ''}>Banned</option>
                   <option value="revoked" ${m.status === 'revoked' ? 'selected' : ''}>Revoked</option>
@@ -534,20 +554,48 @@
               </div>
             </div>
 
-            <button onclick="confirmDeleteMarketer('${m.id}', '${esc(m.name)}')" class="w-full py-3 bg-error/10 text-error font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-error hover:text-white transition-all">Remove Marketer</button>
+            <div class="flex gap-3">
+              <button onclick="updateMarketer('${m.id}', true)" class="flex-1 py-3 bg-primary text-white font-black text-xs uppercase tracking-widest rounded-xl hover:opacity-90 transition-all">Update Stats</button>
+              <button onclick="confirmDeleteMarketer('${m.id}', '${esc(m.name)}')" class="px-4 py-3 bg-error/10 text-error font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-error hover:text-white transition-all">Remove</button>
+            </div>
           </div>
         `).join('');
 
       } catch (err) { alert('Failed to load marketers.'); }
     }
 
-    async function updateMarketerField(id, field, value) {
-      const res = await fetch('/api/marketing/admin/update-sales', { // backend handles all updates in this endpoint now
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', 'x-admin-secret': SECRET },
-        body: JSON.stringify({ id, [field]: value })
-      });
-      if (res.ok) { loadMarketers(); }
+    async function updateMarketer(id, isMobile = false) {
+      const prefix = isMobile ? 'm-' : '';
+      const body = {
+        id,
+        total_sales: document.getElementById(`${prefix}sales-${id}`).value,
+        successful_projects: document.getElementById(`${prefix}projects-${id}`).value,
+        reward_claimed: document.getElementById(`${prefix}reward-${id}`).value === 'true',
+        status: document.getElementById(`${prefix}status-${id}`).value
+      };
+
+      try {
+        const res = await fetch('/api/marketing/admin/update-sales', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'x-admin-secret': SECRET },
+          body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Update failed');
+        
+        // Show visual feedback
+        const el = document.getElementById(isMobile ? `card-${id}` : `row-${id}`);
+        const originalBg = el.style.backgroundColor;
+        el.style.backgroundColor = '#f0fdf4';
+        setTimeout(() => {
+          el.style.backgroundColor = originalBg;
+          loadMarketers(); // Refresh data to show persistent state
+        }, 1000);
+        
+        console.log('Update successful for:', id);
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
     }
 
     async function confirmDeleteMarketer(id, name) {
@@ -590,8 +638,14 @@
     const cursorRing = document.getElementById('cursor-ring');
     let ringX = 0, ringY = 0, dotX = 0, dotY = 0;
     
-    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
     if (!isTouch) {
+      window.addEventListener('mousemove', e => {
+        dotX = e.clientX; dotY = e.clientY;
+        cursorDot.style.opacity = '1';
+        cursorRing.style.opacity = '1';
+      }, { once: true });
+
       window.addEventListener('mousemove', e => { dotX = e.clientX; dotY = e.clientY; });
       (function animateCursor() {
         ringX += (dotX - ringX) * 0.12;
@@ -602,9 +656,10 @@
         cursorRing.style.top = ringY + 'px';
         requestAnimationFrame(animateCursor);
       })();
-      document.querySelectorAll('a,button,[onclick],input,textarea,select').forEach(el => {
-        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+
+      document.addEventListener('mouseover', e => {
+        if (e.target.closest('a,button,[onclick],input,textarea,select')) document.body.classList.add('cursor-hover');
+        else document.body.classList.remove('cursor-hover');
       });
     }
 

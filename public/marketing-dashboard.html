@@ -73,6 +73,27 @@
     #qr-modal.open { display: flex; animation: fadeIn 0.3s ease; }
     #qr-wrap { background: #fff; padding: 2rem; border-radius: 2.5rem; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
     @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+    .nav-tab { cursor: pointer; position: relative; transition: all 0.3s; }
+    .nav-tab.active { color: #ff6035; }
+    .nav-tab.active::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px; background: #ff6035; border-radius: 2px; }
+
+    .tab-content { display: none; animation: fadeIn 0.4s ease; }
+    .tab-content.active { display: block; }
+
+    .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(0,0,0,0.1); border-top-color: #ff6035; border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .profile-field { position: relative; margin-bottom: 1.5rem; }
+    .profile-field input {
+      width: 100%; background: #f9f9fb; border: 1px solid #e8e8eb;
+      padding: 12px 16px; border-radius: 12px; font-family: 'Manrope', sans-serif; font-size: 0.95rem; color: #111111;
+      outline: none !important; transition: border-color 0.3s, background 0.3s;
+    }
+    .profile-field input:focus { border-color: #ff6035; background: #fff; }
+    .profile-field label {
+      display: block; margin-bottom: 6px; color: #666666; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+    }
   </style>
 </head>
 <body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-fixed min-h-screen flex flex-col hero-noise">
@@ -86,13 +107,41 @@
         </div>
         <span class="text-xl font-black tracking-tighter text-[#111111] font-headline">Aetherstack</span>
       </a>
+      
+      <div class="hidden md:flex items-center gap-8 px-6">
+        <span onclick="showTab('dashboard')" class="nav-tab active text-sm font-bold uppercase tracking-widest" id="tab-dashboard-btn">Dashboard</span>
+        <span onclick="showTab('leaderboard')" class="nav-tab text-sm font-bold uppercase tracking-widest" id="tab-leaderboard-btn">Leaderboard</span>
+        <span onclick="showTab('rewards')" class="nav-tab text-sm font-bold uppercase tracking-widest" id="tab-rewards-btn">Rewards</span>
+        <span onclick="showTab('profile')" class="nav-tab text-sm font-bold uppercase tracking-widest" id="tab-profile-btn">Profile</span>
+      </div>
+
       <button onclick="logout()" class="text-sm font-bold text-on-surface-variant hover:text-error transition-colors uppercase tracking-widest flex items-center gap-2">
-        <span class="material-symbols-outlined text-lg">logout</span> Logout
+        <span class="material-symbols-outlined text-lg">logout</span> <span class="hidden sm:inline">Logout</span>
       </button>
     </div>
   </nav>
 
-  <main class="flex-1 max-w-5xl mx-auto w-full pt-36 pb-20 px-6 relative z-10">
+  <!-- Mobile Bottom Nav -->
+  <div class="fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-lg md:hidden z-50 glass-nav rounded-2xl shadow-2xl flex justify-around items-center py-3">
+    <button onclick="showTab('dashboard')" class="flex flex-col items-center gap-1">
+      <span class="material-symbols-outlined" id="mob-dashboard-icon">dashboard</span>
+      <span class="text-[9px] font-black uppercase">Home</span>
+    </button>
+    <button onclick="showTab('leaderboard')" class="flex flex-col items-center gap-1">
+      <span class="material-symbols-outlined" id="mob-leaderboard-icon">leaderboard</span>
+      <span class="text-[9px] font-black uppercase">Top</span>
+    </button>
+    <button onclick="showTab('rewards')" class="flex flex-col items-center gap-1">
+      <span class="material-symbols-outlined" id="mob-rewards-icon">redeem</span>
+      <span class="text-[9px] font-black uppercase">Perks</span>
+    </button>
+    <button onclick="showTab('profile')" class="flex flex-col items-center gap-1">
+      <span class="material-symbols-outlined" id="mob-profile-icon">person</span>
+      <span class="text-[9px] font-black uppercase">Me</span>
+    </button>
+  </div>
+
+  <main class="flex-1 max-w-5xl mx-auto w-full pt-36 pb-32 md:pb-20 px-6 relative z-10">
     <div id="toast" class="hidden"></div>
 
     <!-- Loading Skeleton -->
@@ -106,8 +155,8 @@
       </div>
     </div>
 
-    <!-- Content -->
-    <div id="dashboard-content" class="hidden animate-fade-in-up">
+    <!-- ════ TAB: DASHBOARD ════ -->
+    <div id="tab-dashboard" class="tab-content active">
       <div class="mb-12">
         <p class="text-primary font-bold uppercase tracking-[0.2em] font-headline text-xs mb-3">Welcome back</p>
         <h1 class="font-headline font-black text-5xl md:text-6xl tracking-tighter text-on-background" id="greeting-name">—</h1>
@@ -144,7 +193,7 @@
       </div>
 
       <!-- Stats -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
         <div class="tilt-card bg-white rounded-[2rem] p-10 border border-outline-variant/30 shadow-lg group">
           <div class="flex items-center justify-between mb-8">
             <div class="w-14 h-14 rounded-2xl bg-tertiary/10 text-tertiary flex items-center justify-center">
@@ -166,6 +215,17 @@
           <p class="font-headline font-black text-6xl text-on-background mb-1">₹<span id="stat-sales">—</span></p>
           <p class="text-on-surface-variant font-bold text-xs uppercase tracking-widest">Confirmed Sales Value</p>
         </div>
+
+        <div class="tilt-card bg-white rounded-[2rem] p-10 border border-outline-variant/30 shadow-lg group md:col-span-2 lg:col-span-1">
+          <div class="flex items-center justify-between mb-8">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+              <span class="material-symbols-outlined text-3xl">verified</span>
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-emerald-600">Milestone</span>
+          </div>
+          <p class="font-headline font-black text-6xl text-on-background mb-1" id="stat-projects">—</p>
+          <p class="text-on-surface-variant font-bold text-xs uppercase tracking-widest">Successful Projects</p>
+        </div>
       </div>
 
       <!-- Info -->
@@ -174,13 +234,108 @@
           <span class="material-symbols-outlined text-primary">info</span>
         </div>
         <p class="text-on-surface-variant text-sm font-medium leading-relaxed">
-          Commissions are tracked when clients mention your code during the discovery phase. Sales values are updated manually by the admin team upon project confirmation.
+          Commissions are tracked when clients mention your code during the discovery phase. Sales values and successful project counts are updated manually by the admin team upon project confirmation.
         </p>
+      </div>
+    </div>
+
+    <!-- ════ TAB: LEADERBOARD ════ -->
+    <div id="tab-leaderboard" class="tab-content">
+      <div class="mb-12">
+        <h2 class="font-headline font-black text-5xl tracking-tighter text-on-background">Leaderboard</h2>
+        <p class="text-on-surface-variant font-medium mt-2">Top performers of the Aetherstack network.</p>
+      </div>
+
+      <div class="bg-white rounded-[2.5rem] shadow-xl border border-outline-variant/30 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-background/50 border-bottom border-outline-variant/20">
+                <th class="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">Rank</th>
+                <th class="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">Marketer</th>
+                <th class="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">Code</th>
+                <th class="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant text-right">Sales Value</th>
+                <th class="px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant text-right">Projects</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-body"></tbody>
+          </table>
+        </div>
+        <div id="leaderboard-loading" class="p-20 flex flex-col items-center justify-center gap-4">
+          <span class="spinner"></span>
+          <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Loading Leaders...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ TAB: REWARDS ════ -->
+    <div id="tab-rewards" class="tab-content">
+      <div class="mb-12">
+        <h2 class="font-headline font-black text-5xl tracking-tighter text-on-background">Rewards</h2>
+        <p class="text-on-surface-variant font-medium mt-2">Unlock exclusive perks as you scale.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white rounded-[2.5rem] p-10 shadow-xl border border-outline-variant/30 relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute top-0 right-0 p-8">
+            <div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+              <span class="material-symbols-outlined text-primary text-4xl">checkroom</span>
+            </div>
+          </div>
+          <div>
+            <span class="px-4 py-2 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full mb-6 inline-block">Current Milestone</span>
+            <h3 class="font-headline font-black text-3xl mb-4">Official Aetherstack T-Shirt</h3>
+            <p class="text-on-surface-variant text-sm font-medium leading-relaxed mb-8 max-w-xs">
+              Complete <span class="text-on-background font-bold">10 successful project referrals</span> to claim your premium branded tee.
+            </p>
+          </div>
+          <div>
+            <div class="flex justify-between items-end mb-4">
+              <span class="text-4xl font-headline font-black text-on-background"><span id="reward-progress-text">0</span>/10</span>
+              <span class="text-[10px] font-black uppercase tracking-widest text-primary" id="reward-percent">0%</span>
+            </div>
+            <div class="w-full bg-background rounded-full h-4 overflow-hidden p-1 border border-outline-variant/20 mb-6">
+              <div id="reward-progress-bar" class="h-full bg-primary rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+            </div>
+            <div id="claim-section" class="hidden">
+              <button onclick="claimReward()" id="btn-claim" class="w-full py-4 bg-primary text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">redeem</span> Claim My T-Shirt
+              </button>
+            </div>
+            <div id="claimed-section" class="hidden">
+              <div class="w-full py-4 bg-emerald-500/10 text-emerald-600 rounded-2xl font-black text-sm uppercase tracking-widest border border-emerald-500/20 flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">verified</span> Reward Claimed
+              </div>
+            </div>
+            <p id="reward-hint" class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest mt-4">Keep going! You're almost there.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ TAB: PROFILE ════ -->
+    <div id="tab-profile" class="tab-content">
+      <div class="mb-12">
+        <h2 class="font-headline font-black text-5xl tracking-tighter text-on-background">My Profile</h2>
+        <p class="text-on-surface-variant font-medium mt-2">Manage your professional information.</p>
+      </div>
+      <div class="max-w-2xl">
+        <form id="profile-form" class="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-xl border border-outline-variant/30 space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="profile-field"><label>Full Name</label><input type="text" id="prof-name" disabled class="opacity-60 cursor-not-allowed"/></div>
+            <div class="profile-field"><label>Email Address</label><input type="email" id="prof-email" disabled class="opacity-60 cursor-not-allowed"/></div>
+          </div>
+          <div class="profile-field"><label>Mobile Number</label><input type="tel" id="prof-mobile" maxlength="10"/></div>
+          <div class="profile-field"><label>Physical Address</label><input type="text" id="prof-address"/></div>
+          <div class="profile-field"><label>Pincode</label><input type="text" id="prof-pincode" maxlength="6"/></div>
+          <div class="pt-4">
+            <button type="submit" id="btn-save-profile" class="gradient-primary px-8 py-4 rounded-2xl font-headline font-black text-sm text-white shadow-lg uppercase tracking-widest flex items-center gap-2">Save Changes</button>
+          </div>
+        </form>
       </div>
     </div>
   </main>
 
-  <!-- QR Modal -->
   <div id="qr-modal" onclick="closeQR()">
     <div id="qr-wrap" onclick="event.stopPropagation()">
       <div class="text-center mb-8">
@@ -189,9 +344,7 @@
       </div>
       <div id="qrcode" class="flex justify-center mb-10">
         <img id="qr-img" src="" alt="QR Code" class="w-[220px] h-[220px] hidden" onload="this.classList.remove('hidden')"/>
-        <div id="qr-loader" class="w-[220px] h-[220px] flex items-center justify-center bg-surface-container-low rounded-2xl">
-          <span class="spinner"></span>
-        </div>
+        <div id="qr-loader" class="w-[220px] h-[220px] flex items-center justify-center bg-surface-container-low rounded-2xl"><span class="spinner"></span></div>
       </div>
       <button onclick="closeQR()" class="w-full py-4 bg-on-background text-white rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95">Close</button>
     </div>
@@ -208,80 +361,108 @@
       setTimeout(() => t.classList.add('hidden'), 3000);
     }
 
+    function showTab(tabId) {
+      document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+      document.getElementById(`tab-${tabId}-btn`)?.classList.add('active');
+      ['dashboard','leaderboard','rewards','profile'].forEach(id => {
+        const icon = document.getElementById(`mob-${id}-icon`);
+        if (icon) icon.style.color = (id === tabId) ? '#ff6035' : '#666666';
+      });
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+      if (tabId === 'leaderboard') loadLeaderboard();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     async function loadDashboard() {
       try {
-        const res = await fetch('/api/marketing/dashboard', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await fetch('/api/marketing/dashboard', { headers: { 'Authorization': `Bearer ${token}` } });
         if (res.status === 401) { logout(); return; }
-        if (!res.ok) throw new Error();
-
         const { data } = await res.json();
         document.getElementById('greeting-name').textContent = data.name;
         document.getElementById('member-since').textContent = new Date(data.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
         document.getElementById('referral-code').textContent = data.referral_code;
         document.getElementById('stat-leads').textContent = data.total_leads.toLocaleString('en-IN');
         document.getElementById('stat-sales').textContent = data.total_sales.toLocaleString('en-IN');
+        document.getElementById('stat-projects').textContent = (data.successful_projects || 0).toLocaleString('en-IN');
+
+        const projects = data.successful_projects || 0;
+        const progress = Math.min((projects / 10) * 100, 100);
+        document.getElementById('reward-progress-text').textContent = projects;
+        document.getElementById('reward-percent').textContent = `${Math.floor(progress)}%`;
+        setTimeout(() => document.getElementById('reward-progress-bar').style.width = `${progress}%`, 300);
+
+        const claimSec = document.getElementById('claim-section');
+        const claimedSec = document.getElementById('claimed-section');
+        const hint = document.getElementById('reward-hint');
+        if (data.reward_claimed) { claimedSec.classList.remove('hidden'); claimSec.classList.add('hidden'); hint.textContent = "Your T-Shirt is being processed!"; }
+        else if (projects >= 10) { claimSec.classList.remove('hidden'); claimedSec.classList.add('hidden'); hint.textContent = "You've unlocked the T-Shirt! Claim it now."; }
+
+        document.getElementById('prof-name').value = data.name;
+        document.getElementById('prof-email').value = data.email;
+        document.getElementById('prof-mobile').value = data.mobile || '';
+        document.getElementById('prof-address').value = data.address || '';
+        document.getElementById('prof-pincode').value = data.pincode || '';
 
         document.getElementById('loading-state').classList.add('hidden');
-        document.getElementById('dashboard-content').classList.remove('hidden');
+        document.getElementById('tab-dashboard').classList.add('active');
         wireButtons(data.referral_code);
-      } catch {
-        showToast('Session error. Please re-login.', 'error');
-      }
+      } catch (err) { showToast('Session error.', 'error'); }
     }
+
+    async function claimReward() {
+      const btn = document.getElementById('btn-claim');
+      btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>...';
+      try {
+        const res = await fetch('/api/marketing/claim-reward', { method: 'POST', headers: { 'Authorization': `Bearer ${token}` } });
+        if (!res.ok) throw new Error();
+        showToast('Claimed!'); loadDashboard();
+      } catch { showToast('Failed.', 'error'); }
+      finally { btn.disabled = false; btn.innerHTML = 'Claim My T-Shirt'; }
+    }
+
+    async function loadLeaderboard() {
+      const body = document.getElementById('leaderboard-body');
+      if (body.children.length > 0) return;
+      try {
+        const res = await fetch('/api/marketing/leaderboard', { headers: { 'Authorization': `Bearer ${token}` } });
+        const { leaderboard } = await res.json();
+        document.getElementById('leaderboard-loading').classList.add('hidden');
+        body.innerHTML = leaderboard.map((m, i) => `
+          <tr class="border-b border-outline-variant/10 hover:bg-background/30 transition-colors">
+            <td class="px-8 py-5"><span class="w-8 h-8 rounded-full flex items-center justify-center font-black text-xs ${i < 3 ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'bg-on-background/5 text-on-surface-variant'}">${i + 1}</span></td>
+            <td class="px-8 py-5"><p class="font-bold text-on-background">${m.name}</p></td>
+            <td class="px-8 py-5"><code class="bg-background px-2 py-1 rounded text-primary font-black text-xs uppercase">${m.referral_code}</code></td>
+            <td class="px-8 py-5 text-right font-headline font-black text-lg">₹${m.total_sales.toLocaleString('en-IN')}</td>
+            <td class="px-8 py-5 text-right"><span class="px-3 py-1 bg-emerald-500/10 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-widest">${m.successful_projects || 0} Projects</span></td>
+          </tr>`).join('');
+      } catch { showToast('Error.', 'error'); }
+    }
+
+    document.getElementById('profile-form').onsubmit = async (e) => {
+      e.preventDefault();
+      try {
+        const res = await fetch('/api/marketing/update-profile', {
+          method: 'PATCH',
+          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mobile: document.getElementById('prof-mobile').value, address: document.getElementById('prof-address').value, pincode: document.getElementById('prof-pincode').value })
+        });
+        if (res.ok) showToast('Saved!');
+      } catch { showToast('Error.', 'error'); }
+    };
 
     function wireButtons(code) {
       const shareUrl = `${window.location.origin}/index.html?ref=${code}`;
-      
-      document.getElementById('btn-copy').onclick = () => {
-        navigator.clipboard.writeText(code);
-        showToast('Code copied to clipboard!');
-      };
-
-      document.getElementById('btn-copy-link').onclick = () => {
-        navigator.clipboard.writeText(shareUrl);
-        showToast('Referral link copied!');
-      };
-
-      document.getElementById('btn-share-wa').onclick = () => {
-        const msg = encodeURIComponent(`Hey! Check out Aetherstack for premium web solutions. Use my referral code *${code}* or this link: ${shareUrl}`);
-        window.open(`https://wa.me/?text=${msg}`, '_blank');
-      };
-
+      document.getElementById('btn-copy').onclick = () => { navigator.clipboard.writeText(code); showToast('Copied!'); };
+      document.getElementById('btn-copy-link').onclick = () => { navigator.clipboard.writeText(shareUrl); showToast('Link Copied!'); };
+      document.getElementById('btn-share-wa').onclick = () => window.open(`https://wa.me/?text=${encodeURIComponent('Join Aetherstack: ' + shareUrl)}`, '_blank');
       document.getElementById('btn-qr').onclick = () => {
-        const qrImg = document.getElementById('qr-img');
-        const qrLoader = document.getElementById('qr-loader');
-        qrImg.classList.add('hidden');
-        qrLoader.classList.remove('hidden');
-        
-        // Use a reliable QR API
-        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=10&data=${encodeURIComponent(shareUrl)}`;
-        
+        document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(shareUrl)}`;
         document.getElementById('qr-modal').classList.add('open');
-        
-        qrImg.onload = () => {
-          qrImg.classList.remove('hidden');
-          qrLoader.classList.add('hidden');
-        };
       };
     }
-
     function closeQR() { document.getElementById('qr-modal').classList.remove('open'); }
     function logout() { localStorage.removeItem('mkt_token'); window.location.replace('marketing-login.html'); }
-    
-    function initTilt(el) {
-      if (window.innerWidth < 1024) return;
-      el.addEventListener('mousemove', e => {
-        const r = el.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width - 0.5;
-        const y = (e.clientY - r.top) / r.height - 0.5;
-        el.style.transform = `perspective(1000px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateY(-4px)`;
-      });
-      el.addEventListener('mouseleave', () => el.style.transform = '');
-    }
-    document.querySelectorAll('.tilt-card').forEach(initTilt);
-
     loadDashboard();
   </script>
 </body>

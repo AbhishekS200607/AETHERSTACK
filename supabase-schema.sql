@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS public.marketers (
   password_hash TEXT          NOT NULL,           -- bcrypt hash, never store plain text
   total_sales   INTEGER       NOT NULL DEFAULT 0,
   total_leads   INTEGER       NOT NULL DEFAULT 0,
+  successful_projects INTEGER NOT NULL DEFAULT 0,
+  reward_claimed     BOOLEAN NOT NULL DEFAULT FALSE,
   status        TEXT          NOT NULL DEFAULT 'active',
   created_at    TIMESTAMPTZ   NOT NULL DEFAULT NOW()
 );
@@ -80,9 +82,16 @@ ALTER TABLE public.submissions        ENABLE ROW LEVEL SECURITY;
 -- Block ALL direct client access — only the service-role backend may read/write.
 -- (The backend uses createClient with the SERVICE_ROLE key, which bypasses RLS.)
 
+DROP POLICY IF EXISTS "deny_all_marketers" ON public.marketers;
 CREATE POLICY "deny_all_marketers" ON public.marketers FOR ALL TO anon, authenticated USING (false);
+
+DROP POLICY IF EXISTS "deny_all_otp" ON public.otp_verifications;
 CREATE POLICY "deny_all_otp" ON public.otp_verifications FOR ALL TO anon, authenticated USING (false);
+
+DROP POLICY IF EXISTS "deny_all_projects" ON public.projects;
 CREATE POLICY "deny_all_projects" ON public.projects FOR ALL TO anon, authenticated USING (false);
+
+DROP POLICY IF EXISTS "deny_all_submissions" ON public.submissions;
 CREATE POLICY "deny_all_submissions" ON public.submissions FOR ALL TO anon, authenticated USING (false);
 
 -- ── 4. AUTOMATIC CLEANUP (optional but recommended) ─────────
