@@ -81,8 +81,8 @@
       #cursor-dot, #cursor-ring { display: none !important; }
     }
 
-    #cursor-dot { position: fixed; top: 0; left: 0; width: 8px; height: 8px; background: #ff6035; border-radius: 50%; pointer-events: none; z-index: 99999; transform: translate(-50%,-50%); transition: width 0.2s, height 0.2s, opacity 0.2s; opacity: 0; }
-    #cursor-ring { position: fixed; top: 0; left: 0; width: 36px; height: 36px; border: 2px solid rgba(255,96,53,0.6); border-radius: 50%; pointer-events: none; z-index: 99998; transform: translate(-50%,-50%); will-change: left, top; transition: width 0.3s, height 0.3s, border-color 0.3s, opacity 0.2s; opacity: 0; }
+    #cursor-dot { position: fixed; top: 0; left: 0; width: 8px; height: 8px; background: #ff6035; border-radius: 50%; pointer-events: none; z-index: 99999; will-change: transform; transition: width 0.2s, height 0.2s, opacity 0.2s; opacity: 0; }
+    #cursor-ring { position: fixed; top: 0; left: 0; width: 36px; height: 36px; border: 2px solid rgba(255,96,53,0.6); border-radius: 50%; pointer-events: none; z-index: 99998; will-change: transform; transition: width 0.3s, height 0.3s, border-color 0.3s, opacity 0.2s; opacity: 0; }
     body.cursor-hover #cursor-dot { width: 12px; height: 12px; }
     body.cursor-hover #cursor-ring { width: 56px; height: 56px; border-color: #ff6035; mix-blend-mode: difference; }
 
@@ -650,10 +650,8 @@
       (function animateCursor() {
         ringX += (dotX - ringX) * 0.12;
         ringY += (dotY - ringY) * 0.12;
-        cursorDot.style.left = dotX + 'px';
-        cursorDot.style.top = dotY + 'px';
-        cursorRing.style.left = ringX + 'px';
-        cursorRing.style.top = ringY + 'px';
+        cursorDot.style.transform = `translate(${dotX - 4}px, ${dotY - 4}px)`;
+        cursorRing.style.transform = `translate(${ringX - 18}px, ${ringY - 18}px)`;
         requestAnimationFrame(animateCursor);
       })();
 
