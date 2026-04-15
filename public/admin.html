@@ -162,7 +162,7 @@
 
       <!-- Pane: Submissions -->
       <div id="pane-submissions" class="sr visible">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-6">
           <div>
             <h2 class="font-headline font-black text-3xl md:text-4xl tracking-tighter">Client Inquiries</h2>
             <p id="submissions-count" class="text-on-surface-variant font-medium mt-1">Loading...</p>
@@ -170,6 +170,20 @@
           <button onclick="loadSubmissions()" class="text-primary font-bold text-sm flex items-center gap-2 hover:opacity-70 transition-all bg-white sm:bg-transparent px-4 py-2 rounded-xl border border-outline-variant sm:border-none shadow-sm sm:shadow-none">
             <span class="material-symbols-outlined text-lg">refresh</span> Refresh
           </button>
+        </div>
+        <div class="flex gap-3 mb-8">
+          <div class="relative flex-1">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+            <input id="sub-search" oninput="filterSubmissions()" type="text" placeholder="Search by name, email, message..." class="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-2xl text-sm focus:outline-none focus:border-primary transition-all"/>
+          </div>
+          <select id="sub-filter-type" onchange="filterSubmissions()" class="bg-white border border-outline-variant rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-primary">
+            <option value="">All Types</option>
+            <option>Web Application</option>
+            <option>E-commerce</option>
+            <option>SaaS Platform</option>
+            <option>Landing Page</option>
+            <option>Not sure yet</option>
+          </select>
         </div>
         <div id="submissions-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"></div>
       </div>
@@ -237,6 +251,18 @@
         </div>
 
         <!-- Marketers List (Responsive) -->
+        <div class="flex gap-3 mb-6">
+          <div class="relative flex-1">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+            <input id="mkt-search" oninput="filterMarketers()" type="text" placeholder="Search by name, email, code..." class="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-2xl text-sm focus:outline-none focus:border-primary transition-all"/>
+          </div>
+          <select id="mkt-filter-status" onchange="filterMarketers()" class="bg-white border border-outline-variant rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-primary">
+            <option value="">All Status</option>
+            <option>active</option>
+            <option>banned</option>
+            <option>revoked</option>
+          </select>
+        </div>
         <div class="bg-white rounded-3xl border border-outline-variant shadow-sm overflow-hidden">
           <!-- Desktop Table -->
           <div class="hidden md:block overflow-x-auto">
@@ -264,7 +290,7 @@
 
       <!-- Pane: Applications -->
       <div id="pane-applications" class="hidden sr visible">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-6">
           <div>
             <h2 class="font-headline font-black text-3xl md:text-4xl tracking-tighter">Career Applications</h2>
             <p id="applications-count" class="text-on-surface-variant font-medium mt-1">Loading...</p>
@@ -272,6 +298,26 @@
           <button onclick="loadApplications()" class="text-primary font-bold text-sm flex items-center gap-2 hover:opacity-70 transition-all bg-white sm:bg-transparent px-4 py-2 rounded-xl border border-outline-variant sm:border-none shadow-sm sm:shadow-none">
             <span class="material-symbols-outlined text-lg">refresh</span> Refresh
           </button>
+        </div>
+        <div class="flex gap-3 mb-8">
+          <div class="relative flex-1">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+            <input id="app-search" oninput="filterApplications()" type="text" placeholder="Search by name, email, college..." class="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-2xl text-sm focus:outline-none focus:border-primary transition-all"/>
+          </div>
+          <select id="app-filter-role" onchange="filterApplications()" class="bg-white border border-outline-variant rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-primary">
+            <option value="">All Roles</option>
+            <option>Frontend Developer</option>
+            <option>Full Stack Developer</option>
+            <option>UI/UX Designer</option>
+            <option>Business Development</option>
+          </select>
+          <select id="app-filter-status" onchange="filterApplications()" class="bg-white border border-outline-variant rounded-2xl px-4 py-3 text-sm font-bold focus:outline-none focus:border-primary">
+            <option value="">All Status</option>
+            <option>new</option>
+            <option>reviewing</option>
+            <option>accepted</option>
+            <option>rejected</option>
+          </select>
         </div>
         <div id="applications-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"></div>
       </div>
@@ -345,13 +391,29 @@
     }
 
     // ── Submissions ────────────────────────────────────────
+    let allSubmissions = [];
     async function loadSubmissions() {
       try {
         const res = await fetch('/api/submissions', { headers: { 'x-admin-secret': SECRET } });
         if (!res.ok) { logout(); return; }
-        const data = await res.json();
-        document.getElementById('submissions-count').textContent = `${data.length} active leads recorded`;
-        document.getElementById('submissions-list').innerHTML = data.map(s => `
+        allSubmissions = await res.json();
+        renderSubmissions(allSubmissions);
+      } catch (err) { alert('Connection failed.'); }
+    }
+
+    function filterSubmissions() {
+      const q      = document.getElementById('sub-search').value.toLowerCase();
+      const type   = document.getElementById('sub-filter-type').value.toLowerCase();
+      const filtered = allSubmissions.filter(s =>
+        (!q    || [s.name, s.email, s.message].some(f => (f||'').toLowerCase().includes(q))) &&
+        (!type || (s.projectType||'').toLowerCase().includes(type))
+      );
+      renderSubmissions(filtered);
+    }
+
+    function renderSubmissions(data) {
+      document.getElementById('submissions-count').textContent = `${data.length} of ${allSubmissions.length} leads`;
+      document.getElementById('submissions-list').innerHTML = data.map(s => `
           <div class="tilt-card bg-white rounded-3xl p-6 md:p-8 border border-outline-variant shadow-sm relative overflow-hidden group">
             <div class="card-shine"></div>
             <div class="flex justify-between items-start mb-6">
@@ -384,8 +446,7 @@
             ` : ''}
           </div>
         `).join('');
-        document.querySelectorAll('.tilt-card').forEach(initTilt);
-      } catch (err) { alert('Connection failed.'); }
+      document.querySelectorAll('.tilt-card').forEach(initTilt);
     }
 
     // ── Projects CRUD ──────────────────────────────────────
@@ -468,14 +529,30 @@
     }
 
     // ── Marketing Team ─────────────────────────────────────
+    let allMarketers = [];
     async function loadMarketers() {
       try {
         const res = await fetch('/api/marketing/admin/stats', { headers: { 'x-admin-secret': SECRET } });
         const { stats, marketers } = await res.json();
+        allMarketers = marketers;
         document.getElementById('stat-total-marketers').textContent = stats.totalMarketers;
         document.getElementById('stat-total-leads').textContent = stats.totalLeads;
         document.getElementById('stat-total-sales').textContent = `₹${stats.totalSales.toLocaleString()}`;
+        renderMarketers(allMarketers);
+      } catch (err) { alert('Failed to load marketers.'); }
+    }
 
+    function filterMarketers() {
+      const q      = document.getElementById('mkt-search').value.toLowerCase();
+      const status = document.getElementById('mkt-filter-status').value.toLowerCase();
+      const filtered = allMarketers.filter(m =>
+        (!q      || [m.name, m.email, m.referral_code].some(f => (f||'').toLowerCase().includes(q))) &&
+        (!status || m.status === status)
+      );
+      renderMarketers(filtered);
+    }
+
+    function renderMarketers(marketers) {
         // Render Desktop Table
         document.getElementById('marketers-tbody').innerHTML = marketers.map(m => `
           <tr id="row-${m.id}">
@@ -573,7 +650,6 @@
           </div>
         `).join('');
 
-      } catch (err) { alert('Failed to load marketers.'); }
     }
 
     async function updateMarketer(id, isMobile = false) {
@@ -626,14 +702,32 @@
       accepted:  'bg-emerald-100 text-emerald-700',
       rejected:  'bg-red-100 text-red-600'
     };
+    let allApplications = [];
 
     async function loadApplications() {
       try {
         const res = await fetch('/api/applications', { headers: { 'x-admin-secret': SECRET } });
         if (!res.ok) { logout(); return; }
-        const data = await res.json();
-        document.getElementById('applications-count').textContent = `${data.length} application${data.length !== 1 ? 's' : ''} received`;
-        document.getElementById('applications-list').innerHTML = data.length ? data.map(a => `
+        allApplications = await res.json();
+        renderApplications(allApplications);
+      } catch { alert('Failed to load applications.'); }
+    }
+
+    function filterApplications() {
+      const q      = document.getElementById('app-search').value.toLowerCase();
+      const role   = document.getElementById('app-filter-role').value;
+      const status = document.getElementById('app-filter-status').value;
+      const filtered = allApplications.filter(a =>
+        (!q      || [a.name, a.email, a.college].some(f => (f||'').toLowerCase().includes(q))) &&
+        (!role   || a.role === role) &&
+        (!status || a.status === status)
+      );
+      renderApplications(filtered);
+    }
+
+    function renderApplications(data) {
+      document.getElementById('applications-count').textContent = `${data.length} of ${allApplications.length} applications`;
+      document.getElementById('applications-list').innerHTML = data.length ? data.map(a => `
           <div class="tilt-card bg-white rounded-3xl p-6 md:p-8 border border-outline-variant shadow-sm relative overflow-hidden group">
             <div class="card-shine"></div>
             <div class="flex justify-between items-start mb-4">
@@ -656,9 +750,8 @@
               <button onclick="deleteApp(${a.id})" class="ml-auto text-[10px] font-bold text-error uppercase tracking-widest hover:opacity-70">Delete</button>
             </div>
           </div>
-        `).join('') : '<p class="text-on-surface-variant col-span-2">No applications yet.</p>';
-        document.querySelectorAll('.tilt-card').forEach(initTilt);
-      } catch { alert('Failed to load applications.'); }
+        `).join('') : '<p class="text-on-surface-variant col-span-2">No applications found.</p>';
+      document.querySelectorAll('.tilt-card').forEach(initTilt);
     }
 
     async function updateAppStatus(id, status) {
@@ -667,13 +760,15 @@
         headers: { 'Content-Type': 'application/json', 'x-admin-secret': SECRET },
         body: JSON.stringify({ status })
       });
-      loadApplications();
+      allApplications = allApplications.map(a => a.id === id ? { ...a, status } : a);
+      filterApplications();
     }
 
     async function deleteApp(id) {
       if (!confirm('Delete this application?')) return;
       await fetch(`/api/applications/${id}`, { method: 'DELETE', headers: { 'x-admin-secret': SECRET } });
-      loadApplications();
+      allApplications = allApplications.filter(a => a.id !== id);
+      filterApplications();
     }
 
     // ── Utilities ──────────────────────────────────────────
