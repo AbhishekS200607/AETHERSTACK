@@ -29,7 +29,7 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc:  ["'self'"],
-      scriptSrc:   ["'self'", "'unsafe-inline'", "'unsafe-hashes'", 'cdn.tailwindcss.com', 'fonts.googleapis.com', 'cdnjs.cloudflare.com'],
+      scriptSrc:   ["'self'", "'unsafe-inline'", "'unsafe-hashes'", 'cdn.tailwindcss.com', 'fonts.googleapis.com', 'cdnjs.cloudflare.com', 'https://www.googletagmanager.com'],
       scriptSrcAttr: ["'unsafe-inline'"],
       styleSrc:    ["'self'", "'unsafe-inline'", 'fonts.googleapis.com', 'fonts.gstatic.com'],
       fontSrc:     ["'self'", 'fonts.gstatic.com', 'fonts.googleapis.com', 'r2cdn.perplexity.ai', 'data:'],
