@@ -408,8 +408,18 @@
 <!-- Custom Cursor -->
 <div id="cursor-dot"></div>
 <div id="cursor-ring"></div>
+<!-- Marketer Recruitment Bar (Temporary) -->
+<div id="marketer-bar" class="w-full bg-[#111] py-3 px-6 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center relative z-[60] border-b border-white/5">
+  <div class="flex items-center gap-2">
+    <span class="w-2 h-2 rounded-full bg-primary animate-pulse shrink-0"></span>
+    <p class="text-[10px] md:text-xs font-headline font-black uppercase tracking-[0.2em] text-white/90">We're hiring marketers!</p>
+  </div>
+  <p class="text-[9px] md:text-[11px] font-medium text-white/50 tracking-tight leading-tight">Earn 7-10% commission on every project lead.</p>
+  <a href="marketing-join.html" class="bg-primary/10 hover:bg-primary/20 text-primary px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all border border-primary/20 hover:scale-105 active:scale-95 sm:ml-2">Join the Team</a>
+</div>
+
 <!-- TopNavBar -->
-<nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl z-50 glass-nav rounded-2xl shadow-2xl transition-all duration-500">
+<nav id="main-nav" class="fixed left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-5xl z-50 glass-nav rounded-2xl shadow-2xl transition-all duration-500 ease-in-out" style="top: 80px;">
 <div class="flex justify-between items-center w-full px-6 py-4">
   <div class="flex items-center gap-3 group">
     <div class="animate-fox-entrance overflow-hidden rounded-lg w-10 h-10 flex items-center justify-center bg-surface-container-high/50">
@@ -1197,6 +1207,31 @@ document.querySelectorAll('a,button,[onclick]').forEach(el => {
   el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
   el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
 });
+
+// ── Dynamic Header Behavior ──────────────────────────────
+(function() {
+  const bar = document.getElementById('marketer-bar');
+  const nav = document.getElementById('main-nav');
+  if (!bar || !nav) return;
+
+  function updateHeader() {
+    const barHeight = bar.offsetHeight;
+    const scrollY = window.scrollY;
+    
+    if (scrollY > barHeight) {
+      // Scroll past the bar: Nav goes to top-4
+      nav.style.top = '16px';
+    } else {
+      // Near top: Nav sits below the bar with padding
+      nav.style.top = (barHeight + 16) + 'px';
+    }
+  }
+
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  window.addEventListener('resize', updateHeader, { passive: true });
+  // Initial run
+  setTimeout(updateHeader, 100);
+})();
 </script>
 </body></html>
 
