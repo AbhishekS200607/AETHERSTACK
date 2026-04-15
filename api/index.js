@@ -217,6 +217,165 @@ app.delete('/api/projects/:id', adminAuth, async (req, res) => {
   res.json({ success: true });
 });
 
+// ── POST /api/apply ────────────────────────────────────────
+app.post('/api/apply', async (req, res) => {
+  const { name, email, college, role, portfolio, message } = req.body;
+  if (!name || !email || !college || !role || !message) {
+    return res.status(400).json({ error: 'Name, email, college, role and message are required.' });
+  }
+  const { error } = await supabase.from('applications').insert([{
+    id: Date.now(), name, email, college, role, portfolio: portfolio || null, message, status: 'new'
+  }]);
+  if (error) console.error('Supabase error:', error.message);
+
+  // Notify admin
+  try {
+    await transporter.sendMail({
+      from: `"Aetherstack" <${process.env.EMAIL_USER}>`,
+      to: process.env.EMAIL_USER,
+      subject: `📋 New Application: ${he.encode(name)} — ${he.encode(role)}`,
+      html: `
+        <div style="font-family:sans-serif;padding:20px;color:#333">
+          <h2 style="color:#ff6035">New Career Application</h2>
+          <hr style="border:0;border-top:1px solid #eee"/>
+          <p><b>Name:</b> ${he.encode(name)}</p>
+          <p><b>Email:</b> ${he.encode(email)}</p>
+          <p><b>College:</b> ${he.encode(college)}</p>
+          <p><b>Role:</b> ${he.encode(role)}</p>
+          ${portfolio ? `<p><b>Portfolio:</b> <a href="${he.encode(portfolio)}">${he.encode(portfolio)}</a></p>` : ''}
+          <p style="background:#f9f9f9;padding:15px;border-radius:8px"><b>Why join:</b><br/>${he.encode(message)}</p>
+        </div>`
+    });
+  } catch (e) { console.error('EMAIL FAILED:', e.message); }
+
+  // Send confirmation to applicant
+  try {
+    const firstName = name.split(' ')[0];
+    await transporter.sendMail({
+      from: `"Aetherstack" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: `We received your application, ${firstName}!`,
+      html: `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+        </head>
+        <body style="background-color:#FAFAFA;margin:0!important;padding:0!important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td align="center" style="padding:60px 15px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;background-color:#ffffff;border-radius:4px;box-shadow:0 10px 30px rgba(0,0,0,0.03);overflow:hidden;">
+
+                  <!-- Accent line -->
+                  <tr><td style="height:4px;background-color:#C5A059;font-size:0;line-height:0;">&nbsp;</td></tr>
+
+                  <!-- Header -->
+                  <tr>
+                    <td align="center" style="padding:50px 40px 30px;background-color:#ffffff;">
+                      <p style="margin:0;font-size:28px;font-weight:700;color:#111111;letter-spacing:-0.5px;">aetherstack</p>
+                      <p style="margin:6px 0 0;font-size:10px;color:#888888;letter-spacing:4px;font-weight:600;text-transform:uppercase;">code smarter . ship faster</p>
+                    </td>
+                  </tr>
+
+                  <!-- Divider -->
+                  <tr>
+                    <td align="center" style="padding:0 40px;">
+                      <table border="0" cellpadding="0" cellspacing="0" width="40" style="border-top:1px solid #EAEAEA;"><tr><td style="font-size:0;line-height:0;">&nbsp;</td></tr></table>
+                    </td>
+                  </tr>
+
+                  <!-- Body -->
+                  <tr>
+                    <td align="left" style="padding:40px 50px 20px;color:#444444;line-height:1.8;font-size:15px;font-weight:300;">
+                      <p style="margin-top:0;">Dear <strong>${he.encode(name)}</strong>,</p>
+
+                      <p style="margin:0 0 25px;font-size:20px;color:#111111;line-height:1.4;font-family:'Playfair Display',Georgia,serif;">
+                        Thank you for applying to <i style="color:#C5A059;">Aetherstack.</i>
+                      </p>
+
+                      <p style="margin-bottom:20px;">We have successfully received your application for the <strong>${he.encode(role)}</strong> role and our team is currently reviewing it.</p>
+
+                      <!-- Application summary box -->
+                      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin:30px 0;">
+                        <tr>
+                          <td style="background-color:#FCFBF7;border:1px solid #EBE4D5;border-radius:4px;padding:25px;">
+                            <p style="margin:0 0 12px;font-size:11px;color:#888888;text-transform:uppercase;letter-spacing:2px;">Your Application</p>
+                            <p style="margin:4px 0;font-size:14px;color:#333;"><b>Role:</b> ${he.encode(role)}</p>
+                            <p style="margin:4px 0;font-size:14px;color:#333;"><b>College:</b> ${he.encode(college)}</p>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <!-- What happens next -->
+                      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin:30px 0;">
+                        <tr>
+                          <td style="background-color:#ffffff;border:1px solid #EAEAEA;border-left:3px solid #C5A059;padding:25px;">
+                            <p style="margin:0 0 10px;color:#C5A059;font-weight:500;font-size:18px;font-style:italic;font-family:'Playfair Display',Georgia,serif;">What Happens Next</p>
+                            <p style="margin:0;font-size:15px;color:#444444;line-height:1.6;">Our team will carefully review your application and reach out to you within <strong>3–5 business days</strong>. If your profile is a strong match, we will schedule a brief introductory call.</p>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <p>In the meantime, feel free to explore our work at <a href="https://aetherstack.in" style="color:#C5A059;font-weight:600;">aetherstack.in</a>.</p>
+                      <p style="margin-top:30px;">We appreciate your interest and look forward to potentially building together.</p>
+                    </td>
+                  </tr>
+
+                  <!-- Sign-off -->
+                  <tr>
+                    <td align="left" style="padding:0 50px 50px;color:#444444;line-height:1.8;font-size:15px;">
+                      <p style="margin:0;">Warmest regards,</p>
+                      <p style="margin:15px 0 0;">
+                        <span style="font-size:22px;color:#C5A059;display:block;font-family:'Playfair Display',Georgia,serif;">The Aetherstack Team</span>
+                      </p>
+                    </td>
+                  </tr>
+
+                  <!-- Footer -->
+                  <tr>
+                    <td align="center" style="padding:30px 40px;background-color:#FAFAFA;border-top:1px solid #EAEAEA;color:#999999;font-size:11px;line-height:1.6;letter-spacing:0.5px;">
+                      <p style="margin:0;">&copy; 2026 Aetherstack. All rights reserved.<br>This is an automated confirmation of your application.</p>
+                    </td>
+                  </tr>
+
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>`
+    });
+  } catch (e) { console.error('CONFIRMATION EMAIL FAILED:', e.message); }
+
+  res.json({ success: true });
+});
+
+// ── GET /api/applications ────────────────────────────────────
+app.get('/api/applications', adminAuth, async (req, res) => {
+  const { data, error } = await supabase.from('applications').select('*').order('id', { ascending: false });
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data);
+});
+
+// ── PATCH /api/applications/:id ──────────────────────────────
+app.patch('/api/applications/:id', adminAuth, async (req, res) => {
+  const { status } = req.body;
+  if (!['new','reviewing','accepted','rejected'].includes(status)) {
+    return res.status(400).json({ error: 'Invalid status.' });
+  }
+  await supabase.from('applications').update({ status }).eq('id', Number(req.params.id));
+  res.json({ success: true });
+});
+
+// ── DELETE /api/applications/:id ─────────────────────────────
+app.delete('/api/applications/:id', adminAuth, async (req, res) => {
+  await supabase.from('applications').delete().eq('id', Number(req.params.id));
+  res.json({ success: true });
+});
+
 // ════════════════════════════════════════════════════════════
 //  MARKETING PORTAL ROUTES  (mounted at /api/marketing)
 // ════════════════════════════════════════════════════════════

@@ -380,7 +380,7 @@ router.get('/admin/stats', (req, res, next) => {
   next();
 }, async (req, res) => {
   try {
-    const { data: marketers, error } = await supabase.from('marketers').select('id, name, email, mobile, referral_code, total_leads, total_sales, successful_projects, reward_claimed, created_at, status').order('created_at', { ascending: false });
+    const { data: marketers, error } = await supabase.from('marketers').select('id, name, email, mobile, referral_code, total_leads, total_sales, successful_projects, claimed_tier1, claimed_tier2, claimed_tier3, claimed_tier4, created_at, status').order('created_at', { ascending: false });
     if (error) throw error;
     const totalMarketers = marketers.length;
     const totalLeads     = marketers.reduce((s, m) => s + (m.total_leads || 0), 0);
@@ -398,13 +398,16 @@ router.patch('/admin/update-sales', (req, res, next) => {
   next();
 }, async (req, res) => {
   try {
-    const { id, total_sales, total_leads, successful_projects, reward_claimed, status } = req.body;
+    const { id, total_sales, total_leads, successful_projects, claimed_tier1, claimed_tier2, claimed_tier3, claimed_tier4, status } = req.body;
     if (!id) return res.status(400).json({ error: 'id is required.' });
     const updates = {};
     if (total_sales !== undefined && !isNaN(Number(total_sales))) updates.total_sales = Number(total_sales);
     if (total_leads !== undefined && !isNaN(Number(total_leads))) updates.total_leads = Number(total_leads);
     if (successful_projects !== undefined && !isNaN(Number(successful_projects))) updates.successful_projects = Number(successful_projects);
-    if (reward_claimed !== undefined) updates.reward_claimed = Boolean(reward_claimed);
+    if (claimed_tier1 !== undefined) updates.claimed_tier1 = Boolean(claimed_tier1);
+    if (claimed_tier2 !== undefined) updates.claimed_tier2 = Boolean(claimed_tier2);
+    if (claimed_tier3 !== undefined) updates.claimed_tier3 = Boolean(claimed_tier3);
+    if (claimed_tier4 !== undefined) updates.claimed_tier4 = Boolean(claimed_tier4);
     if (status !== undefined) updates.status = status;
     const { error } = await supabase.from('marketers').update(updates).eq('id', id);
     if (error) throw error;
@@ -439,10 +442,22 @@ router.get('/leaderboard', requireAuth, async (req, res) => {
   }
 });
 
+// ── Tier config ──────────────────────────────────────────────
+const TIER_CONFIG = {
+  1: { projects: 10,  name: 'Bronze',   reward: 'Official Aetherstack T-Shirt',       col: 'claimed_tier1' },
+  2: { projects: 25,  name: 'Silver',   reward: 'Elite Hoodie + Branded Mug',         col: 'claimed_tier2' },
+  3: { projects: 50,  name: 'Gold',     reward: 'Desk Plaque + Tech Kit (Powerbank)', col: 'claimed_tier3' },
+  4: { projects: 100, name: 'Platinum', reward: 'Premium Backpack + Team Dinner',     col: 'claimed_tier4' }
+};
+
 // ── GET /api/marketing/dashboard ────────────────────────────
 router.get('/dashboard', requireAuth, async (req, res) => {
   try {
-    const { data: marketer, error } = await supabase.from('marketers').select('name, email, mobile, address, pincode, referral_code, total_leads, total_sales, successful_projects, reward_claimed, created_at').eq('id', req.marketer.id).single();
+    const { data: marketer, error } = await supabase
+      .from('marketers')
+      .select('name, email, mobile, address, pincode, referral_code, total_leads, total_sales, successful_projects, claimed_tier1, claimed_tier2, claimed_tier3, claimed_tier4, created_at')
+      .eq('id', req.marketer.id)
+      .single();
     if (error || !marketer) return res.status(404).json({ error: 'Not found.' });
     return res.json({ success: true, data: marketer });
   } catch (err) {
@@ -451,38 +466,58 @@ router.get('/dashboard', requireAuth, async (req, res) => {
 });
 
 // ── POST /api/marketing/claim-reward ────────────────────────
+// Body: { tier: 1|2|3|4 }
 router.post('/claim-reward', requireAuth, async (req, res) => {
   try {
-    const { data: marketer, error: fetchErr } = await supabase.from('marketers').select('name, email, mobile, address, pincode, successful_projects, reward_claimed').eq('id', req.marketer.id).single();
-    if (fetchErr || !marketer) return res.status(404).json({ error: 'Not found.' });
-    if (marketer.reward_claimed) return res.status(400).json({ error: 'Already claimed.' });
-    if (marketer.successful_projects < 10) return res.status(400).json({ error: 'Need 10 projects.' });
-    await supabase.from('marketers').update({ reward_claimed: true }).eq('id', req.marketer.id);
+    const tier = parseInt(req.body.tier);
+    if (![1, 2, 3, 4].includes(tier)) return res.status(400).json({ error: 'Invalid tier.' });
+    const cfg = TIER_CONFIG[tier];
 
-    const adminMail = {
+    const { data: marketer, error } = await supabase
+      .from('marketers')
+      .select(`name, email, mobile, address, pincode, successful_projects, ${cfg.col}`)
+      .eq('id', req.marketer.id)
+      .single();
+
+    if (error || !marketer) return res.status(404).json({ error: 'Not found.' });
+    if (marketer[cfg.col]) return res.status(409).json({ error: `Tier ${tier} already claimed.` });
+    if ((marketer.successful_projects || 0) < cfg.projects) {
+      return res.status(403).json({ error: `You need ${cfg.projects} completed projects to claim ${cfg.name} tier.` });
+    }
+
+    await supabase.from('marketers').update({ [cfg.col]: true }).eq('id', req.marketer.id);
+
+    transporter.sendMail({
       from: `"Aetherstack" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
-      subject: `🎁 Reward Claimed: ${marketer.name}`,
-      html: `
-        <div style="font-family:sans-serif;padding:20px;border:1px solid #ff6035;border-radius:12px;">
-          <h2 style="color:#ff6035;">New T-Shirt Claim!</h2>
-          <p><b>Marketer:</b> ${marketer.name}</p>
-          <p><b>Mobile:</b> ${marketer.mobile || 'N/A'}</p>
-          <p><b>Address:</b> ${marketer.address || 'N/A'}, ${marketer.pincode || ''}</p>
-        </div>`
-    };
+      subject: `🎁 ${cfg.name} Tier Claimed — ${marketer.name}`,
+      html: `<div style="font-family:sans-serif;padding:20px;color:#333">
+        <h2 style="color:#ff6035">Tier ${tier} Reward Claim</h2>
+        <p><b>Marketer:</b> ${marketer.name}</p>
+        <p><b>Email:</b> ${marketer.email}</p>
+        <p><b>Tier:</b> ${cfg.name} — ${cfg.reward}</p>
+        <p><b>Projects:</b> ${marketer.successful_projects}</p>
+        <p><b>Address:</b> ${marketer.address || 'N/A'}, ${marketer.pincode || ''}</p>
+        <p><b>Mobile:</b> ${marketer.mobile || 'N/A'}</p>
+      </div>`
+    }).catch(() => {});
 
-    const userMail = {
+    transporter.sendMail({
       from: `"Aetherstack" <${process.env.EMAIL_USER}>`,
       to: marketer.email,
-      subject: `Congratulations! Your T-Shirt is confirmed.`,
-      html: `<p>Hi ${marketer.name}, your Aetherstack T-Shirt claim is confirmed and will ship soon.</p>`
-    };
+      subject: `🎉 Your ${cfg.name} reward is confirmed!`,
+      html: `<div style="font-family:sans-serif;padding:20px;color:#333">
+        <h2 style="color:#ff6035">Congratulations, ${marketer.name.split(' ')[0]}!</h2>
+        <p>Your <b>${cfg.name} tier</b> reward has been confirmed.</p>
+        <p><b>Reward:</b> ${cfg.reward}</p>
+        <p>We'll ship it to your registered address shortly. Thank you for your amazing work!</p>
+      </div>`
+    }).catch(() => {});
 
-    await Promise.all([transporter.sendMail(adminMail), transporter.sendMail(userMail)]);
-    return res.json({ success: true, message: 'Claimed!' });
+    return res.json({ success: true, message: `${cfg.name} reward claimed! We'll ship your ${cfg.reward} soon.` });
   } catch (err) {
-    return res.status(500).json({ error: 'Failed.' });
+    console.error('[claim-reward]', err.message);
+    return res.status(500).json({ error: 'Failed to claim reward.' });
   }
 });
 

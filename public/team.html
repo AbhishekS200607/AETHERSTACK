@@ -75,6 +75,10 @@
           .reveal.active {
             animation: fadeInUp 0.8s ease-out forwards;
           }
+          /* Fallback: ensure content is visible if JS is slow */
+          @media (prefers-reduced-motion: reduce) {
+            .reveal { opacity: 1; }
+          }
           .avatar-circle {
             width: 120px;
             height: 120px;

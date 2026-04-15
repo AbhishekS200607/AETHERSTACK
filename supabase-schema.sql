@@ -17,6 +17,13 @@ CREATE TABLE IF NOT EXISTS public.marketers (
   total_leads   INTEGER       NOT NULL DEFAULT 0,
   successful_projects INTEGER NOT NULL DEFAULT 0,
   reward_claimed     BOOLEAN NOT NULL DEFAULT FALSE,
+  claimed_tier1      BOOLEAN NOT NULL DEFAULT FALSE,
+  claimed_tier2      BOOLEAN NOT NULL DEFAULT FALSE,
+  claimed_tier3      BOOLEAN NOT NULL DEFAULT FALSE,
+  claimeCREATE TABLE IF NOT EXISTS public.applications (
+  id            BIGINT        PRIMARY KEY,
+  name          TEXT          NOT NULL,
+  emaild_tier4      BOOLEAN NOT NULL DEFAULT FALSE,
   status        TEXT          NOT NULL DEFAULT 'active',
   created_at    TIMESTAMPTZ   NOT NULL DEFAULT NOW()
 );
@@ -65,6 +72,20 @@ CREATE TABLE IF NOT EXISTS public.submissions (
   referralCode  TEXT,
   created_at    TIMESTAMPTZ   NOT NULL DEFAULT NOW()
 );
+
+-- ── 5. APPLICATIONS ────────────────────────────────────────
+         TEXT          NOT NULL,
+  college       TEXT          NOT NULL,
+  role          TEXT          NOT NULL,
+  portfolio     TEXT,
+  message       TEXT          NOT NULL,
+  status        TEXT          NOT NULL DEFAULT 'new',
+  created_at    TIMESTAMPTZ   NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE public.applications ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "deny_all_applications" ON public.applications;
+CREATE POLICY "deny_all_applications" ON public.applications FOR ALL TO anon, authenticated USING (false);
 
 -- ── 5. ROW LEVEL SECURITY ───────────────────────────────────
 --

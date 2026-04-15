@@ -157,6 +157,7 @@
         <button onclick="switchTab('submissions')" id="tab-submissions" class="tab-btn active pb-4 font-headline font-bold text-lg">Submissions</button>
         <button onclick="switchTab('projects')" id="tab-projects" class="tab-btn pb-4 font-headline font-bold text-lg">Projects</button>
         <button onclick="switchTab('marketers')" id="tab-marketers" class="tab-btn pb-4 font-headline font-bold text-lg">Marketing Team</button>
+        <button onclick="switchTab('applications')" id="tab-applications" class="tab-btn pb-4 font-headline font-bold text-lg">Applications</button>
       </div>
 
       <!-- Pane: Submissions -->
@@ -248,7 +249,7 @@
                   <th>Leads</th>
                   <th>Sales (₹)</th>
                   <th>Projects</th>
-                  <th>Reward</th>
+                  <th>T1</th><th>T2</th><th>T3</th><th>T4</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
@@ -259,6 +260,20 @@
           <!-- Mobile Cards -->
           <div id="marketers-cards" class="md:hidden divide-y divide-outline-variant"></div>
         </div>
+      </div>
+
+      <!-- Pane: Applications -->
+      <div id="pane-applications" class="hidden sr visible">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
+          <div>
+            <h2 class="font-headline font-black text-3xl md:text-4xl tracking-tighter">Career Applications</h2>
+            <p id="applications-count" class="text-on-surface-variant font-medium mt-1">Loading...</p>
+          </div>
+          <button onclick="loadApplications()" class="text-primary font-bold text-sm flex items-center gap-2 hover:opacity-70 transition-all bg-white sm:bg-transparent px-4 py-2 rounded-xl border border-outline-variant sm:border-none shadow-sm sm:shadow-none">
+            <span class="material-symbols-outlined text-lg">refresh</span> Refresh
+          </button>
+        </div>
+        <div id="applications-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"></div>
       </div>
 
     </div>
@@ -320,12 +335,13 @@
 
     // ── Tabs ───────────────────────────────────────────────
     function switchTab(tab) {
-      ['submissions', 'projects', 'marketers'].forEach(t => {
+      ['submissions', 'projects', 'marketers', 'applications'].forEach(t => {
         document.getElementById('pane-' + t).classList.toggle('hidden', t !== tab);
         const btn = document.getElementById('tab-' + t);
         btn.classList.toggle('active', t === tab);
       });
       if (tab === 'marketers') loadMarketers();
+      if (tab === 'applications') loadApplications();
     }
 
     // ── Submissions ────────────────────────────────────────
@@ -475,18 +491,12 @@
               <span class="px-3 py-1 rounded-lg bg-primary/10 text-primary font-black tracking-widest text-sm">${esc(m.referral_code)}</span>
             </td>
             <td class="font-bold text-tertiary">${m.total_leads}</td>
-            <td>
-              <input type="number" id="sales-${m.id}" value="${m.total_sales}" class="w-24 bg-surface-container-low border-none rounded-lg text-sm font-bold p-2 focus:ring-2 focus:ring-primary"/>
-            </td>
-            <td>
-              <input type="number" id="projects-${m.id}" value="${m.successful_projects || 0}" class="w-16 bg-surface-container-low border-none rounded-lg text-sm font-bold p-2 focus:ring-2 focus:ring-primary"/>
-            </td>
-            <td>
-              <select id="reward-${m.id}" class="bg-surface-container-low border-none rounded-lg text-[10px] font-bold p-2 focus:ring-2 focus:ring-primary uppercase">
-                <option value="false" ${!m.reward_claimed ? 'selected' : ''}>None</option>
-                <option value="true" ${m.reward_claimed ? 'selected' : ''}>Claimed 🎁</option>
-              </select>
-            </td>
+            <td><input type="number" id="sales-${m.id}" value="${m.total_sales}" class="w-24 bg-surface-container-low border-none rounded-lg text-sm font-bold p-2 focus:ring-2 focus:ring-primary"/></td>
+            <td><input type="number" id="projects-${m.id}" value="${m.successful_projects || 0}" class="w-16 bg-surface-container-low border-none rounded-lg text-sm font-bold p-2 focus:ring-2 focus:ring-primary"/></td>
+            <td class="text-center"><label class="flex items-center gap-1 text-[10px] font-bold text-orange-500" title="Bronze"><input type="checkbox" id="t1-${m.id}" ${m.claimed_tier1 ? 'checked' : ''} class="accent-orange-500"/>B</label></td>
+            <td class="text-center"><label class="flex items-center gap-1 text-[10px] font-bold text-gray-500" title="Silver"><input type="checkbox" id="t2-${m.id}" ${m.claimed_tier2 ? 'checked' : ''} class="accent-gray-500"/>S</label></td>
+            <td class="text-center"><label class="flex items-center gap-1 text-[10px] font-bold text-yellow-600" title="Gold"><input type="checkbox" id="t3-${m.id}" ${m.claimed_tier3 ? 'checked' : ''} class="accent-yellow-500"/>G</label></td>
+            <td class="text-center"><label class="flex items-center gap-1 text-[10px] font-bold text-blue-500" title="Platinum"><input type="checkbox" id="t4-${m.id}" ${m.claimed_tier4 ? 'checked' : ''} class="accent-blue-500"/>P</label></td>
             <td>
               <select id="status-${m.id}" class="bg-surface-container-low border-none rounded-lg text-xs font-bold p-2 focus:ring-2 focus:ring-primary uppercase tracking-widest">
                 <option value="active" ${m.status === 'active' ? 'selected' : ''}>Active</option>
@@ -538,11 +548,13 @@
                 <input type="number" id="m-projects-${m.id}" value="${m.successful_projects || 0}" class="w-full bg-surface-container-low border-none rounded-xl text-sm font-bold p-3 focus:ring-2 focus:ring-primary"/>
               </div>
               <div>
-                <label class="block text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Reward</label>
-                <select id="m-reward-${m.id}" class="w-full bg-surface-container-low border-none rounded-xl text-[10px] font-bold p-3 focus:ring-2 focus:ring-primary uppercase">
-                  <option value="false" ${!m.reward_claimed ? 'selected' : ''}>None</option>
-                  <option value="true" ${m.reward_claimed ? 'selected' : ''}>Claimed</option>
-                </select>
+                <label class="block text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Tiers Claimed</label>
+                <div class="flex gap-3 flex-wrap">
+                  <label class="flex items-center gap-1 text-[10px] font-bold text-orange-500" title="Bronze — 10 projects"><input type="checkbox" id="m-t1-${m.id}" ${m.claimed_tier1 ? 'checked' : ''} class="accent-orange-500"/> T1</label>
+                  <label class="flex items-center gap-1 text-[10px] font-bold text-gray-500" title="Silver — 25 projects"><input type="checkbox" id="m-t2-${m.id}" ${m.claimed_tier2 ? 'checked' : ''} class="accent-gray-500"/> T2</label>
+                  <label class="flex items-center gap-1 text-[10px] font-bold text-yellow-600" title="Gold — 50 projects"><input type="checkbox" id="m-t3-${m.id}" ${m.claimed_tier3 ? 'checked' : ''} class="accent-yellow-500"/> T3</label>
+                  <label class="flex items-center gap-1 text-[10px] font-bold text-blue-500" title="Platinum — 100 projects"><input type="checkbox" id="m-t4-${m.id}" ${m.claimed_tier4 ? 'checked' : ''} class="accent-blue-500"/> T4</label>
+                </div>
               </div>
               <div>
                 <label class="block text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Status</label>
@@ -568,10 +580,13 @@
       const prefix = isMobile ? 'm-' : '';
       const body = {
         id,
-        total_sales: document.getElementById(`${prefix}sales-${id}`).value,
+        total_sales:         document.getElementById(`${prefix}sales-${id}`).value,
         successful_projects: document.getElementById(`${prefix}projects-${id}`).value,
-        reward_claimed: document.getElementById(`${prefix}reward-${id}`).value === 'true',
-        status: document.getElementById(`${prefix}status-${id}`).value
+        claimed_tier1:       document.getElementById(`${prefix}t1-${id}`).checked,
+        claimed_tier2:       document.getElementById(`${prefix}t2-${id}`).checked,
+        claimed_tier3:       document.getElementById(`${prefix}t3-${id}`).checked,
+        claimed_tier4:       document.getElementById(`${prefix}t4-${id}`).checked,
+        status:              document.getElementById(`${prefix}status-${id}`).value
       };
 
       try {
@@ -602,6 +617,63 @@
       if (!confirm(`Delete marketer "${name}"?`)) return;
       const res = await fetch('/api/marketing/admin/delete/'+id, { method: 'DELETE', headers: { 'x-admin-secret': SECRET } });
       if (res.ok) loadMarketers();
+    }
+
+    // ── Applications ──────────────────────────────────────────────
+    const STATUS_COLORS = {
+      new:       'bg-blue-100 text-blue-700',
+      reviewing: 'bg-yellow-100 text-yellow-700',
+      accepted:  'bg-emerald-100 text-emerald-700',
+      rejected:  'bg-red-100 text-red-600'
+    };
+
+    async function loadApplications() {
+      try {
+        const res = await fetch('/api/applications', { headers: { 'x-admin-secret': SECRET } });
+        if (!res.ok) { logout(); return; }
+        const data = await res.json();
+        document.getElementById('applications-count').textContent = `${data.length} application${data.length !== 1 ? 's' : ''} received`;
+        document.getElementById('applications-list').innerHTML = data.length ? data.map(a => `
+          <div class="tilt-card bg-white rounded-3xl p-6 md:p-8 border border-outline-variant shadow-sm relative overflow-hidden group">
+            <div class="card-shine"></div>
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h3 class="font-headline font-black text-xl">${esc(a.name)}</h3>
+                <p class="text-primary font-bold text-xs uppercase tracking-widest mt-1">${esc(a.role)}</p>
+              </div>
+              <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full ${STATUS_COLORS[a.status] || 'bg-gray-100 text-gray-600'}">${a.status}</span>
+            </div>
+            <p class="text-sm text-on-surface-variant mb-1"><b>College:</b> ${esc(a.college)}</p>
+            <p class="text-sm text-on-surface-variant mb-3"><b>Email:</b> <a href="mailto:${esc(a.email)}" class="text-primary font-bold hover:underline">${esc(a.email)}</a></p>
+            ${a.portfolio ? `<a href="${esc(a.portfolio)}" target="_blank" class="text-primary text-xs font-bold hover:underline block mb-3">🔗 ${esc(a.portfolio)}</a>` : ''}
+            <div class="bg-surface-container-low/50 rounded-2xl p-4 mb-6">
+              <p class="text-xs leading-relaxed text-on-surface-variant">${esc(a.message)}</p>
+            </div>
+            <div class="flex gap-2 flex-wrap">
+              ${['new','reviewing','accepted','rejected'].map(s => `
+                <button onclick="updateAppStatus(${a.id}, '${s}')" class="text-[10px] font-black uppercase tracking-widest px-3 py-2 rounded-lg transition-all ${a.status === s ? (STATUS_COLORS[s] + ' ring-2 ring-offset-1') : 'bg-surface-container-low hover:bg-surface-container'} ">${s}</button>
+              `).join('')}
+              <button onclick="deleteApp(${a.id})" class="ml-auto text-[10px] font-bold text-error uppercase tracking-widest hover:opacity-70">Delete</button>
+            </div>
+          </div>
+        `).join('') : '<p class="text-on-surface-variant col-span-2">No applications yet.</p>';
+        document.querySelectorAll('.tilt-card').forEach(initTilt);
+      } catch { alert('Failed to load applications.'); }
+    }
+
+    async function updateAppStatus(id, status) {
+      await fetch(`/api/applications/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'x-admin-secret': SECRET },
+        body: JSON.stringify({ status })
+      });
+      loadApplications();
+    }
+
+    async function deleteApp(id) {
+      if (!confirm('Delete this application?')) return;
+      await fetch(`/api/applications/${id}`, { method: 'DELETE', headers: { 'x-admin-secret': SECRET } });
+      loadApplications();
     }
 
     // ── Utilities ──────────────────────────────────────────

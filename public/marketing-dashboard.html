@@ -274,42 +274,14 @@
         <h2 class="font-headline font-black text-5xl tracking-tighter text-on-background">Rewards</h2>
         <p class="text-on-surface-variant font-medium mt-2">Unlock exclusive perks as you scale.</p>
       </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="bg-white rounded-[2.5rem] p-10 shadow-xl border border-outline-variant/30 relative overflow-hidden flex flex-col justify-between">
-          <div class="absolute top-0 right-0 p-8">
-            <div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
-              <span class="material-symbols-outlined text-primary text-4xl">checkroom</span>
-            </div>
-          </div>
-          <div>
-            <span class="px-4 py-2 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full mb-6 inline-block">Current Milestone</span>
-            <h3 class="font-headline font-black text-3xl mb-4">Official Aetherstack T-Shirt</h3>
-            <p class="text-on-surface-variant text-sm font-medium leading-relaxed mb-8 max-w-xs">
-              Complete <span class="text-on-background font-bold">10 successful project referrals</span> to claim your premium branded tee.
-            </p>
-          </div>
-          <div>
-            <div class="flex justify-between items-end mb-4">
-              <span class="text-4xl font-headline font-black text-on-background"><span id="reward-progress-text">0</span>/10</span>
-              <span class="text-[10px] font-black uppercase tracking-widest text-primary" id="reward-percent">0%</span>
-            </div>
-            <div class="w-full bg-background rounded-full h-4 overflow-hidden p-1 border border-outline-variant/20 mb-6">
-              <div id="reward-progress-bar" class="h-full bg-primary rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
-            </div>
-            <div id="claim-section" class="hidden">
-              <button onclick="claimReward()" id="btn-claim" class="w-full py-4 bg-primary text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined">redeem</span> Claim My T-Shirt
-              </button>
-            </div>
-            <div id="claimed-section" class="hidden">
-              <div class="w-full py-4 bg-emerald-500/10 text-emerald-600 rounded-2xl font-black text-sm uppercase tracking-widest border border-emerald-500/20 flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined">verified</span> Reward Claimed
-              </div>
-            </div>
-            <p id="reward-hint" class="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest mt-4">Keep going! You're almost there.</p>
-          </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="tiers-grid"></div>
+      <div class="mt-10 bg-surface-container-low/50 rounded-3xl p-8 flex flex-col md:flex-row items-center gap-6 border border-outline-variant/20">
+        <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shrink-0 shadow-sm">
+          <span class="material-symbols-outlined text-primary">info</span>
         </div>
+        <p class="text-on-surface-variant text-sm font-medium leading-relaxed">
+          Commissions increase with each tier. Rewards are shipped to your registered address within 7 business days of claiming.
+        </p>
       </div>
     </div>
 
@@ -374,11 +346,19 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    const TIERS = [
+      { tier:1, projects:10,  name:'Bronze',   commission:'7% – 10%',  reward:'Official Aetherstack T-Shirt',       icon:'checkroom',         color:'#ea580c', bgCls:'bg-orange-50',  borderCls:'border-orange-200',  badgeCls:'bg-orange-100 text-orange-600' },
+      { tier:2, projects:25,  name:'Silver',   commission:'10% – 12%', reward:'Elite Hoodie + Branded Mug',         icon:'style',             color:'#6b7280', bgCls:'bg-gray-50',    borderCls:'border-gray-200',    badgeCls:'bg-gray-100 text-gray-600' },
+      { tier:3, projects:50,  name:'Gold',     commission:'12% – 15%', reward:'Desk Plaque + Tech Kit (Powerbank)', icon:'workspace_premium', color:'#ca8a04', bgCls:'bg-yellow-50',  borderCls:'border-yellow-200',  badgeCls:'bg-yellow-100 text-yellow-700' },
+      { tier:4, projects:100, name:'Platinum', commission:'15% – 20%', reward:'Premium Backpack + Team Dinner',     icon:'diamond',           color:'#3b82f6', bgCls:'bg-blue-50',    borderCls:'border-blue-200',    badgeCls:'bg-blue-100 text-blue-600' }
+    ];
+
     async function loadDashboard() {
       try {
         const res = await fetch('/api/marketing/dashboard', { headers: { 'Authorization': `Bearer ${token}` } });
         if (res.status === 401) { logout(); return; }
         const { data } = await res.json();
+
         document.getElementById('greeting-name').textContent = data.name;
         document.getElementById('member-since').textContent = new Date(data.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
         document.getElementById('referral-code').textContent = data.referral_code;
@@ -387,20 +367,46 @@
         document.getElementById('stat-projects').textContent = (data.successful_projects || 0).toLocaleString('en-IN');
 
         const projects = data.successful_projects || 0;
-        const progress = Math.min((projects / 10) * 100, 100);
-        document.getElementById('reward-progress-text').textContent = projects;
-        document.getElementById('reward-percent').textContent = `${Math.floor(progress)}%`;
-        setTimeout(() => document.getElementById('reward-progress-bar').style.width = `${progress}%`, 300);
+        const claimedMap = { 1: data.claimed_tier1, 2: data.claimed_tier2, 3: data.claimed_tier3, 4: data.claimed_tier4 };
 
-        const claimSec = document.getElementById('claim-section');
-        const claimedSec = document.getElementById('claimed-section');
-        const hint = document.getElementById('reward-hint');
-        if (data.reward_claimed) { claimedSec.classList.remove('hidden'); claimSec.classList.add('hidden'); hint.textContent = "Your T-Shirt is being processed!"; }
-        else if (projects >= 10) { claimSec.classList.remove('hidden'); claimedSec.classList.add('hidden'); hint.textContent = "You've unlocked the T-Shirt! Claim it now."; }
+        document.getElementById('tiers-grid').innerHTML = TIERS.map(t => {
+          const claimed  = claimedMap[t.tier];
+          const unlocked = projects >= t.projects;
+          const pct      = Math.min(Math.floor((projects / t.projects) * 100), 100);
+          return `
+            <div class="bg-white rounded-[2.5rem] p-10 shadow-xl border ${t.borderCls} relative overflow-hidden flex flex-col justify-between">
+              <div class="absolute top-0 right-0 p-8">
+                <div class="w-20 h-20 rounded-full ${t.bgCls} flex items-center justify-center">
+                  <span class="material-symbols-outlined text-4xl" style="color:${t.color}">${t.icon}</span>
+                </div>
+              </div>
+              <div>
+                <span class="px-4 py-2 ${t.badgeCls} text-[10px] font-black uppercase tracking-widest rounded-full mb-6 inline-block">${t.name} Tier</span>
+                <h3 class="font-headline font-black text-2xl mb-2">${t.reward}</h3>
+                <p class="font-bold text-xs uppercase tracking-widest mb-4" style="color:${t.color}">Commission: ${t.commission}</p>
+                <p class="text-on-surface-variant text-sm font-medium leading-relaxed mb-8">Complete <span class="text-on-background font-bold">${t.projects} successful projects</span> to unlock.</p>
+              </div>
+              <div>
+                <div class="flex justify-between items-end mb-3">
+                  <span class="text-3xl font-headline font-black text-on-background">${projects}/${t.projects}</span>
+                  <span class="text-[10px] font-black uppercase tracking-widest" style="color:${t.color}">${pct}%</span>
+                </div>
+                <div class="w-full bg-background rounded-full h-3 overflow-hidden border border-outline-variant/20 mb-6">
+                  <div class="h-full rounded-full transition-all duration-1000 ease-out" style="width:${pct}%;background:${t.color}"></div>
+                </div>
+                ${claimed
+                  ? `<div class="w-full py-4 bg-emerald-500/10 text-emerald-600 rounded-2xl font-black text-sm uppercase tracking-widest border border-emerald-500/20 flex items-center justify-center gap-2"><span class="material-symbols-outlined">verified</span> Claimed</div>`
+                  : unlocked
+                  ? `<button onclick="claimReward(${t.tier}, this)" class="w-full py-4 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2" style="background:${t.color};box-shadow:0 8px 24px ${t.color}40"><span class="material-symbols-outlined">redeem</span> Claim ${t.name} Reward</button>`
+                  : `<div class="w-full py-4 bg-on-background/5 text-on-surface-variant rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-2"><span class="material-symbols-outlined">lock</span> ${t.projects - projects} more to unlock</div>`
+                }
+              </div>
+            </div>`;
+        }).join('');
 
-        document.getElementById('prof-name').value = data.name;
-        document.getElementById('prof-email').value = data.email;
-        document.getElementById('prof-mobile').value = data.mobile || '';
+        document.getElementById('prof-name').value    = data.name;
+        document.getElementById('prof-email').value   = data.email;
+        document.getElementById('prof-mobile').value  = data.mobile || '';
         document.getElementById('prof-address').value = data.address || '';
         document.getElementById('prof-pincode').value = data.pincode || '';
 
@@ -410,15 +416,24 @@
       } catch (err) { showToast('Session error.', 'error'); }
     }
 
-    async function claimReward() {
-      const btn = document.getElementById('btn-claim');
-      btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>...';
+    async function claimReward(tier, btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner" style="border-top-color:#fff"></span>';
       try {
-        const res = await fetch('/api/marketing/claim-reward', { method: 'POST', headers: { 'Authorization': `Bearer ${token}` } });
-        if (!res.ok) throw new Error();
-        showToast('Claimed!'); loadDashboard();
-      } catch { showToast('Failed.', 'error'); }
-      finally { btn.disabled = false; btn.innerHTML = 'Claim My T-Shirt'; }
+        const res = await fetch('/api/marketing/claim-reward', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tier })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        showToast(data.message || 'Reward claimed!');
+        loadDashboard();
+      } catch (e) {
+        showToast(e.message || 'Failed to claim.', 'error');
+        btn.disabled = false;
+        btn.innerHTML = `<span class="material-symbols-outlined">redeem</span> Retry`;
+      }
     }
 
     async function loadLeaderboard() {
