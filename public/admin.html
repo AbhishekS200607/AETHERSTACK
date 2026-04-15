@@ -248,10 +248,7 @@
                   <th>Leads</th>
                   <th>Sales (₹)</th>
                   <th>Projects</th>
-                  <th>T1</th>
-                  <th>T2</th>
-                  <th>T3</th>
-                  <th>T4</th>
+                  <th>Reward</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
@@ -484,21 +481,11 @@
             <td>
               <input type="number" id="projects-${m.id}" value="${m.successful_projects || 0}" class="w-16 bg-surface-container-low border-none rounded-lg text-sm font-bold p-2 focus:ring-2 focus:ring-primary"/>
             </td>
-            <td class="text-center">
-              <div class="flex flex-col items-center gap-1">
-                <label class="flex items-center gap-1 text-[10px] font-bold" title="Bronze - 10 projects">
-                  <input type="checkbox" id="t1-${m.id}" ${m.claimed_tier1 ? 'checked' : ''} class="accent-orange-400"/> <span class="text-orange-400">T1</span>
-                </label>
-                <label class="flex items-center gap-1 text-[10px] font-bold" title="Silver - 25 projects">
-                  <input type="checkbox" id="t2-${m.id}" ${m.claimed_tier2 ? 'checked' : ''} class="accent-gray-400"/> <span class="text-gray-400">T2</span>
-                </label>
-                <label class="flex items-center gap-1 text-[10px] font-bold" title="Gold - 50 projects">
-                  <input type="checkbox" id="t3-${m.id}" ${m.claimed_tier3 ? 'checked' : ''} class="accent-yellow-500"/> <span class="text-yellow-500">T3</span>
-                </label>
-                <label class="flex items-center gap-1 text-[10px] font-bold" title="Platinum - 100 projects">
-                  <input type="checkbox" id="t4-${m.id}" ${m.claimed_tier4 ? 'checked' : ''} class="accent-blue-400"/> <span class="text-blue-400">T4</span>
-                </label>
-              </div>
+            <td>
+              <select id="reward-${m.id}" class="bg-surface-container-low border-none rounded-lg text-[10px] font-bold p-2 focus:ring-2 focus:ring-primary uppercase">
+                <option value="false" ${!m.reward_claimed ? 'selected' : ''}>None</option>
+                <option value="true" ${m.reward_claimed ? 'selected' : ''}>Claimed 🎁</option>
+              </select>
             </td>
             <td>
               <select id="status-${m.id}" class="bg-surface-container-low border-none rounded-lg text-xs font-bold p-2 focus:ring-2 focus:ring-primary uppercase tracking-widest">
@@ -551,21 +538,11 @@
                 <input type="number" id="m-projects-${m.id}" value="${m.successful_projects || 0}" class="w-full bg-surface-container-low border-none rounded-xl text-sm font-bold p-3 focus:ring-2 focus:ring-primary"/>
               </div>
               <div>
-                <label class="block text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Tiers Claimed</label>
-                <div class="flex gap-3 flex-wrap">
-                  <label class="flex items-center gap-1 text-[10px] font-bold text-orange-400" title="Bronze">
-                    <input type="checkbox" id="m-t1-${m.id}" ${m.claimed_tier1 ? 'checked' : ''} class="accent-orange-400"/> T1
-                  </label>
-                  <label class="flex items-center gap-1 text-[10px] font-bold text-gray-400" title="Silver">
-                    <input type="checkbox" id="m-t2-${m.id}" ${m.claimed_tier2 ? 'checked' : ''} class="accent-gray-400"/> T2
-                  </label>
-                  <label class="flex items-center gap-1 text-[10px] font-bold text-yellow-500" title="Gold">
-                    <input type="checkbox" id="m-t3-${m.id}" ${m.claimed_tier3 ? 'checked' : ''} class="accent-yellow-500"/> T3
-                  </label>
-                  <label class="flex items-center gap-1 text-[10px] font-bold text-blue-400" title="Platinum">
-                    <input type="checkbox" id="m-t4-${m.id}" ${m.claimed_tier4 ? 'checked' : ''} class="accent-blue-400"/> T4
-                  </label>
-                </div>
+                <label class="block text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Reward</label>
+                <select id="m-reward-${m.id}" class="w-full bg-surface-container-low border-none rounded-xl text-[10px] font-bold p-3 focus:ring-2 focus:ring-primary uppercase">
+                  <option value="false" ${!m.reward_claimed ? 'selected' : ''}>None</option>
+                  <option value="true" ${m.reward_claimed ? 'selected' : ''}>Claimed</option>
+                </select>
               </div>
               <div>
                 <label class="block text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-2">Status</label>
@@ -591,13 +568,10 @@
       const prefix = isMobile ? 'm-' : '';
       const body = {
         id,
-        total_sales:          document.getElementById(`${prefix}sales-${id}`).value,
-        successful_projects:  document.getElementById(`${prefix}projects-${id}`).value,
-        claimed_tier1:        document.getElementById(`${prefix}t1-${id}`).checked,
-        claimed_tier2:        document.getElementById(`${prefix}t2-${id}`).checked,
-        claimed_tier3:        document.getElementById(`${prefix}t3-${id}`).checked,
-        claimed_tier4:        document.getElementById(`${prefix}t4-${id}`).checked,
-        status:               document.getElementById(`${prefix}status-${id}`).value
+        total_sales: document.getElementById(`${prefix}sales-${id}`).value,
+        successful_projects: document.getElementById(`${prefix}projects-${id}`).value,
+        reward_claimed: document.getElementById(`${prefix}reward-${id}`).value === 'true',
+        status: document.getElementById(`${prefix}status-${id}`).value
       };
 
       try {
