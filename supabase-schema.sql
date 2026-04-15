@@ -17,6 +17,10 @@ CREATE TABLE IF NOT EXISTS public.marketers (
   total_leads   INTEGER       NOT NULL DEFAULT 0,
   successful_projects INTEGER NOT NULL DEFAULT 0,
   reward_claimed     BOOLEAN NOT NULL DEFAULT FALSE,
+  claimed_tier1      BOOLEAN NOT NULL DEFAULT FALSE,
+  claimed_tier2      BOOLEAN NOT NULL DEFAULT FALSE,
+  claimed_tier3      BOOLEAN NOT NULL DEFAULT FALSE,
+  claimed_tier4      BOOLEAN NOT NULL DEFAULT FALSE,
   status        TEXT          NOT NULL DEFAULT 'active',
   created_at    TIMESTAMPTZ   NOT NULL DEFAULT NOW()
 );
