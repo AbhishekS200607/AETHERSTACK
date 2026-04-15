@@ -300,8 +300,23 @@
           <div class="profile-field"><label>Mobile Number</label><input type="tel" id="prof-mobile" maxlength="10"/></div>
           <div class="profile-field"><label>Physical Address</label><input type="text" id="prof-address"/></div>
           <div class="profile-field"><label>Pincode</label><input type="text" id="prof-pincode" maxlength="6"/></div>
-          <div class="pt-4">
-            <button type="submit" id="btn-save-profile" class="gradient-primary px-8 py-4 rounded-2xl font-headline font-black text-sm text-white shadow-lg uppercase tracking-widest flex items-center gap-2">Save Changes</button>
+          
+          <!-- OTP Section (Hidden by default) -->
+          <div id="otp-section" class="hidden space-y-4 pt-4 border-t border-outline-variant/20">
+            <p class="text-xs font-bold text-primary uppercase tracking-widest">Verify identity to save changes</p>
+            <div class="profile-field">
+              <label>Enter 6-Digit OTP</label>
+              <input type="text" id="prof-otp" maxlength="6" placeholder="000000" class="tracking-[0.5em] font-black text-center"/>
+            </div>
+          </div>
+
+          <div class="pt-4 flex flex-col sm:flex-row gap-4">
+            <button type="button" id="btn-send-otp" onclick="sendProfileOTP()" class="bg-on-background/5 text-on-background px-8 py-4 rounded-2xl font-headline font-black text-sm uppercase tracking-widest hover:bg-on-background/10 transition-all flex items-center justify-center gap-2">
+              Get OTP
+            </button>
+            <button type="submit" id="btn-save-profile" class="gradient-primary px-8 py-4 rounded-2xl font-headline font-black text-sm text-white shadow-lg uppercase tracking-widest flex-1 flex items-center justify-center gap-2">
+              Save Changes
+            </button>
           </div>
         </form>
       </div>
@@ -454,16 +469,62 @@
       } catch { showToast('Error.', 'error'); }
     }
 
+    async function sendProfileOTP() {
+      const btn = document.getElementById('btn-send-otp');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>';
+      try {
+        const res = await fetch('/api/marketing/send-profile-otp', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        showToast('OTP sent to your email!');
+        document.getElementById('otp-section').classList.remove('hidden');
+        btn.textContent = 'Resend OTP';
+      } catch (e) {
+        showToast(e.message || 'Failed to send OTP.', 'error');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
     document.getElementById('profile-form').onsubmit = async (e) => {
       e.preventDefault();
+      const otp = document.getElementById('prof-otp').value.trim();
+      if (!otp) {
+        showToast('Please get and enter OTP first.', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('btn-save-profile');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner" style="border-top-color:#fff"></span> Saving...';
+
       try {
         const res = await fetch('/api/marketing/update-profile', {
           method: 'PATCH',
           headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ mobile: document.getElementById('prof-mobile').value, address: document.getElementById('prof-address').value, pincode: document.getElementById('prof-pincode').value })
+          body: JSON.stringify({ 
+            mobile: document.getElementById('prof-mobile').value, 
+            address: document.getElementById('prof-address').value, 
+            pincode: document.getElementById('prof-pincode').value,
+            otp: otp
+          })
         });
-        if (res.ok) showToast('Saved!');
-      } catch { showToast('Error.', 'error'); }
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        
+        showToast('Profile updated!');
+        document.getElementById('otp-section').classList.add('hidden');
+        document.getElementById('prof-otp').value = '';
+      } catch (e) {
+        showToast(e.message || 'Error.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save Changes';
+      }
     };
 
     function wireButtons(code) {

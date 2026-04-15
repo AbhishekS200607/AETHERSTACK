@@ -101,7 +101,6 @@ async function readSubmissions() {
 
 async function saveSubmission(data) {
   const { error } = await supabase.from('submissions').insert([{
-    id:           Date.now(),
     name:         data.name,
     email:        data.email,
     projectType:  data.projectType || null,
@@ -128,17 +127,14 @@ app.post('/api/contact', async (req, res) => {
     try {
       const { createClient } = require('@supabase/supabase-js');
       const sbService = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
-      // Fetch current lead count then increment (Supabase JS v2 has no atomic increment via RPC easily)
+      // Fetch current lead count then increment atomically via RPC
       const { data: mktr } = await sbService
         .from('marketers')
-        .select('id, total_leads')
+        .select('id')
         .eq('referral_code', referralCode.toUpperCase())
         .maybeSingle();
       if (mktr) {
-        await sbService
-          .from('marketers')
-          .update({ total_leads: mktr.total_leads + 1 })
-          .eq('id', mktr.id);
+        await sbService.rpc('increment_leads', { m_id: mktr.id });
         if (process.env.NODE_ENV !== 'production') console.log(`[referral] Lead credited to marketer ${mktr.id} via code ${referralCode}`);
       }
     } catch (e) {
@@ -197,7 +193,7 @@ app.post('/api/projects', adminAuth, async (req, res) => {
     return res.status(400).json({ error: 'Title and description are required.' });
   }
   const { data, error } = await supabase.from('projects').insert([
-    { id: Date.now(), title, description, tags: tags || [], imageUrl: imageUrl || '', link: link || '' }
+    { title, description, tags: tags || [], imageUrl: imageUrl || '', link: link || '' }
   ]).select();
   if (error) return res.status(400).json({ error: error.message });
   res.json(data[0]);
@@ -205,15 +201,15 @@ app.post('/api/projects', adminAuth, async (req, res) => {
 
 app.put('/api/projects/:id', adminAuth, async (req, res) => {
   const { data, error } = await supabase.from('projects')
-    .update({ ...req.body, id: Number(req.params.id) })
-    .eq('id', Number(req.params.id))
+    .update({ ...req.body, id: req.params.id })
+    .eq('id', req.params.id)
     .select();
   if (error || !data?.length) return res.status(404).json({ error: 'Not found.' });
   res.json(data[0]);
 });
 
 app.delete('/api/projects/:id', adminAuth, async (req, res) => {
-  await supabase.from('projects').delete().eq('id', Number(req.params.id));
+  await supabase.from('projects').delete().eq('id', req.params.id);
   res.json({ success: true });
 });
 
@@ -224,7 +220,7 @@ app.post('/api/apply', async (req, res) => {
     return res.status(400).json({ error: 'Name, email, college, role and message are required.' });
   }
   const { error } = await supabase.from('applications').insert([{
-    id: Date.now(), name, email, college, role, portfolio: portfolio || null, message, status: 'new'
+    name, email, college, role, portfolio: portfolio || null, message, status: 'new'
   }]);
   if (error) console.error('Supabase error:', error.message);
 
@@ -366,13 +362,13 @@ app.patch('/api/applications/:id', adminAuth, async (req, res) => {
   if (!['new','reviewing','accepted','rejected'].includes(status)) {
     return res.status(400).json({ error: 'Invalid status.' });
   }
-  await supabase.from('applications').update({ status }).eq('id', Number(req.params.id));
+  await supabase.from('applications').update({ status }).eq('id', req.params.id);
   res.json({ success: true });
 });
 
 // ── DELETE /api/applications/:id ─────────────────────────────
 app.delete('/api/applications/:id', adminAuth, async (req, res) => {
-  await supabase.from('applications').delete().eq('id', Number(req.params.id));
+  await supabase.from('applications').delete().eq('id', req.params.id);
   res.json({ success: true });
 });
 

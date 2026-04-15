@@ -470,8 +470,8 @@
                 ${p.link ? `<a href="${esc(p.link)}" target="_blank" class="text-primary text-[10px] md:text-xs font-bold hover-line uppercase tracking-widest mt-1 inline-block">View Live Project</a>` : ''}
               </div>
               <div class="flex gap-2 shrink-0">
-                <button onclick="editProject(${p.id})" class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-surface-container-low hover:bg-primary hover:text-white transition-all flex items-center justify-center"><span class="material-symbols-outlined text-lg">edit</span></button>
-                <button onclick="deleteProject(${p.id})" class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-surface-container-low hover:bg-error hover:text-white transition-all flex items-center justify-center"><span class="material-symbols-outlined text-lg">delete</span></button>
+                <button onclick="editProject('${p.id}')" class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-surface-container-low hover:bg-primary hover:text-white transition-all flex items-center justify-center"><span class="material-symbols-outlined text-lg">edit</span></button>
+                <button onclick="deleteProject('${p.id}')" class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-surface-container-low hover:bg-error hover:text-white transition-all flex items-center justify-center"><span class="material-symbols-outlined text-lg">delete</span></button>
               </div>
             </div>
             <p class="text-xs md:text-sm text-on-surface-variant leading-relaxed mb-4 line-clamp-2">${esc(p.description)}</p>

@@ -524,16 +524,84 @@ router.post('/claim-reward', requireAuth, async (req, res) => {
 // ── PATCH /api/marketing/update-profile ──────────────────────
 router.patch('/update-profile', requireAuth, async (req, res) => {
   try {
-    const { mobile, address, pincode } = req.body;
+    const { mobile, address, pincode, otp } = req.body;
+    const cleanEmail = req.marketer.email.toLowerCase();
+
+    if (!otp) return res.status(400).json({ error: 'OTP is required to update profile.' });
+
+    // Verify OTP
+    const { data: record, error: otpErr } = await supabase
+      .from('otp_verifications')
+      .select('*')
+      .eq('email_or_mobile', cleanEmail)
+      .eq('verified', false)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (otpErr || !record || record.otp_code !== String(otp).trim()) {
+      return res.status(400).json({ error: 'Invalid or expired OTP.' });
+    }
+    if (new Date(record.expires_at) < new Date()) {
+      return res.status(400).json({ error: 'OTP has expired.' });
+    }
+
     const updates = {};
-    if (mobile  !== undefined && isValidMobile(mobile))   updates.mobile  = sanitizeText(mobile, 10);
-    if (address !== undefined && address.length >= 5)    updates.address = sanitizeText(address, 300);
-    if (pincode !== undefined && isValidPincode(pincode)) updates.pincode = sanitizeText(pincode, 6);
-    if (!Object.keys(updates).length) return res.status(400).json({ error: 'No changes.' });
-    await supabase.from('marketers').update(updates).eq('id', req.marketer.id);
-    return res.json({ success: true, message: 'Profile updated!' });
+    if (mobile !== undefined) {
+      if (!isValidMobile(mobile)) return res.status(400).json({ error: 'Invalid mobile number.' });
+      updates.mobile = sanitizeText(mobile, 10);
+    }
+    if (address !== undefined) {
+      if (address.length < 5) return res.status(400).json({ error: 'Address too short.' });
+      updates.address = sanitizeText(address, 300);
+    }
+    if (pincode !== undefined) {
+      if (!isValidPincode(pincode)) return res.status(400).json({ error: 'Invalid pincode.' });
+      updates.pincode = sanitizeText(pincode, 6);
+    }
+
+    if (!Object.keys(updates).length) return res.status(400).json({ error: 'No changes provided.' });
+
+    const { error: updateErr } = await supabase.from('marketers').update(updates).eq('id', req.marketer.id);
+    if (updateErr) throw updateErr;
+
+    // Mark OTP as verified/used
+    await supabase.from('otp_verifications').update({ verified: true }).eq('id', record.id);
+
+    return res.json({ success: true, message: 'Profile updated successfully!' });
   } catch (err) {
-    return res.status(500).json({ error: 'Failed.' });
+    console.error('[update-profile]', err.message);
+    return res.status(500).json({ error: 'Failed to update profile.' });
+  }
+});
+
+// ── POST /api/marketing/send-profile-otp ────────────────────
+router.post('/send-profile-otp', requireAuth, otpLimiter, async (req, res) => {
+  try {
+    const cleanEmail = req.marketer.email.toLowerCase();
+    
+    // Clear old unverified OTPs for this email
+    await supabase.from('otp_verifications').delete().eq('email_or_mobile', cleanEmail).eq('verified', false);
+    
+    const otp = generateOTP();
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+    
+    const { error: insertErr } = await supabase.from('otp_verifications').insert({
+      email_or_mobile: cleanEmail,
+      otp_code: otp,
+      expires_at: expiresAt,
+      verified: false
+    });
+    
+    if (insertErr) throw insertErr;
+    
+    await sendOTPEmail(cleanEmail, otp);
+    if (process.env.NODE_ENV !== 'production') console.log(`[PROFILE-UPDATE] OTP for ${cleanEmail}: ${otp}`);
+    
+    return res.json({ success: true, message: 'OTP sent to your email.' });
+  } catch (err) {
+    console.error('[send-profile-otp]', err.message);
+    return res.status(500).json({ error: 'Failed to send OTP.' });
   }
 });
 
