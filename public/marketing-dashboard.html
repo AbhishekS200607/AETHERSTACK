@@ -128,55 +128,6 @@
       outline: none !important; transition: border-color 0.3s, background 0.3s;
     }
     .profile-field input:focus { border-color: #ff6035; background: #fff; }
-    .calc-tier-btn.selected { border-color: #ff6035; background: #fff5f2; }
-    .calc-tier-btn.selected p { color: #ff6035 !important; }
-
-    /* ── Game bridge progress ── */
-    .bridge-track {
-      position: relative; height: 80px;
-      background: linear-gradient(180deg, transparent 55%, #f0f0f2 55%, #f0f0f2 65%, transparent 65%);
-    }
-    .bridge-plank {
-      position: absolute; bottom: 35%; height: 10%;
-      background: repeating-linear-gradient(90deg, #e0e0e4 0px, #e0e0e4 18px, transparent 18px, transparent 24px);
-      border-radius: 4px;
-    }
-    .bridge-fill {
-      position: absolute; bottom: 35%; height: 10%;
-      background: linear-gradient(90deg, #ff6035, #ff8c42);
-      border-radius: 4px;
-      transition: width 1.2s cubic-bezier(0.34,1.1,0.64,1);
-      box-shadow: 0 0 12px rgba(255,96,53,0.4);
-    }
-    .bridge-walker {
-      position: absolute; bottom: calc(35% + 10%);
-      font-size: 1.6rem; line-height: 1;
-      transition: left 1.2s cubic-bezier(0.34,1.1,0.64,1);
-      animation: walkerBob 0.5s ease-in-out infinite alternate;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
-    }
-    @keyframes walkerBob {
-      from { transform: translateY(0px) scaleX(1); }
-      to   { transform: translateY(-4px) scaleX(1); }
-    }
-    .bridge-flag {
-      position: absolute; bottom: calc(35% + 10%);
-      right: 0; font-size: 1.6rem; line-height: 1;
-      animation: flagWave 1s ease-in-out infinite alternate;
-    }
-    @keyframes flagWave {
-      from { transform: rotate(-5deg); }
-      to   { transform: rotate(5deg); }
-    }
-    .milestone-dot {
-      position: absolute; bottom: calc(35% - 6px);
-      width: 14px; height: 14px; border-radius: 50%;
-      background: #e0e0e4; border: 2px solid #fff;
-      transform: translateX(-50%);
-      transition: background 0.5s;
-    }
-    .milestone-dot.done { background: #ff6035; box-shadow: 0 0 8px rgba(255,96,53,0.5); }
-
     .profile-field label {
       display: block; margin-bottom: 6px; color: #666666; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
     }
@@ -247,13 +198,6 @@
         <p class="text-primary font-bold uppercase tracking-[0.2em] font-headline text-xs mb-3">Welcome back</p>
         <h1 class="font-headline font-black text-5xl md:text-6xl tracking-tighter text-on-background" id="greeting-name">—</h1>
         <p class="text-on-surface-variant font-medium mt-2">Member since <span id="member-since">—</span></p>
-      </div>
-
-      <!-- Next Tier Progress -->
-      <div class="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-xl border border-outline-variant/30 mb-8 overflow-hidden relative" id="tier-progress-card">
-        <div id="tier-progress-content">
-          <!-- filled by JS -->
-        </div>
       </div>
 
       <!-- Referral Card -->
@@ -329,60 +273,6 @@
         <p class="text-on-surface-variant text-sm font-medium leading-relaxed">
           Commissions are paid when a client you referred successfully completes a paid project with Aetherstack. Sales values and project counts are updated by the admin team upon payment confirmation.
         </p>
-      </div>
-
-      <!-- Commission Calculator -->
-      <div class="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-xl border border-outline-variant/30 mt-8">
-        <div class="flex items-center gap-4 mb-8">
-          <div class="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined text-2xl">calculate</span>
-          </div>
-          <div>
-            <p class="font-headline font-black text-xl text-on-background">Commission Calculator</p>
-            <p class="text-on-surface-variant text-sm font-medium">Enter project value and select your tier to see your earnings</p>
-          </div>
-        </div>
-
-        <!-- Input -->
-        <div class="profile-field mb-6">
-          <label>Project Value (₹)</label>
-          <input type="number" id="calc-amount" placeholder="e.g. 50000" min="0" oninput="calcCommission()"/>
-        </div>
-
-        <!-- Tier selector -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8" id="calc-tiers">
-          <button onclick="selectCalcTier(1, this)" class="calc-tier-btn py-4 px-3 rounded-2xl border-2 border-outline-variant/40 text-center transition-all hover:border-primary/40 active:scale-95">
-            <p class="font-headline font-black text-sm text-on-background">Tier 1</p>
-            <p class="text-[11px] font-bold text-on-surface-variant mt-1">Bronze</p>
-            <p class="text-xs font-black text-primary mt-1">7% – 10%</p>
-          </button>
-          <button onclick="selectCalcTier(2, this)" class="calc-tier-btn py-4 px-3 rounded-2xl border-2 border-outline-variant/40 text-center transition-all hover:border-primary/40 active:scale-95">
-            <p class="font-headline font-black text-sm text-on-background">Tier 2</p>
-            <p class="text-[11px] font-bold text-on-surface-variant mt-1">Silver</p>
-            <p class="text-xs font-black text-primary mt-1">10% – 12%</p>
-          </button>
-          <button onclick="selectCalcTier(3, this)" class="calc-tier-btn py-4 px-3 rounded-2xl border-2 border-outline-variant/40 text-center transition-all hover:border-primary/40 active:scale-95">
-            <p class="font-headline font-black text-sm text-on-background">Tier 3</p>
-            <p class="text-[11px] font-bold text-on-surface-variant mt-1">Gold</p>
-            <p class="text-xs font-black text-primary mt-1">12% – 15%</p>
-          </button>
-          <button onclick="selectCalcTier(4, this)" class="calc-tier-btn py-4 px-3 rounded-2xl border-2 border-outline-variant/40 text-center transition-all hover:border-primary/40 active:scale-95">
-            <p class="font-headline font-black text-sm text-on-background">Tier 4</p>
-            <p class="text-[11px] font-bold text-on-surface-variant mt-1">Platinum</p>
-            <p class="text-xs font-black text-primary mt-1">15% – 20%</p>
-          </button>
-        </div>
-
-        <!-- Result -->
-        <div id="calc-result" class="hidden rounded-2xl p-6 border-2 border-primary/20 bg-primary/5 text-center">
-          <p class="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-2">Your Commission</p>
-          <p class="font-headline font-black text-5xl text-primary mb-1">₹<span id="calc-min">0</span> – ₹<span id="calc-max">0</span></p>
-          <p class="text-sm text-on-surface-variant font-medium mt-2">on a ₹<span id="calc-project">0</span> project at <span id="calc-tier-label">—</span></p>
-        </div>
-        <div id="calc-placeholder" class="rounded-2xl p-6 border-2 border-dashed border-outline-variant/40 text-center">
-          <span class="material-symbols-outlined text-3xl text-on-surface-variant/40 mb-2 block">currency_rupee</span>
-          <p class="text-sm text-on-surface-variant font-medium">Enter a project value and select a tier above</p>
-        </div>
       </div>
     </div>
 
@@ -588,7 +478,7 @@
       { tier:4, projects:100, name:'Platinum', commission:'15% – 20%', reward:'Premium Backpack + Team Dinner',     icon:'diamond',           color:'#3b82f6', bgCls:'bg-blue-50',    borderCls:'border-blue-200',    badgeCls:'bg-blue-100 text-blue-600' }
     ];
 
-    async function loadDashboard(silent = false) {
+    async function loadDashboard() {
       try {
         const res = await fetch('/api/marketing/dashboard', { headers: { 'Authorization': `Bearer ${token}` } });
         if (res.status === 401) { logout(); return; }
@@ -645,14 +535,13 @@
         document.getElementById('prof-address').value = data.address || '';
         document.getElementById('prof-pincode').value = data.pincode || '';
 
-        if (!silent) document.getElementById('loading-state').classList.add('hidden');
-        if (!silent) document.getElementById('tab-dashboard').classList.add('active');
-        renderTierProgress(projects);
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('tab-dashboard').classList.add('active');
         wireButtons(data.referral_code);
         // Pre-load QR so ID card can reuse it
         const shareUrl = `https://aetherstack.in/?ref=${data.referral_code}`;
         document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(shareUrl)}`;
-      } catch (err) { if (!silent) showToast('Session error.', 'error'); }
+      } catch (err) { showToast('Session error.', 'error'); }
     }
 
     async function claimReward(tier, btn) {
@@ -750,130 +639,6 @@
         btn.textContent = 'Save Changes';
       }
     };
-
-    function renderTierProgress(projects) {
-      const tiers = [
-        { name:'Bronze',   projects:10,  min:7,  max:10, color:'#ea580c', light:'#fff7ed', border:'#fed7aa',
-          icon:`<svg viewBox="0 0 24 24" width="28" height="28" fill="none"><circle cx="12" cy="15" r="6" fill="#ea580c" opacity=".2" stroke="#ea580c" stroke-width="1.8"/><circle cx="12" cy="15" r="3" fill="#ea580c"/><path d="M9 6l3-4 3 4" stroke="#ea580c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>` },
-        { name:'Silver',   projects:25,  min:10, max:12, color:'#6b7280', light:'#f9fafb', border:'#e5e7eb',
-          icon:`<svg viewBox="0 0 24 24" width="28" height="28" fill="none"><circle cx="12" cy="15" r="6" fill="#6b7280" opacity=".2" stroke="#6b7280" stroke-width="1.8"/><circle cx="12" cy="15" r="3" fill="#6b7280"/><path d="M9 6l3-4 3 4" stroke="#6b7280" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>` },
-        { name:'Gold',     projects:50,  min:12, max:15, color:'#ca8a04', light:'#fefce8', border:'#fde68a',
-          icon:`<svg viewBox="0 0 24 24" width="28" height="28" fill="none"><circle cx="12" cy="15" r="6" fill="#ca8a04" opacity=".2" stroke="#ca8a04" stroke-width="1.8"/><circle cx="12" cy="15" r="3" fill="#ca8a04"/><path d="M9 6l3-4 3 4" stroke="#ca8a04" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>` },
-        { name:'Platinum', projects:100, min:15, max:20, color:'#3b82f6', light:'#eff6ff', border:'#bfdbfe',
-          icon:`<svg viewBox="0 0 24 24" width="28" height="28" fill="none"><path d="M12 3l2.5 5.5L20 9.5l-4 4 1 5.5L12 16l-5 3 1-5.5-4-4 5.5-1z" fill="#3b82f6" opacity=".2" stroke="#3b82f6" stroke-width="1.8" stroke-linejoin="round"/></svg>` },
-      ];
-
-      const currentTierIdx = tiers.reduce((acc, t, i) => projects >= t.projects ? i : acc, -1);
-      const nextTier = tiers.find(t => projects < t.projects);
-      const isMaxed  = projects >= 100;
-
-      // overall pct across full 0-100 range
-      const overallPct = Math.min((projects / 100) * 100, 100);
-
-      const walkerSVG = `<svg viewBox="0 0 24 24" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="4.5" r="2.5" fill="#ff6035"/>
-        <path d="M12 7v5M9 9.5l3 2.5 3-2.5M9.5 17l2.5-4.5 2.5 4.5" stroke="#ff6035" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>`;
-
-      document.getElementById('tier-progress-content').innerHTML = `
-        <!-- Header -->
-        <div class="flex items-center justify-between mb-8 gap-4 flex-wrap">
-          <div>
-            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-1">Tier Progress</p>
-            <h3 class="font-headline font-black text-2xl text-on-background">
-              ${isMaxed
-                ? '<span style="color:#ca8a04">Platinum Achieved! 🏆</span>'
-                : 'You are <span style="color:' + (currentTierIdx >= 0 ? tiers[currentTierIdx].color : '#888') + '">' + (currentTierIdx >= 0 ? tiers[currentTierIdx].name : 'Unranked') + '</span> &rarr; Next: <span style="color:' + nextTier.color + '">' + nextTier.name + '</span>'}
-            </h3>
-          </div>
-          <div class="text-right">
-            <p class="font-headline font-black text-5xl text-on-background leading-none">${projects}</p>
-            <p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mt-1">Projects Done</p>
-          </div>
-        </div>
-
-        <!-- Tier cards row -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-          ${tiers.map((t, i) => {
-            const done    = projects >= t.projects;
-            const current = i === currentTierIdx;
-            const isNext  = !isMaxed && t === nextTier;
-            const pct     = done ? 100 : Math.min((projects / t.projects) * 100, 100);
-            return `
-            <div style="border-radius:1.25rem;padding:1rem;border:2px solid ${current ? t.color : isNext ? t.border : '#f0f0f2'};background:${current || done ? t.light : '#fafafa'};position:relative;overflow:hidden;transition:all 0.3s;">
-              ${current ? `<div style="position:absolute;top:8px;right:8px;background:${t.color};color:#fff;font-size:0.55rem;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:99px;">Current</div>` : ''}
-              ${done && !current ? `<div style="position:absolute;top:8px;right:8px;"><svg viewBox="0 0 20 20" width="18" height="18" fill="none"><circle cx="10" cy="10" r="9" fill="${t.color}" opacity=".15"/><path d="M5 10l4 4 6-7" stroke="${t.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>` : ''}
-              <div style="margin-bottom:8px;">${t.icon}</div>
-              <p style="font-family:'Space Grotesk',sans-serif;font-weight:900;font-size:0.95rem;color:${done || current ? t.color : '#aaa'};">${t.name}</p>
-              <p style="font-size:0.7rem;font-weight:700;color:#bbb;margin-bottom:8px;">${t.min}%–${t.max}% commission</p>
-              <div style="height:5px;background:#e8e8eb;border-radius:99px;overflow:hidden;">
-                <div style="height:100%;width:${pct}%;background:${t.color};border-radius:99px;transition:width 1s ease;"></div>
-              </div>
-              <p style="font-size:0.65rem;font-weight:700;color:${done ? t.color : '#bbb'};margin-top:5px;">${done ? '✓ Unlocked' : projects + ' / ' + t.projects + ' projects'}</p>
-            </div>`;
-          }).join('')}
-        </div>
-
-        <!-- Overall progress bar with walker -->
-        <div style="margin-bottom:0.5rem;">
-          <div style="position:relative;height:48px;">
-            <!-- Track -->
-            <div style="position:absolute;top:50%;left:0;right:0;height:8px;transform:translateY(-50%);background:#f0f0f2;border-radius:99px;overflow:hidden;">
-              <div style="height:100%;width:${overallPct}%;background:linear-gradient(90deg,#ff6035,#ff8c42);border-radius:99px;transition:width 1.2s cubic-bezier(0.34,1.1,0.64,1);box-shadow:0 0 10px rgba(255,96,53,0.35);"></div>
-            </div>
-            <!-- Milestone markers -->
-            ${tiers.map((t, i) => {
-              const pos = (t.projects / 100) * 100;
-              const done = projects >= t.projects;
-              return `<div style="position:absolute;top:50%;left:${pos}%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:${done ? t.color : '#e0e0e4'};border:3px solid #fff;box-shadow:${done ? '0 0 8px ' + t.color + '66' : 'none'};transition:all 0.5s;z-index:1;"></div>`;
-            }).join('')}
-            <!-- Walker -->
-            <div style="position:absolute;top:50%;left:${Math.min(overallPct, 96)}%;transform:translate(-50%,-100%) translateY(-6px);transition:left 1.2s cubic-bezier(0.34,1.1,0.64,1);animation:walkerBob 0.6s ease-in-out infinite alternate;z-index:2;">
-              ${walkerSVG}
-            </div>
-          </div>
-          <!-- Labels under bar -->
-          <div style="display:flex;justify-content:space-between;margin-top:6px;padding:0 2px;">
-            <span style="font-size:0.6rem;font-weight:700;color:#bbb;">0</span>
-            ${tiers.map(t => `<span style="font-size:0.6rem;font-weight:800;color:${projects >= t.projects ? t.color : '#bbb'};">${t.projects}</span>`).join('')}
-          </div>
-        </div>
-
-        ${!isMaxed ? `
-        <div class="mt-6 pt-5 border-t border-outline-variant/20 flex items-center gap-3">
-          <div style="width:10px;height:10px;border-radius:50%;background:${nextTier.color};flex-shrink:0;animation:pulse 1.5s infinite;"></div>
-          <p class="text-sm font-medium text-on-surface-variant">
-            <strong class="text-on-background">${nextTier.projects - projects} more project${nextTier.projects - projects !== 1 ? 's' : ''}</strong> to unlock
-            <strong style="color:${nextTier.color}">${nextTier.name}</strong> &mdash; earn up to <strong style="color:${nextTier.color}">${nextTier.max}% commission</strong>
-          </p>
-        </div>` : ''}
-      `;
-    }
-
-    const CALC_TIERS = { 1:{min:7,max:10,name:'Tier 1 Bronze'}, 2:{min:10,max:12,name:'Tier 2 Silver'}, 3:{min:12,max:15,name:'Tier 3 Gold'}, 4:{min:15,max:20,name:'Tier 4 Platinum'} };
-    let _calcTier = null;
-
-    function selectCalcTier(tier, btn) {
-      _calcTier = tier;
-      document.querySelectorAll('.calc-tier-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      calcCommission();
-    }
-
-    function calcCommission() {
-      const amount = parseFloat(document.getElementById('calc-amount').value);
-      const result = document.getElementById('calc-result');
-      const placeholder = document.getElementById('calc-placeholder');
-      if (!amount || amount <= 0 || !_calcTier) { result.classList.add('hidden'); placeholder.classList.remove('hidden'); return; }
-      const t = CALC_TIERS[_calcTier];
-      const fmt = v => Math.round(v).toLocaleString('en-IN');
-      document.getElementById('calc-min').textContent   = fmt(amount * t.min / 100);
-      document.getElementById('calc-max').textContent   = fmt(amount * t.max / 100);
-      document.getElementById('calc-project').textContent = fmt(amount);
-      document.getElementById('calc-tier-label').textContent = t.name + ' (' + t.min + '% – ' + t.max + '%)';
-      result.classList.remove('hidden');
-      placeholder.classList.add('hidden');
-    }
 
     function wireButtons(code) {
       const shareUrl = `https://aetherstack.in/?ref=${code}`;
@@ -1061,8 +826,6 @@
     }
     function logout() { localStorage.removeItem('mkt_token'); window.location.replace('marketing-login.html'); }
     loadDashboard();
-    // Silent refresh every 60 seconds
-    setInterval(() => loadDashboard(true), 60000);
   </script>
 </body>
 </html>
