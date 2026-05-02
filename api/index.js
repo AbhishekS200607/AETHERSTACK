@@ -204,6 +204,12 @@ app.get('/api/submissions', adminAuth, async (req, res) => {
   res.json(await readSubmissions());
 });
 
+app.delete('/api/submissions/:id', adminAuth, async (req, res) => {
+  const { error } = await supabaseAdmin.from('submissions').delete().eq('id', req.params.id);
+  if (error) return res.status(500).json({ error: error.message });
+  res.json({ success: true });
+});
+
 app.get('/api/projects', async (req, res) => res.json(await readProjects()));
 
 app.post('/api/projects', adminAuth, async (req, res) => {

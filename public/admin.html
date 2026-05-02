@@ -426,6 +426,19 @@
       } catch (err) { alert('Connection failed.'); }
     }
 
+    async function deleteSubmission(id, btn) {
+      if (!confirm('Delete this submission?')) return;
+      btn.disabled = true;
+      const res = await fetch(`/api/submissions/${id}`, { method: 'DELETE', headers: { 'x-admin-secret': SECRET } });
+      if (res.ok) {
+        allSubmissions = allSubmissions.filter(s => s.id !== id);
+        filterSubmissions();
+      } else {
+        btn.disabled = false;
+        alert('Failed to delete.');
+      }
+    }
+
     function filterSubmissions() {
       const q      = document.getElementById('sub-search').value.toLowerCase();
       const type   = document.getElementById('sub-filter-type').value.toLowerCase();
@@ -463,12 +476,17 @@
             <div class="bg-surface-container-low/50 rounded-2xl p-4 md:p-5 mb-6">
               <p class="text-xs md:text-sm leading-relaxed text-on-surface-variant">${esc(s.message)}</p>
             </div>
-            ${(s.referralcode || s.referralCode) ? `
-              <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-tertiary text-sm">verified</span>
-                <span class="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-tertiary">Credited to: ${esc(s.referralcode || s.referralCode)}</span>
-              </div>
-            ` : ''}
+            <div class="flex items-center justify-between mt-2">
+              ${(s.referralcode || s.referralCode) ? `
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-tertiary text-sm">verified</span>
+                  <span class="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-tertiary">Credited to: ${esc(s.referralcode || s.referralCode)}</span>
+                </div>
+              ` : '<div></div>'}
+              <button onclick="deleteSubmission('${s.id}', this)" class="text-[10px] font-bold text-error uppercase tracking-widest hover:opacity-70 flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">delete</span> Delete
+              </button>
+            </div>
           </div>
         `).join('');
       document.querySelectorAll('.tilt-card').forEach(initTilt);
