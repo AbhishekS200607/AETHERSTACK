@@ -208,11 +208,11 @@
                 <label>Tags (Comma separated)</label>
               </div>
               <div class="float-field">
-                <input id="p-image" type="url" placeholder=" " />
+                <input id="p-image" type="text" placeholder=" " />
                 <label>Image URL</label>
               </div>
               <div class="float-field">
-                <input id="p-link" type="url" placeholder=" " />
+                <input id="p-link" type="text" placeholder=" " />
                 <label>Direct Link</label>
               </div>
               <div class="float-field">
@@ -431,7 +431,7 @@
       const type   = document.getElementById('sub-filter-type').value.toLowerCase();
       const filtered = allSubmissions.filter(s =>
         (!q    || [s.name, s.email, s.message].some(f => (f||'').toLowerCase().includes(q))) &&
-        (!type || (s.projectType||'').toLowerCase().includes(type))
+        (!type || (s.projecttype||s.projectType||'').toLowerCase().includes(type))
       );
       renderSubmissions(filtered);
     }
@@ -447,13 +447,13 @@
                 <a href="mailto:${esc(s.email)}" class="text-primary font-bold text-xs md:text-sm hover-line break-all">${esc(s.email)}</a>
               </div>
               <span class="shrink-0 text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-on-surface-variant bg-surface-container-low px-2 md:px-3 py-1 rounded-full">
-                ${s.date ? new Date(s.date).toLocaleDateString() : 'New'}
+                ${s.created_at ? new Date(s.created_at).toLocaleDateString() : 'New'}
               </span>
             </div>
             <div class="grid grid-cols-2 gap-3 md:gap-4 mb-6">
               <div class="bg-surface-container-low/30 rounded-2xl p-3 md:p-4">
                 <p class="overline mb-1" style="font-size:0.55rem">Plan</p>
-                <p class="font-bold text-xs md:text-sm text-on-surface">${esc(s.projectType || 'Standard')}</p>
+                <p class="font-bold text-xs md:text-sm text-on-surface">${esc(s.projecttype || s.projectType || 'Standard')}</p>
               </div>
               <div class="bg-surface-container-low/30 rounded-2xl p-3 md:p-4">
                 <p class="overline mb-1" style="font-size:0.55rem">Budget</p>
@@ -463,10 +463,10 @@
             <div class="bg-surface-container-low/50 rounded-2xl p-4 md:p-5 mb-6">
               <p class="text-xs md:text-sm leading-relaxed text-on-surface-variant">${esc(s.message)}</p>
             </div>
-            ${s.referralCode ? `
+            ${(s.referralcode || s.referralCode) ? `
               <div class="flex items-center gap-2">
                 <span class="material-symbols-outlined text-tertiary text-sm">verified</span>
-                <span class="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-tertiary">Credited to: ${esc(s.referralCode)}</span>
+                <span class="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-tertiary">Credited to: ${esc(s.referralcode || s.referralCode)}</span>
               </div>
             ` : ''}
           </div>
@@ -524,11 +524,11 @@
         body: JSON.stringify(body)
       });
       if (res.ok) { cancelEdit(); loadProjects(); }
-      else alert('Error saving.');
+      else { const err = await res.json().catch(() => ({})); alert('Error saving: ' + (err.error || res.status)); }
     }
 
     function editProject(id) {
-      const p = projects.find(x => x.id === id); if (!p) return;
+      const p = projects.find(x => String(x.id) === String(id)); if (!p) return;
       document.getElementById('edit-id').value = p.id;
       document.getElementById('p-title').value = p.title;
       document.getElementById('p-desc').value = p.description;
@@ -893,6 +893,7 @@
     });
 
     // Magnetic
+    const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
     document.querySelectorAll('.btn-magnetic').forEach(btn => {
       if (isTouch) return;
       btn.addEventListener('mousemove', e => {

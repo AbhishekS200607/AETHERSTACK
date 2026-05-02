@@ -13,10 +13,14 @@ const marketingRouter = require('./marketing');
 
 const app = express();
 
-// ── Supabase (anon key for existing public routes) ───────────
+// ── Supabase clients ─────────────────────────────────────────
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_KEY
+);
+const supabaseAdmin = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
 );
 
 // ════════════════════════════════════════════════════════════
@@ -58,7 +62,7 @@ app.use(cors({
     }
   },
   methods:     ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-admin-secret'],
   credentials: true
 }));
 
@@ -82,33 +86,44 @@ const transporter = nodemailer.createTransport({
 // ════════════════════════════════════════════════════════════
 
 async function readProjects() {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from('projects')
     .select('*')
     .order('id', { ascending: false });
   if (error) console.error('Supabase error:', error);
-  return data || [];
+  return (data || []).map(p => ({ ...p, imageUrl: p.imageurl }));
 }
 
 async function readSubmissions() {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from('submissions')
-    .select('*')
-    .order('id', { ascending: false });
-  if (error) console.error('Supabase error:', error);
-  return data || [];
+    .select('*');
+  if (error) console.error('Supabase readSubmissions error:', error);
+  return (data || []).map(s => ({
+    id:           s.id,
+    name:         s.name,
+    email:        s.email,
+    projectType:  s.projecttype || null,
+    budget:       s.budget || null,
+    message:      s.message,
+    date:         s.date || null,
+    referralCode: s.referralcode || null
+  }));
 }
 
 async function saveSubmission(data) {
-  const { error } = await supabase.from('submissions').insert([{
+  const { error } = await supabaseAdmin.from('submissions').insert([{
     name:         data.name,
     email:        data.email,
-    projectType:  data.projectType || null,
+    projecttype:  data.projectType || null,
     budget:       data.budget || null,
     message:      data.message,
-    referralCode: data.referralCode || null
+    referralcode: data.referralCode || null
   }]);
-  if (error) console.error('Supabase error:', error.message);
+  if (error) {
+    console.error('Supabase saveSubmission error:', error.message);
+    throw error;
+  }
 }
 
 // ── POST /api/contact ────────────────────────────────────────
@@ -119,7 +134,12 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ error: 'Name, email, and message are required.' });
   }
 
-  await saveSubmission({ name, email, projectType, budget, message, referralCode });
+  try {
+    await saveSubmission({ name, email, projectType, budget, message, referralCode });
+  } catch (e) {
+    console.error('Failed to save submission to DB:', e.message);
+    // still continue — email will still send
+  }
 
   // ── If a referral code was provided, increment that marketer's lead count ──
   // Uses the service-role client from marketing.js indirectly via a fresh client here.
@@ -172,14 +192,13 @@ app.post('/api/contact', async (req, res) => {
 
 // ── Admin auth middleware ────────────────────────────────────
 function adminAuth(req, res, next) {
-  // FIX: read secret from Authorization header, not query string
-  // (query params appear in server logs and browser history)
   const header = req.headers['x-admin-secret'] || req.body?.secret;
   if (header !== process.env.ADMIN_SECRET) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
   next();
 }
+
 
 app.get('/api/submissions', adminAuth, async (req, res) => {
   res.json(await readSubmissions());
@@ -192,24 +211,27 @@ app.post('/api/projects', adminAuth, async (req, res) => {
   if (!title || !description) {
     return res.status(400).json({ error: 'Title and description are required.' });
   }
-  const { data, error } = await supabase.from('projects').insert([
-    { title, description, tags: tags || [], imageUrl: imageUrl || '', link: link || '' }
+  const { data, error } = await supabaseAdmin.from('projects').insert([
+    { title, description, tags: tags || [], imageurl: imageUrl || null, link: link || null }
   ]).select();
   if (error) return res.status(400).json({ error: error.message });
   res.json(data[0]);
 });
 
 app.put('/api/projects/:id', adminAuth, async (req, res) => {
-  const { data, error } = await supabase.from('projects')
-    .update({ ...req.body, id: req.params.id })
+  const { id: _drop, imageUrl, ...rest } = req.body;
+  const fields = { ...rest, imageurl: imageUrl || null };
+  if ('link' in fields) fields.link = fields.link || null;
+  const { data, error } = await supabaseAdmin.from('projects')
+    .update(fields)
     .eq('id', req.params.id)
     .select();
-  if (error || !data?.length) return res.status(404).json({ error: 'Not found.' });
+  if (error || !data?.length) return res.status(400).json({ error: error?.message || 'Not found.' });
   res.json(data[0]);
 });
 
 app.delete('/api/projects/:id', adminAuth, async (req, res) => {
-  await supabase.from('projects').delete().eq('id', req.params.id);
+  await supabaseAdmin.from('projects').delete().eq('id', req.params.id);
   res.json({ success: true });
 });
 
@@ -351,7 +373,7 @@ app.post('/api/apply', async (req, res) => {
 
 // ── GET /api/applications ────────────────────────────────────
 app.get('/api/applications', adminAuth, async (req, res) => {
-  const { data, error } = await supabase.from('applications').select('*').order('id', { ascending: false });
+  const { data, error } = await supabaseAdmin.from('applications').select('*').order('id', { ascending: false });
   if (error) return res.status(500).json({ error: error.message });
   res.json(data);
 });
@@ -362,13 +384,13 @@ app.patch('/api/applications/:id', adminAuth, async (req, res) => {
   if (!['new','reviewing','accepted','rejected'].includes(status)) {
     return res.status(400).json({ error: 'Invalid status.' });
   }
-  await supabase.from('applications').update({ status }).eq('id', req.params.id);
+  await supabaseAdmin.from('applications').update({ status }).eq('id', req.params.id);
   res.json({ success: true });
 });
 
 // ── DELETE /api/applications/:id ─────────────────────────────
 app.delete('/api/applications/:id', adminAuth, async (req, res) => {
-  await supabase.from('applications').delete().eq('id', req.params.id);
+  await supabaseAdmin.from('applications').delete().eq('id', req.params.id);
   res.json({ success: true });
 });
 
